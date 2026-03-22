@@ -1,0 +1,84 @@
+{%- paginate collection.products by section.settings.products_per_page -%}
+<section class="reborn-collection">
+  <div class="container">
+    <header class="reborn-collection__head">
+      <div>
+        <p class="reborn-collection__kicker">Koleksiyon</p>
+        <h1>{{ collection.title }}</h1>
+        {%- if collection.description != blank and section.settings.show_description -%}
+          <div class="reborn-collection__description rte">{{ collection.description }}</div>
+        {%- endif -%}
+      </div>
+      <p class="reborn-collection__count">{{ collection.products_count }} urun</p>
+    </header>
+
+    {%- if collection.products.size > 0 -%}
+      <div class="reborn-collection__grid">
+        {%- for product in collection.products -%}
+          <article class="reborn-product-card">
+            <a class="reborn-product-card__image" href="{{ product.url | within: collection }}">
+              {%- if product.featured_image -%}
+                <img
+                  src="{{ product.featured_image | image_url: width: 700 }}"
+                  alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                  width="700"
+                  height="700"
+                  loading="lazy"
+                >
+              {%- endif -%}
+            </a>
+            <div class="reborn-product-card__body">
+              <a class="reborn-product-card__title" href="{{ product.url | within: collection }}">{{ product.title }}</a>
+              <div class="reborn-product-card__price">{{ product.price | money }}</div>
+              <div class="reborn-product-card__actions">
+                <a class="btn-secondary" href="{{ product.url | within: collection }}">Incele</a>
+                <a class="btn-primary" href="{{ product.url | within: collection }}">Sepete Git</a>
+              </div>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="reborn-pagination" role="navigation" aria-label="Sayfalama">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}">Onceki</a>
+          {%- endif -%}
+          <span>{{ paginate.current_page }} / {{ paginate.pages }}</span>
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}">Sonraki</a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- else -%}
+      <div class="reborn-empty">
+        <h2>Bu koleksiyonda henuz urun yok</h2>
+        <p>Farkli bir kategoriye gecerek urunleri kesfedebilirsiniz.</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Reborn Collection",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 36,
+      "step": 4,
+      "label": "Products per page",
+      "default": 16
+    }
+  ]
+}
+{% endschema %}
