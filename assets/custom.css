@@ -831,6 +831,42 @@ body.reborn-theme .btn-secondary {
   color: #e57f3a;
 }
 
+@media (min-width: 992px) {
+  .reborn-nav__inner {
+    grid-template-columns: 280px minmax(0, 1fr);
+    align-items: flex-start;
+    gap: 16px;
+    min-height: auto;
+    padding-top: 8px;
+  }
+
+  .reborn-categories {
+    width: 280px;
+  }
+
+  .reborn-categories__trigger {
+    width: 100%;
+    justify-content: space-between;
+    border-radius: 6px 6px 0 0;
+    min-height: 34px;
+  }
+
+  .reborn-categories__panel {
+    display: block;
+    position: static;
+    width: 100%;
+    border-top: 0;
+    box-shadow: none;
+  }
+
+  .reborn-nav__links {
+    min-height: auto;
+    padding-top: 6px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}
+
 /* Footer v2 */
 .reborn-footer {
   margin-top: 28px;
