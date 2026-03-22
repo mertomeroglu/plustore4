@@ -745,3 +745,292 @@ body.reborn-theme .btn-secondary {
     grid-template-columns: 1fr;
   }
 }
+
+/* Categories flyout */
+.reborn-nav ul {
+  position: relative;
+}
+
+.reborn-categories {
+  position: relative;
+}
+
+.reborn-categories__trigger {
+  border: 0;
+  cursor: pointer;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: #e57f3a;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reborn-categories__panel {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  width: 280px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.18);
+  z-index: 40;
+}
+
+.reborn-categories:hover .reborn-categories__panel {
+  display: block;
+}
+
+.reborn-categories__panel ul {
+  display: block;
+  min-height: auto;
+  margin: 0;
+  padding: 6px 0;
+}
+
+.reborn-categories__panel li {
+  margin: 0;
+}
+
+.reborn-categories__panel a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  text-decoration: none;
+  color: #23354b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.reborn-categories__panel a:hover {
+  background: #f7fafc;
+  color: #e57f3a;
+}
+
+/* Footer v2 */
+.reborn-footer {
+  margin-top: 28px;
+  padding: 0;
+  background: #e5e7eb;
+  color: #203046;
+}
+
+.reborn-footer__payments {
+  padding: 24px 0 14px;
+  text-align: center;
+}
+
+.reborn-footer__payments img {
+  max-width: min(820px, 92vw);
+  height: auto;
+}
+
+.reborn-footer__payments p {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.reborn-footer__stripe {
+  background: #e57f3a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.reborn-footer__stripe p {
+  margin: 0;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reborn-footer__trust {
+  border-bottom: 1px solid #cfd5de;
+}
+
+.reborn-footer__trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+}
+
+.reborn-footer__trust-item {
+  padding: 20px 18px;
+  text-align: center;
+  border-right: 1px solid #cfd5de;
+}
+
+.reborn-footer__trust-item:last-child {
+  border-right: 0;
+}
+
+.reborn-footer__trust-item h4 {
+  margin: 0 0 8px;
+  color: #203046;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.reborn-footer__trust-item p {
+  margin: 0;
+  color: #26384f;
+  line-height: 1.5;
+}
+
+.reborn-footer__main {
+  padding: 20px 0 18px;
+}
+
+.reborn-footer__grid-v2 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.reborn-footer__grid-v2 h4 {
+  margin: 0 0 10px;
+  color: #2c3d53;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.reborn-footer__grid-v2 h5 {
+  margin: 14px 0 8px;
+  color: #2c3d53;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.reborn-footer__grid-v2 ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reborn-footer__grid-v2 li + li {
+  margin-top: 8px;
+}
+
+.reborn-footer__grid-v2 a,
+.reborn-footer__grid-v2 p {
+  color: #2f3f55;
+  text-decoration: none;
+  line-height: 1.45;
+}
+
+.reborn-footer__newsletter {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.reborn-footer__newsletter input {
+  border: 1px solid #cfd5de;
+  border-right: 0;
+  background: #fff;
+  min-height: 40px;
+  padding: 0 10px;
+}
+
+.reborn-footer__newsletter button {
+  border: 0;
+  background: #e57f3a;
+  color: #fff;
+  min-height: 40px;
+  padding: 0 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.reborn-footer__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reborn-footer__socials a {
+  border: 1px solid #cfd5de;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.reborn-footer__bottom-v2 {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #cfd5de;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+}
+
+.reborn-footer__bottom-v2 a {
+  color: #2f3f55;
+  text-decoration: none;
+  position: relative;
+}
+
+.reborn-footer__to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: #e57f3a;
+  text-decoration: none;
+  font-weight: 900;
+}
+
+@media (max-width: 1100px) {
+  .reborn-footer__trust-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .reborn-footer__trust-item:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .reborn-footer__grid-v2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .reborn-categories__panel {
+    width: 240px;
+  }
+
+  .reborn-footer__trust-grid,
+  .reborn-footer__grid-v2 {
+    grid-template-columns: 1fr;
+  }
+
+  .reborn-footer__trust-item {
+    border-right: 0;
+    border-bottom: 1px solid #cfd5de;
+  }
+
+  .reborn-footer__trust-item:last-child {
+    border-bottom: 0;
+  }
+}

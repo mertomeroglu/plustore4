@@ -1,36 +1,125 @@
 <section class="reborn-footer">
-  <div class="container">
-    <div class="reborn-footer__grid">
-      <div>
-        <h3>{{ section.settings.brand_title }}</h3>
-        <p>{{ section.settings.brand_text }}</p>
+  <div class="reborn-footer__payments">
+    <div class="container">
+      {%- if section.settings.payment_image != blank -%}
+        <img
+          src="{{ section.settings.payment_image | image_url: width: 820 }}"
+          alt="Odeme yontemleri"
+          width="820"
+          height="70"
+          loading="lazy"
+        >
+      {%- else -%}
+        <p>iyzico | mastercard | VISA | AMEX | troy</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="reborn-footer__stripe">
+    <div class="container">
+      <p>{{ section.settings.footer_strip_text }}</p>
+    </div>
+  </div>
+
+  <div class="reborn-footer__trust">
+    <div class="container reborn-footer__trust-grid">
+      <div class="reborn-footer__trust-item">
+        <h4>Ucretsiz Kargo</h4>
+        <p>750 tl ve uzeri alisverislerde kargo ucretsiz.</p>
+      </div>
+      <div class="reborn-footer__trust-item">
+        <h4>Guvenli Odeme</h4>
+        <p>Dunyanin en populer ve guvenli odeme yontemleri.</p>
+      </div>
+      <div class="reborn-footer__trust-item">
+        <h4>7/24 Destek Merkezi</h4>
+        <p>Sorunsuz alisveris deneyimi icin 7/24 destek.</p>
+      </div>
+      <div class="reborn-footer__trust-item">
+        <h4>14 Gun Kosulsuz Iade</h4>
+        <p>Memnun kalmadiginiz urunlerde 14 gun iade imkani.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reborn-footer__main">
+    <div class="container">
+      <div class="reborn-footer__grid-v2">
+        <div>
+          <h4>{{ section.settings.store_title }}</h4>
+          {%- assign store_menu = linklists[section.settings.store_menu] -%}
+          {%- if store_menu == blank -%}
+            {%- assign store_menu = linklists['main-menu'] -%}
+          {%- endif -%}
+          <ul>
+            {%- for link in store_menu.links limit: 6 -%}
+              <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+
+        <div>
+          <h4>{{ section.settings.account_title }}</h4>
+          {%- assign account_menu = linklists[section.settings.account_menu] -%}
+          {%- if account_menu == blank -%}
+            {%- assign account_menu = linklists['customer-account-main-menu'] -%}
+          {%- endif -%}
+          <ul>
+            {%- for link in account_menu.links limit: 8 -%}
+              <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+
+        <div>
+          <h4>{{ section.settings.help_title }}</h4>
+          {%- assign help_menu = linklists[section.settings.help_menu] -%}
+          {%- if help_menu == blank -%}
+            {%- assign help_menu = linklists['yard-m'] -%}
+          {%- endif -%}
+          <ul>
+            {%- for link in help_menu.links limit: 8 -%}
+              <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+
+        <div>
+          <h4>{{ section.settings.newsletter_title }}</h4>
+          <p>{{ section.settings.newsletter_text }}</p>
+          {%- form 'customer', class: 'reborn-footer__newsletter' -%}
+            <input type="email" name="contact[email]" required placeholder="E-posta">
+            <button type="submit">Abone ol</button>
+          {%- endform -%}
+
+          <h5>{{ section.settings.social_title }}</h5>
+          <div class="reborn-footer__socials">
+            {%- if settings.social_instagram_link != blank -%}
+              <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener">Instagram</a>
+            {%- endif -%}
+            {%- if settings.social_facebook_link != blank -%}
+              <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener">Facebook</a>
+            {%- endif -%}
+            {%- if settings.social_youtube_link != blank -%}
+              <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener">YouTube</a>
+            {%- endif -%}
+            {%- if settings.social_tiktok_link != blank -%}
+              <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener">TikTok</a>
+            {%- endif -%}
+          </div>
+        </div>
       </div>
 
-      <div>
-        <h4>{{ section.settings.menu_title }}</h4>
-        {%- assign footer_menu = linklists[section.settings.footer_menu] -%}
-        {%- if footer_menu == blank -%}
-          {%- assign footer_menu = linklists['main-menu'] -%}
-        {%- endif -%}
-        <ul>
-          {%- for link in footer_menu.links limit: 8 -%}
-            <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
-          {%- endfor -%}
-        </ul>
-      </div>
-
-      <div>
-        <h4>{{ section.settings.contact_title }}</h4>
-        <p>{{ section.settings.contact_text }}</p>
-        {%- if section.settings.email != blank -%}
-          <a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>
-        {%- endif -%}
+      <div class="reborn-footer__bottom-v2">
+        <a href="/pages/refund-policy">Iade Politikasi</a>
+        <a href="/pages/privacy-policy">Gizlilik Politikasi</a>
+        <a href="/pages/terms-of-service">Hizmet Sartlari</a>
+        <a href="/pages/shipping-policy">Kargo Politikasi</a>
+        <a href="/pages/contact">Iletisim Bilgileri</a>
       </div>
     </div>
 
-    <div class="reborn-footer__bottom">
-      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. Tum haklari saklidir.</p>
-    </div>
+    <a href="#MainContent" class="reborn-footer__to-top" aria-label="Yukari cik">^</a>
   </div>
 </section>
 
@@ -40,45 +129,66 @@
   "settings": [
     {
       "type": "text",
-      "id": "brand_title",
-      "label": "Brand title",
-      "default": "PlusStore"
+      "id": "footer_strip_text",
+      "label": "Footer strip text",
+      "default": "750 tl ve uzeri alisverislerde kargo ucretsiz | secili urunlerde sepette 4 al, 3 ode | guvenli alisveris | hizli teslimat"
     },
     {
-      "type": "textarea",
-      "id": "brand_text",
-      "label": "Brand text",
-      "default": "Gunluk hayati kolaylastiran pratik, premium ve secili urunler."
+      "type": "image_picker",
+      "id": "payment_image",
+      "label": "Payment logos image"
     },
     {
       "type": "text",
-      "id": "menu_title",
-      "label": "Menu title",
-      "default": "Hizli erisim"
+      "id": "store_title",
+      "label": "Store column title",
+      "default": "Magaza"
     },
     {
       "type": "link_list",
-      "id": "footer_menu",
-      "label": "Footer menu"
+      "id": "store_menu",
+      "label": "Store menu"
     },
     {
       "type": "text",
-      "id": "contact_title",
-      "label": "Contact title",
-      "default": "Iletisim"
+      "id": "account_title",
+      "label": "Account column title",
+      "default": "Hesabim"
+    },
+    {
+      "type": "link_list",
+      "id": "account_menu",
+      "label": "Account menu"
+    },
+    {
+      "type": "text",
+      "id": "help_title",
+      "label": "Help column title",
+      "default": "Yardim"
+    },
+    {
+      "type": "link_list",
+      "id": "help_menu",
+      "label": "Help menu"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter title",
+      "default": "E-Bulten"
     },
     {
       "type": "textarea",
-      "id": "contact_text",
-      "label": "Contact text",
-      "default": "Bize ulasin, size uygun cozumleri birlikte bulalim."
+      "id": "newsletter_text",
+      "label": "Newsletter text",
+      "default": "Kampanya, indirim ve yeni urunlerden ilk siz haberdar olun."
     },
     {
       "type": "text",
-      "id": "email",
-      "label": "Email",
-      "default": "destek@plustore.com.tr"
+      "id": "social_title",
+      "label": "Social title",
+      "default": "Bizi takip edin"
     }
   ]
 }
-{% endschema %}
+{% endschema %>

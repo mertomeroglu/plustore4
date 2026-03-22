@@ -51,11 +51,33 @@
   <div class="reborn-nav-wrap">
     <div class="container">
       {%- assign header_menu = linklists[section.settings.menu] -%}
+      {%- assign categories_menu = linklists[section.settings.categories_menu] -%}
       {%- if header_menu == blank -%}
         {%- assign header_menu = linklists['main-menu'] -%}
       {%- endif -%}
+      {%- if categories_menu == blank -%}
+        {%- assign categories_menu = linklists['main-menu'] -%}
+      {%- endif -%}
       <nav class="reborn-nav" aria-label="Ana menu">
         <ul>
+          <li class="reborn-categories">
+            <button type="button" class="reborn-categories__trigger" aria-expanded="false">
+              {{ section.settings.categories_title }}
+              <span aria-hidden="true">&#9776;</span>
+            </button>
+            <div class="reborn-categories__panel">
+              <ul>
+                {%- for link in categories_menu.links limit: 16 -%}
+                  <li>
+                    <a href="{{ link.url }}">
+                      <span>{{ link.title | escape }}</span>
+                      <span aria-hidden="true">&#8250;</span>
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          </li>
           {%- for link in header_menu.links -%}
             <li>
               <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title | escape }}</a>
@@ -86,6 +108,17 @@
       "type": "link_list",
       "id": "menu",
       "label": "Navigation menu"
+    },
+    {
+      "type": "text",
+      "id": "categories_title",
+      "label": "Categories title",
+      "default": "KATEGORILER"
+    },
+    {
+      "type": "link_list",
+      "id": "categories_menu",
+      "label": "Categories menu"
     },
     {
       "type": "text",
