@@ -55,7 +55,7 @@
         {%- assign header_menu = linklists['main-menu'] -%}
       {%- endif -%}
       {%- assign categories_label = section.settings.categories_title | default: 'KATEGORILER' -%}
-      {%- assign fixed_categories = 'Deniz & Plaj Malzemeleri|Giyim|Canta|Kartlik & Cuzdan|Spor & Egzersiz|Medikal Bandajlar|Masaj Aletleri|Outdoor Urunler|Oyun & Eglence|Tatil & Seyahat Urunleri|Pratik Organizer Urunler|Makyaj & Taki Organizeri|Mousepad|Telefon & Tablet Standi|Aksesuar|Pet Shop|Waterproof Urunler' | split: '|' -%}
+      {%- assign fixed_categories = 'Deniz & Plaj Malzemeleri::deniz-plaj-malzemeleri|Giyim::giyim|Canta::canta|Kartlik & Cuzdan::kartlik-cuzdan|Spor & Egzersiz::spor-egzersiz|Medikal Bandajlar::medikal-bandajlar|Masaj Aletleri::masaj-aletleri|Outdoor Urunler::outdoor-urunler|Oyun & Eglence::oyun-eglence|Tatil & Seyahat Urunleri::tatil-seyahat-urunleri|Pratik Organizer Urunler::pratik-organizer-urunler|Makyaj & Taki Organizeri::makyaj-taki-organizeri|Mousepad::mousepad|Telefon & Tablet Standi::telefon-tablet-standi|Aksesuar::aksesuar|Pet Shop::pet-shop|Waterproof Urunler::waterproof-urunler' | split: '|' -%}
       <nav class="reborn-nav" aria-label="Ana menu">
         <div class="reborn-nav__inner">
           <div class="reborn-categories">
@@ -65,13 +65,16 @@
             </button>
             <div class="reborn-categories__panel">
               <ul>
-                {%- for category_title in fixed_categories -%}
-                  {%- assign category_handle = category_title | handleize -%}
+                {%- for category_item in fixed_categories -%}
+                  {%- assign category_parts = category_item | split: '::' -%}
+                  {%- assign category_title = category_parts[0] -%}
+                  {%- assign category_handle = category_parts[1] | default: category_title | handleize -%}
                   {%- assign category_collection = collections[category_handle] -%}
                   {%- if category_collection != blank -%}
                     {%- assign category_url = category_collection.url -%}
                   {%- else -%}
-                    {%- assign category_url = routes.search_url | append: '?type=product&q=' | append: category_title | url_encode -%}
+                    {%- assign category_query = category_title | url_encode -%}
+                    {%- assign category_url = routes.search_url | append: '?type=product&q=' | append: category_query -%}
                   {%- endif -%}
                   <li>
                     <a href="{{ category_url }}">
