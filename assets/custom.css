@@ -747,12 +747,29 @@ body.reborn-theme .btn-secondary {
 }
 
 /* Categories flyout */
-.reborn-nav ul {
-  position: relative;
+.reborn-nav__inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  min-height: 54px;
+}
+
+.reborn-nav__links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .reborn-categories {
   position: relative;
+  flex: 0 0 auto;
 }
 
 .reborn-categories__trigger {
@@ -1018,6 +1035,18 @@ body.reborn-theme .btn-secondary {
 @media (max-width: 768px) {
   .reborn-categories__panel {
     width: 240px;
+  }
+
+  .reborn-nav__inner {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    min-height: auto;
+    padding: 8px 0;
+  }
+
+  .reborn-nav__links {
+    min-height: 44px;
+    gap: 14px;
   }
 
   .reborn-footer__trust-grid,
