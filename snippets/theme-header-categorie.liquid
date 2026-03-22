@@ -1,0 +1,91 @@
+<nav class="header__vertical-menu">
+  <ul class="list-menu list-menu--vertical" role="list">
+    {%- for link in menu.links -%}
+      {% comment %} Find a icon setting for this categorie {% endcomment %}
+      {%- assign link_title = link.title | downcase -%}
+      {%- assign count = forloop.index -%}
+      {%- capture blockIcon -%}{%- endcapture -%}
+      {%- for item in blocks -%}
+        {%- if item.type == 'icon_categories' -%}
+    	  {%- capture icon -%}categorie_icon_{{ count }}{%- endcapture -%}
+    	  {%- capture icon_hover -%}categorie_icon_{{ count }}_hover{%- endcapture -%}
+          {%- capture blockIcon -%}
+            <span class="header__vertical-icon {%- if item.settings[icon_hover] != blank %} vertical-icon__active-hover{% endif -%}">
+              {%- if item.settings[icon] != blank -%}
+              <img class="header__vertical-icon-img"
+                   src="{{ item.settings[icon] | img_url: '50x' }}"
+                   alt="{{ item.settings[icon].alt | escape }}"
+                   loading="lazy"
+                   width="{{ item.settings[icon].width }}"
+                   height="{{ item.settings[icon].height }}"
+                   >
+              {%- endif -%}
+              {%- if item.settings[icon_hover] != blank -%}
+              <img class="header__vertical-icon-hover"
+                   src="{{ item.settings[icon_hover] | img_url: '50x' }}"
+                   alt="{{ item.settings[icon_hover].alt | escape }}"
+                   loading="lazy"
+                   width="{{ item.settings[icon_hover].width }}"
+                   height="{{ item.settings[icon_hover].height }}"
+                   >
+              {%- endif -%}
+            </span>      
+    	  {%- endcapture -%}
+          {% break %}
+        {%- endif -%}
+      {%- endfor -%}
+      {% comment %} Find a sub-menu setting for this menu {% endcomment %}
+      {%- assign block = blank -%}
+      {%- for item in blocks -%}
+        {%- assign target = item.settings.title | downcase -%}
+        {%- if item.type == 'sub_category' and target == link_title -%}
+          {%- assign block = item -%}
+          {% break %}
+        {%- endif -%}
+      {%- endfor -%}
+      {% if block != blank %}
+        <li class="header__vertical-root menu__dropdown">
+          <a href="{{ link.url }}" class="header__vertical-item list-menu__item dropdown-toggle {% if link.current %}header__vertical-active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+            {{ blockIcon }}
+            {{ link.title | escape }}
+            <i class="cs-icon icon-ios-arrow-right"></i>
+          </a>
+          <ul class="header__mega list-menu component-scrollbar dropdown-menu row row-cols-{{ block.settings.column }}" role="list" tabindex="-1">
+            {%- for i in (1..6) -%}
+              {%- capture linklist -%}col{{ i }}_linklist{%- endcapture -%}
+              {%- capture title -%}col{{ i }}_title{%- endcapture -%}
+              {%- if block.settings[linklist] != blank -%}
+                <li class="header__mega-root col">
+                  <div class="header__submenu">
+                    {%- if block.settings[title] != blank -%}<div class="linklist-title">{{ block.settings[title] }}</div>{%- endif -%}
+                    <ul>            
+                      {%- render 'menu-vertical-child-new', child_links: linklists[block.settings[linklist]] -%}
+                    </ul>
+                  </div>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </li>
+      {%- elsif link.links != blank -%}
+        <li class="header__vertical-root menu__dropdown menu_subdropdown">
+          <a href="{{ link.url }}" class="header__vertical-item list-menu__item dropdown-toggle {% if link.current %}header__vertical-active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+            {{ blockIcon }}
+            {{ link.title | escape }}
+            <i class="cs-icon icon-ios-arrow-right"></i>
+          </a>
+          <ul class="header__submenu list-menu list-menu--disclosure component-scrollbar dropdown-menu" role="list" tabindex="-1">
+            {%- render 'menu-child', link: link -%}
+          </ul>
+        </li>
+      {%- else -%}
+        <li class="header__vertical-root">
+          <a href="{{ link.url }}" class="header__vertical-item list-menu__item {% if link.current %}header__vertical-active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+            {{ blockIcon }}
+            {{ link.title | escape }}
+          </a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</nav>

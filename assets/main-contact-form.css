@@ -1,0 +1,42 @@
+.contact-form__container{
+  width: 770px;
+  max-width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+.contact-subtitle{
+  font-size: 16px;
+  line-height: 1.8em;
+  margin-bottom: 30px;
+  color: var(--color_tertiary);
+}
+
+.contact__fields > div{
+  margin-bottom: 30px;
+}
+
+.contact__fields .field__input{
+  height: 40px;
+  line-height: 40px;
+  outline: none;
+}
+.contact__fields textarea{
+  min-height: 342px;
+}
+.contact__fields textarea + .form__label{
+  top: 30px;
+}
+.contact__fields input,
+.contact__fields textarea{ 
+  background-color: var(--color_altenative);    
+}
+.contact__button button{
+  min-width: 100px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+@media screen and (max-width: 767px){
+  .contact__fields textarea{
+    min-height: 150px;
+  }
+}

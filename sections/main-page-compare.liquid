@@ -1,0 +1,47 @@
+{{ 'section-main-compare.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'page-compare.js' | asset_url }}" defer="defer"></script>
+
+<div class="compare-template__layout">
+  <div class="container">
+    <div class="compare-template__container">
+      <h1 class="hidden">
+        {{ page.title | escape }}
+      </h1>
+      <div class="main-page-content">
+        <page-compare>
+          <div class="compare-empty">{{ 'compare.empty' | t }}</div>
+          <div class="compare-template__product" page-compare-product data-remove="{{ 'compare.remove' | t }}">
+            <table class="compare-template__table">
+              <tbody>
+                <tr data-type="product">
+                  <td>{{ 'compare.product' | t }}</td>
+                </tr>
+                <tr data-type="vendor">
+                  <td>{{ 'compare.vendor' | t }}</td>
+                </tr>
+                <tr data-type="type">
+                  <td>{{ 'compare.type' | t }}</td>
+                </tr>
+                <tr data-type="available">
+                  <td>{{ 'compare.available' | t }}</td>
+                </tr>
+                <tr data-type="option">
+                  <td>{{ 'compare.option' | t }}</td>
+                </tr>
+                <tr data-type="remove">
+                  <td>{{ 'compare.remove' | t }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </page-compare>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Page",
+  "class": "compare-template"
+}
+{% endschema %}

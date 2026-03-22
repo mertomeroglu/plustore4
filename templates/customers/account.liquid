@@ -1,0 +1,102 @@
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+
+<div class="account-layout">
+  <div class="container">
+    <div class="account-content">
+      <div class="account-content__info row">
+        <div class="account-content__details col-sm-6">
+          <h3 class="account-details__title">{{ 'customer.account.details' | t }}</h3>
+          <div class="account-details__content">
+            <div class="account-details__item">
+              <span class="details-item__title">{{'customer.account.name'|t}}:</span>
+              <span class="details-item__content">{{ customer.name }}</span>
+            </div>
+            <div class="account-details__item">
+              <span class="details-item__title">{{'customer.account.email'|t}}:</span>
+              <a class="details-item__content" href="{{ customer.email }}">{{ customer.email }}</a>
+            </div>
+            <div class="account-details__item">
+              <span class="details-item__title">{{'customer.account.address'|t}}:</span>
+              <address class="details-item__content">{{ customer.default_address.address1 }}, {{ customer.default_address.city}}, {{customer.default_address.country}}</address>
+            </div>
+            <div class="account-details__item">
+              <span class="details-item__title">{{'customer.account.phone'|t}}:</span>
+              <a class="details-item__content" href="tel:{{customer.default_address.phone}}">{{customer.default_address.phone}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="account-content__link col-sm-6">
+          <h3 class="account-link__title">{{'customer.account.title'|t}}</h3>
+          <div class="account-link__content">
+            <ul class="account-link__list">
+              <li class="account-link__item">
+                <a href="{{ routes.account_logout_url }}">{{ 'customer.log_out' | t }}</a>
+              </li>
+              <li class="account-link__item">
+                <a href="{{ routes.account_addresses_url }}">{{ 'customer.account.view_addresses' |t }}</a>
+              </li>
+              <li class="account-link__item">
+                <a href="/pages/wish-list">{{ 'customer.account.view_wishlist' |t }}</a>
+              </li>
+            </ul>
+          </div>                
+        </div>
+        {%- if settings.account_banner_1 -%}
+          <div class="account-content__banner col-sm-6">
+            <a href="{{ settings.account_banner_1_link }}">
+              {%- assign preview_img = settings.account_banner_1 -%}
+              <div class="lazy-bg" style="padding-bottom: {{ 100 | divided_by: preview_img.aspect_ratio }}%;">
+                <img {% render 'lazyload', preview_img: preview_img  %} />
+                <span class="data-lazy-loading"></span>
+              </div>
+            </a>
+          </div>
+        {%- endif -%}
+        {%- if settings.account_banner_2 -%}
+          <div class="account-content__banner col-sm-6">
+            <a href="{{ settings.account_banner_2_link }}">
+              {%- assign preview_img = settings.account_banner_2 -%}
+              <div class="lazy-bg" style="padding-bottom: {{ 100 | divided_by: preview_img.aspect_ratio }}%;">
+                <img {% render 'lazyload', preview_img: preview_img  %} />
+                <span class="data-lazy-loading"></span>
+              </div>
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="account-content__orders">
+        <div class="account-orders__content">
+          {% paginate customer.orders by 20 %}
+            {% if customer.orders.size != 0 %}
+              <table>
+                <thead>
+                  <tr>
+                    <th class="order_number">{{ 'customer.orders.order_number' | t }}</th>
+                    <th class="date">{{ 'customer.orders.date' | t }}</th>
+                    <th class="payment_status">{{ 'customer.orders.payment_status' | t }}</th>
+                    <th class="fulfillment_status">{{ 'customer.orders.fulfillment_status' | t }}</th>
+                    <th class="total">{{ 'customer.orders.total' | t }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order in customer.orders %}
+                  <tr class="{% cycle 'odd', 'even' %} {% if order.cancelled %}cancelled_order{% endif %}">
+                    <td class="td-name">{{ order.name | link_to: order.customer_url }}</td>
+                    <td class="td-note"><span class="note">{{ order.created_at | date: format: 'short' }}</span></td>
+                    <td class="td-authorized"><span class="status_{{ order.financial_status }}">{{ order.financial_status_label }}</span></td>
+                    <td class="td-unfulfilled"><span class="status_{{ order.fulfillment_status }}">{{ order.fulfillment_status_label }}</span></td>
+                    <td class="td-total"><span class="total money" style="font-family:'currencies'">{{ order.total_price | money }}</span></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% else %}
+              <p>{{ 'customer.orders.none' | t }}</p>
+            {% endif %}
+            {% include 'pagination' %}
+          {% endpaginate %}
+        </div>  
+      </div>   
+    </div>
+  </div>
+</div>

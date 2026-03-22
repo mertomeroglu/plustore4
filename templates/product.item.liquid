@@ -1,0 +1,105 @@
+{%- liquid
+  layout none
+  assign fixed_aspect_ratio = false
+  unless settings.product_image_size == 'natural'
+    assign fixed_aspect_ratio = true
+  endunless
+  assign sold_out = true
+  if product.available
+    assign sold_out = false
+  endif
+-%}
+<div class="product-item__grid {% if sold_out %}product-item__sold-out{% endif %}">
+  {%- if settings.product_title == 'top' -%}
+    <a class="product-item__title h5" href="{{ product.url | within: collection }}">{{ product.title }}</a>
+  {%- endif -%}
+  <div class="product-item__top">
+    <a href="{{ product.url | within: collection }}" class="product-item__link {% if settings.product_hover_image %}product-item__hover_image{% endif %}">
+      <div class="lazy-bg product-item__image {% if fixed_aspect_ratio %}image-ratio--{{ settings.product_image_size }}{% endif %}" {% unless fixed_aspect_ratio %}style="padding-bottom: {{ 100 | divided_by: product.featured_image.aspect_ratio }}%;"{% endunless %}>
+        {%- assign preview_img = product.featured_image -%}
+        <img {% render 'lazyload', preview_img: preview_img  %} />
+        <span class="data-lazy-loading"></span>
+      </div>
+      {%- if settings.product_hover_image and product.images.size > 1 -%}
+        <div class="product-item__image_second">
+          {%- for image in product.images offset: 1 limit: 1 -%}
+            {%- assign second_image = image -%}
+          {%- endfor -%}
+          <div class="lazy-bg product-item__image {% if fixed_aspect_ratio %}image-ratio--{{ settings.product_image_size }}{% endif %}" {% unless fixed_aspect_ratio %}style="padding-bottom: {{ 100 | divided_by: second_image.aspect_ratio }}%;"{% endunless %}>
+            {%- assign preview_img = second_image -%}
+            <img {% render 'lazyload', preview_img: preview_img  %} />
+            <span class="data-lazy-loading"></span>
+          </div>
+        </div>
+      {%- endif -%}
+    </a>
+    {%- if settings.product_quickview or settings.product_addtocart or settings.product_compare -%}
+      <div class="product-item__hover">
+        {%- if settings.product_addtocart -%}
+          <div class="product-item__addcart">
+            {%- if product.available -%}
+              {%- if product.variants.size == 1 -%}
+                <product-cart>
+                  <a href="{{ product.url | within: collection }}" class="product-item__icon" 
+                     title="{{ 'products.product.add_to_cart' | t }}" 
+                     data-add-cart="{{ product.variants[0].id }}">
+                    <span class="cs-icon icon-ios-cart"></span>
+                  </a>
+                </product-cart>
+              {%- else -%}
+                <a href="{{ product.url | within: collection }}" class="product-item__icon" 
+                   title="{{ 'products.product.add_to_cart' | t }}">
+                  <span class="cs-icon icon-navicon"></span>
+            	</a>
+              {%- endif -%}
+            {%- else -%}
+              <a href="{{ product.url | within: collection }}" class="product-item__icon" 
+                 title="{{ 'products.product.add_to_cart' | t }}" disabled="disabled">
+                <span class="cs-icon icon-ios-cart"></span>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if settings.product_quickview and sold_out == false -%}
+          <div class="product-item__quickview">
+            <product-quickview>
+              <a href="{{ product.url | within: collection }}" data-handle="{{ product.handle }}" class="product-item__icon" title="{{ 'products.product_item.quick_view' | t }}">
+                <span class="cs-icon icon-ios-search"></span>
+              </a>
+            </product-quickview>
+          </div>
+        {%- endif -%}
+        {%- if settings.product_compare -%}
+          <div class="product-item__compare">
+            <product-compare>
+              <a href="{{ product.url | within: collection }}" data-add="{{ 'compare.add_to_compare' | t }}" data-added="{{ 'compare.compare_added' | t }}" data-compare-handle="{{ product.handle }}" class="product-item__icon" title="{{ 'compare.add_to_compare' | t }}">
+                <span class="cs-icon icon-ios-shuffle"></span>
+              </a>
+            </product-compare>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    {%- if settings.product_wishlist -%}
+      <product-wishlist>
+        <a href="{{ product.url | within: collection }}" data-add="{{ 'wishlist.add_to_wishlist' | t }}" data-added="{{ 'wishlist.wishlist_added' | t }}" data-wishlist-handle="{{ product.handle }}" class="product-item__icon" title="{{ 'wishlist.add_to_wishlist' | t }}">
+          <span class="cs-icon icon-heart"></span>
+        </a>
+      </product-wishlist>
+    {%- endif -%}
+    {%- if settings.product_label -%}
+      {% render 'product-labels', product: product, label_class: 'product-item__label' %}
+    {%- endif -%}
+  </div>
+  <div class="product-item__bottom">
+    {%- if settings.product_title == 'bottom' -%}
+      <a class="product-item__title h5" href="{{ product.url | within: collection }}">{{ product.title }}</a>
+    {%- endif -%}
+    {% render 'price', product: product , price_class: 'product-item__price' %}
+    {%- if settings.product_rating -%}
+      <div class="product-item__rating">
+        <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

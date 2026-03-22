@@ -1,0 +1,27 @@
+<div class="product-labels {{ label_class }}">
+  {%- if settings.product_label_sale != blank -%}
+  	{%- if product.compare_at_price > product.price and product.available -%}
+      {%- assign percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round -%}
+      <div class="product__labels-item product__labels-sale" style="background: {{ settings.product_label_sale_color }};">
+        {{ settings.product_label_sale | replace: '[percent]', percent }}
+      </div>
+  	  <style type="text/css">
+        .product__labels-sale:before{
+          background: {{ settings.product_label_sale_color }};
+        }
+      </style>
+    {% endif %}
+  {%- endif -%}
+  {%- if product.metafields.my_fields.product_labels.value != blank -%}
+    {% for label in product.metafields.my_fields.product_labels.value %}
+      <div class="product__labels-item product__labels-{{ label['text'] | downcase | strip  | replace: ' ', '-'}}" style="background: {{ label['color'] }};">
+        {{ label['text'] }}
+      </div>
+  	  <style type="text/css">
+        .product__labels-{{ label['text'] | downcase | strip  | replace: ' ', '-'}}:before{
+          background: {{ label['color'] }};
+        }
+      </style>
+    {% endfor %}
+  {%- endif -%}
+</div>

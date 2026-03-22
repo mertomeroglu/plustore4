@@ -1,0 +1,159 @@
+{%- for filter in collection.filters -%}
+  {% case filter.type %}
+    {% when 'list' %}
+      {%- assign _showcolor = false -%}
+      {%- include 'collection-filter-color', label: filter.label -%}
+      <details class="mobile-facets__details js-filter" data-index="mobile-{{ forloop.index }}">
+        <summary class="mobile-facets__summary focus-inset">
+          <div>
+            <span>{{ filter.label | escape }}</span>    
+            <span class="count-bubble">
+              {%- if filter.active_values.size > 0 -%}{{ filter.active_values.size }}{%- endif -%}
+            </span>
+            <span class="mobile-facets__arrow no-js-hidden">{% render 'icon-arrow' %}</span>
+            <noscript>{% render 'icon-caret' %}</noscript>
+          </div>
+        </summary>
+        <div class="mobile-facets__submenu">
+          <button class="mobile-facets__close-button link link--text focus-inset" aria-expanded="true" type="button">
+            {% render 'icon-arrow' %}
+            {{ filter.label | escape }}
+          </button>
+          <ul class="facets__list {% if _showcolor %}facets__list-color{% endif %} list-unstyled" role="list">
+            {%- for value in filter.values -%}
+            <li class="list-menu__item facets__item">
+              {%- if _showcolor -%}
+              <label for="Filter-{{ filter.label | escape }}-mobile-{{ forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}">
+                <input type="checkbox"
+                       name="{{ value.param_name }}"
+                       value="{{ value.value }}"
+                       id="Filter-{{ filter.label | escape }}-mobile-{{ forloop.index }}"
+                       {% if value.active %}checked{% endif %}
+                       {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                       >
+                {% render 'icon-input' %}
+                {% render 'icon-filter-checkmark' %}
+                <span class="collections-filter__color" style="background: {% include 'collection-filter-color-detector', tag: value.label %};"></span>
+                <span class="collections-filter__label">{{ value.label | escape }}</span>
+              </label>
+              {%- else -%}
+              <label for="Filter-{{ filter.label | escape }}-mobile-{{ forloop.index }}" class="facet-checkbox{% if value.count == 0 and value.active == false %} facet-checkbox--disabled{% endif %}">
+                <input type="checkbox"
+                       name="{{ value.param_name }}"
+                       value="{{ value.value }}"
+                       id="Filter-{{ filter.label | escape }}-mobile-{{ forloop.index }}"
+                       {% if value.active %}checked{% endif %}
+                       {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                       >
+                {% render 'icon-input' %}
+                {% render 'icon-filter-checkmark' %}
+                <span class="collections-filter__label">{{ value.label | escape }}</span>
+              </label>
+              {%- endif -%}
+            </li>
+            {%- endfor -%}
+          </ul>
+
+          <div class="no-js-hidden mobile-facets__footer">
+            <facet-remove class="mobile-facets__clear-wrapper">
+              <a href="{{ collection.url }}" class="mobile-facets__clear underlined-link">{{ 'sections.collection_template.clear' | t }}</a>
+            </facet-remove>
+            <button type="button" class="no-js-hidden button button--primary" onclick="this.closest('.mobile-facets__wrapper').querySelector('summary').click()">{{ 'sections.collection_template.apply' | t }}</button>
+            <noscript><button class="button button--primary">{{ 'sections.collection_template.apply' | t }}</button></noscript>
+          </div>
+        </div>
+      </details>
+    {% when 'price_range' %}
+      <details class="mobile-facets__details js-filter" data-index="mobile-{{ forloop.index }}">
+        <summary class="mobile-facets__summary focus-inset">
+          <div>
+            <span>{{ filter.label | escape }}</span>
+            <span class="mobile-facets__arrow no-js-hidden">{% render 'icon-arrow' %}</span>
+            <noscript>{% render 'icon-caret' %}</noscript>
+          </div>
+        </summary>
+        <div class="mobile-facets__submenu">
+          <button class="mobile-facets__close-button link link--text focus-inset" aria-expanded="true" type="button">
+            {% render 'icon-arrow' %}
+            {{ filter.label | escape }}
+          </button>
+          <p class="mobile-facets__info">{{ "sections.collection_template.max_price" | t: price: max_price_amount }}</p>
+          <price-range class="facets__price">
+            <div class="facets__price-range">
+              <input type="range" 
+                     min="0" 
+                     max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" 
+                     {%- if filter.min_value.value -%}
+                     {%- if uses_comma_decimals -%}
+                     value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                     {%- else -%}
+                     value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                     {% endif %}
+                     {%- else -%}
+                     value="0"
+                     {%- endif -%}
+                     >
+              <input type="range" 
+                     min="0" 
+                     max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" 
+                     {%- if filter.max_value.value -%}
+                     {%- if uses_comma_decimals -%}
+                     value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                     {%- else -%}
+                     value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                     {% endif %}
+                     {%- else -%}
+                     value="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                     {%- endif -%}
+                     >
+            </div>
+            <div class="facets__price-field">
+              <div class="field">
+                <span class="field-currency">{{ cart.currency.symbol }}</span>
+                <input class="field__input"
+                       name="{{ filter.min_value.param_name }}"
+                       id="Mobile-Filter-{{ filter.label | escape }}-GTE"
+                       {%- if filter.min_value.value -%}
+                       {%- if uses_comma_decimals -%}value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                       {%- endif -%}
+                       type="number"
+                       placeholder="0"
+                       min="0"
+                       inputmode="decimal"
+                       {%- if uses_comma_decimals -%}max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"{% endif %}
+                       />
+              </div>
+              <span class="facets__price-to">{{ 'sections.collection_template.to' | t }}</span>
+              <div class="field">
+                <span class="field-currency">{{ cart.currency.symbol }}</span>
+                <input class="field__input"
+                       name="{{ filter.max_value.param_name }}"
+                       id="Mobile-Filter-{{ filter.label | escape }}-LTE"
+                       {%- if filter.max_value.value -%}
+                       {%- if uses_comma_decimals -%}value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                       {%- endif -%}
+                       type="number"
+                       min="0"
+                       inputmode="decimal"
+                       {%- if uses_comma_decimals -%}
+                       placeholder="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                       max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                       {%- else -%}
+                       placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                       max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                       {% endif %}
+                       />
+              </div>
+            </div>
+          </price-range>
+          <div class="no-js-hidden mobile-facets__footer">
+            <facet-remove class="mobile-facets__clear-wrapper">
+              <a href="{{ collection.url }}" class="mobile-facets__clear underlined-link">{{ 'sections.collection_template.clear' | t }}</a>
+            </facet-remove>
+            <button type="button" class="no-js-hidden button button--primary" onclick="this.closest('.mobile-facets__wrapper').querySelector('summary').click()">{{ 'sections.collection_template.apply' | t }}</button>
+            <noscript><button class="button button--primary">{{ 'sections.collection_template.apply' | t }}</button></noscript>
+          </div>
+        </div>
+      </details>
+  {% endcase %}
+{%- endfor -%}

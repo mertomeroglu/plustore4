@@ -1,0 +1,66 @@
+{% layout none %}
+<td data-type="product" data-page-compare-handle="{{ product.handle }}">
+  <div class="compare-template__product-item">
+    <a href="{{ product.url | within: collection }}" class="product-item__link">
+      <div class="lazy-bg product-item__image {% if fixed_aspect_ratio %}image-ratio--{{ settings.product_image_size }}{% endif %}" {% unless fixed_aspect_ratio %}style="padding-bottom: {{ 100 | divided_by: product.featured_image.aspect_ratio }}%;"{% endunless %}>
+        {%- assign preview_img = product.featured_image -%}
+        <img {% render 'lazyload', preview_img: preview_img  %} />
+        <span class="data-lazy-loading"></span>
+      </div>
+    </a>
+    <a class="product-item__title h5" href="{{ product.url | within: collection }}">{{ product.title }}</a>
+    {% render 'price', product: product , price_class: 'product-item__price' %}
+    {%- if settings.product_addtocart -%}
+      <div class="product-item__addcart">
+        {%- if product.available -%}
+          {%- if product.variants.size == 1 -%}
+            <product-cart>
+              <a href="{{ product.url | within: collection }}" class="product-item__icon" 
+                 title="{{ 'products.product.add_to_cart' | t }}" 
+                 data-add-cart="{{ product.variants[0].id }}">
+                {{ 'products.product.add_to_cart' | t }}
+              </a>
+            </product-cart>
+          {%- else -%}
+            <a href="{{ product.url | within: collection }}" class="product-item__icon" 
+               title="{{ 'products.product.select_options' | t }}">
+              {{ 'products.product.select_options' | t }}
+            </a>
+          {%- endif -%}
+        {%- else -%}
+          <a href="{{ product.url | within: collection }}" class="product-item__icon" 
+             title="{{ 'products.product.add_to_cart' | t }}" disabled="disabled">
+            {{ 'products.product.add_to_cart' | t }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</td>
+<td data-type="vendor" data-page-compare-handle="{{ product.handle }}">
+  {{ product.vendor }}
+</td>
+<td data-type="type" data-page-compare-handle="{{ product.handle }}">
+  {{ product.type }}
+</td>
+<td data-type="available" data-page-compare-handle="{{ product.handle }}">
+  {% if product.variants[0].available %}
+    {{ 'products.product.in_stock' | t }}
+  {%- else -%}
+    {{ 'products.product.out_stock' | t }}
+  {%- endif -%}
+</td>
+<td data-type="option" data-page-compare-handle="{{ product.handle }}">
+  {%- unless product.has_only_default_variant -%}
+    {%- for option in product.options_with_values -%}
+      <p><strong>{{ option.name }}</strong>: {{ option.values | join: ', ' }}</p>
+    {%- endfor -%}
+  {%- endunless -%}
+</td>
+<td data-type="remove" data-page-compare-handle="{{ product.handle }}">
+  <product-compare>
+    <a href="{{ product.url | within: collection }}" data-add="{{ 'compare.add_to_compare' | t }}" data-added="{{ 'compare.compare_added' | t }}" data-compare-handle="{{ product.handle }}" class="product-item__icon" title="{{ 'compare.add_to_compare' | t }}">
+      {% render 'icon-remove' %}
+    </a>
+  </product-compare>
+</td>

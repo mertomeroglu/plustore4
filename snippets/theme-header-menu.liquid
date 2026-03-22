@@ -1,0 +1,84 @@
+<nav class="header__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list">
+    {%- for link in menu.links -%}
+      {% comment %} Find a sub-menu setting for this menu {% endcomment %}
+      {%- assign link_title = link.title | downcase -%}
+      {%- assign block = blank -%}
+      {%- for item in blocks -%}
+        {%- assign target = item.settings.title | downcase -%}
+        {%- if item.type == 'sub_menu' and target == link_title -%}
+          {%- assign block = item -%}
+          {% break %}
+        {%- endif -%}
+      {%- endfor -%}
+      {% if block != blank %}
+        <li class="header__menu-root menu__dropdown menu__mega">
+          <a href="{{ link.url }}" class="header__menu-item list-menu__item dropdown-toggle {% if link.current %}header__menu-active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+            {{ link.title | escape }}
+            <i class="cs-icon icon-ion-ios-arrow-down"></i>
+          </a>
+          <ul class="header__mega dropdown-menu row" role="list" tabindex="-1" {% if block.settings.bkg %}style="background-image:url({{ block.settings.bkg | img_url: 'master'}})"{% endif %}>
+            {%- for i in (1..6) -%}
+              {%- capture enable -%}col{{ i }}_enable{%- endcapture -%}
+              {%- capture column -%}col{{ i }}_column{%- endcapture -%}
+              {%- capture link_title -%}col{{ i }}_link_title{%- endcapture -%}
+              {%- capture link_list -%}col{{ i }}_link_list{%- endcapture -%}
+              {%- capture product_title -%}col{{ i }}_product_title{%- endcapture -%}
+              {%- capture product -%}col{{ i }}_product{%- endcapture -%}
+              {%- capture article -%}col{{ i }}_article{%- endcapture -%}
+              {%- capture html -%}col{{ i }}_html{%- endcapture -%}
+              {%- if block.settings[enable] -%}
+            	<li class="header__mega-root col-{{ block.settings[column] }}">
+                  {%- if block.settings[link_list] != blank -%}
+                    <div class="header__submenu">
+                      {%- if block.settings[link_title] != blank -%}<div class="linklist-title">{{ block.settings[link_title] }}</div>{%- endif -%}
+                      <ul>            
+                        {%- render 'menu-child-new', child_links: linklists[block.settings[link_list]] -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+                  {%- if block.settings[product] != empty and all_products[block.settings[product]] != empty -%}
+                    <div class="header__mega-product">
+                      {%- if block.settings[product_title] != blank -%}<div class="header__mega-product-title">{{ block.settings[product_title] }}</div>{%- endif -%}
+                      {%- assign product = all_products[block.settings[product]] -%}
+                      <div class="header__mega-product-grid">
+                        {%- render 'index-product-item-list', product: product -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                  {%- if block.settings[article] != empty and articles[block.settings[article]] != empty -%}
+                    <div class="header__mega-article">
+                      {%- assign article = articles[block.settings[article]] -%}
+                      {%- render 'index-article-item', article: article -%}
+                    </div>
+                  {%- endif -%}
+                  {%- if block.settings[html] != empty and block.settings[html] != blank -%}
+                    <div class="header__mega-html">
+                      {{ block.settings[html] }}
+                    </div>
+                  {%- endif -%}
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </li>
+      {%- elsif link.links != blank -%}
+        <li class="header__menu-root menu__dropdown">
+          <a href="{{ link.url }}" class="header__menu-item list-menu__item dropdown-toggle {% if link.current or link.child_active %}header__menu-active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+            {{ link.title | escape }}
+            <i class="cs-icon icon-ion-ios-arrow-down"></i>
+          </a>
+          <ul class="header__submenu list-menu list-menu--disclosure dropdown-menu" role="list" tabindex="-1">
+            {%- render 'menu-child', link: link -%}
+          </ul>
+        </li>
+      {%- else -%}
+        <li class="header__menu-root">
+          <a href="{{ link.url }}" class="header__menu-item list-menu__item {% if link.current %}header__menu-active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+            {{ link.title | escape }}
+          </a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+</nav>

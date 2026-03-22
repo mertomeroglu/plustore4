@@ -1,0 +1,524 @@
+{{ 'component-mobile-facet.css' | asset_url | stylesheet_tag }}
+{{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
+{{ 'component-article.css' | asset_url | stylesheet_tag }}
+{{ 'component-sidebar-blog.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign fixed_aspect_ratio = false
+  unless settings.article_image_size == 'natural'
+    assign fixed_aspect_ratio = true
+  endunless
+  
+  if section.blocks.size > 0
+    for block in section.blocks
+      if block.settings.position == 'left_sidebar'
+         if leftSidebar == true
+            continue
+         else
+           assign leftSidebar = true
+         endif
+      elsif block.settings.position == 'right_sidebar'
+         if rightSidebar == true
+            continue
+         else
+           assign rightSidebar = true
+         endif
+      endif
+    endfor
+  endif
+-%}
+<div class="blog-template__layout">
+  <div class="container">
+    <div class="row">
+      {%- if leftSidebar -%}
+      	<div class="blog-template__sidebar blog-sidebar__left col-12 col-sm-3 d-none d-md-block" data-sticky-sidebar="30">
+          <div class="blog-sidebar__content">
+            <accordion-component data-accordion-parent="true">
+              {%- for block in section.blocks -%}
+                {%- if block.settings.position == 'left_sidebar' -%}
+                  {%- include block.type -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </accordion-component>
+          </div>
+        </div>
+      {%- endif -%}
+      <div class="blog-template__content {% if leftSidebar %}padding-left{% endif %} {% if rightSidebar %}padding-right{% endif %} {% if leftSidebar or rightSidebar %}is-sidebar col-12 col-sm-9{% else %}col-12 col-sm-12{% endif %}">
+        <h1 class="hidden">{{ blog.title }}</h1>
+        {%- if section.settings.sidebar -%}
+          {%- if leftSidebar or rightSidebar -%}
+            <menu-drawer class="mobile-facets__wrapper d-block d-md-none" data-breakpoint="mobile">
+              <details class="mobile-facets__disclosure disclosure-has-popup">
+                <summary class="mobile-facets__open-wrapper focus-offset">
+                  <span class="mobile-facets__open">
+                    <span class="mobile-facets__open-label button-label">{{ 'blogs.sidebar.action' | t }}</span>
+                  </span>
+                  <span tabindex="0" class="mobile-facets__close mobile-facets__close--no-js">{%- render 'icon-close' -%}</span>
+                </summary>
+                <div class="mobile-facets">
+                  <div class="mobile-facets__inner">
+                    <div class="mobile-facets__main">
+                      <div class="blog-sidebar__content">
+                        <accordion-component data-accordion-parent="true">
+                          {%- for block in section.blocks -%}
+                          {%- include block.type -%}
+                          {%- endfor -%}
+                        </accordion-component>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </menu-drawer>
+          {%- endif -%}
+        {%- endif -%}
+        {%- paginate blog.articles by section.settings.limit -%}
+          <div class="blog-template__articles row row-cols-{{ section.settings.col }} row-cols-sm-{{ section.settings.col_sm }} row-cols-md-{{ section.settings.col_md }} row-cols-lg-{{ section.settings.col_lg }} row-cols-xl-{{ section.settings.col_xl }} row-cols-xxl-{{ section.settings.col_xxl }}">
+            {%- for article in blog.articles -%}
+              <div class="article-item__content article-item__layout-{{ section.settings.layout }} col">
+                <div class="article-item__grid">
+                  <div class="article-item__left">
+                    <a href="{{ article.url }}" class="article-item__link">
+                      <div class="lazy-bg product-item__image {% if fixed_aspect_ratio %}image-ratio--{{ settings.article_image_size }}{% endif %}" {% unless fixed_aspect_ratio %}style="padding-bottom: {{ 100 | divided_by: article.image.aspect_ratio }}%;"{% endunless %}>
+                        {%- assign preview_img = article.image -%}
+                        <img {% render 'lazyload', preview_img: preview_img  %} />
+                        <span class="data-lazy-loading"></span>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="article-item__right">
+                    <a href="{{ article.url }}" class="article-item__title h3">
+                      {{ article.title }}
+                    </a>
+                    {%- if settings.article_author  or settings.article_date -%}
+                      <ul class="article-item__info no-bullet">
+                        {%- if settings.article_author -%}
+                        <li class="article-item__author">
+                          {{ 'blogs.article.by' |t }}
+                          <span class="article-item__author-user">{{ article.author }}</span>
+                        </li>
+                        {%- endif -%}
+                        {%- if settings.article_date -%}
+                        <li class="article-item__date">
+                          {{ article.published_at | date: '%b %d, %Y' }}
+                        </li>
+                        {%- endif -%}
+                      </ul>
+                    {%- endif -%}
+                    {%- if article.excerpt.size > 0 or article.content.size > 0 -%}
+                      <p class="article-item__excerpt">
+                        {%- if article.excerpt.size > 0 -%}
+                          {{ article.excerpt | strip_html | truncatewords: 50 }}
+                        {%- else -%}
+                          {{ article.content | strip_html | truncatewords: 50 }}
+                        {%- endif -%}
+                      </p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+          {%- if paginate.pages > 1 -%}
+            {%- render 'pagination', paginate: paginate -%}
+          {%- endif -%}
+        {%- endpaginate -%}
+      </div>
+      {%- if rightSidebar -%}
+      	<div class="blog-template__sidebar blog-sidebar__right col-12 col-sm-3 d-none d-md-block" data-sticky-sidebar="30">
+          <div class="blog-sidebar__content">
+            <accordion-component data-accordion-parent="true">
+              {%- for block in section.blocks -%}
+                {%- if block.settings.position == 'right_sidebar' -%}
+                  {%- include block.type -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </accordion-component>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Blog template",
+  "class": "blog-template",
+  "settings": [
+	{
+      "type": "select",
+      "id": "layout",
+      "label": "Show view as List\/Grid",
+      "options": [
+        {
+          "value": "list",
+          "label": "List"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "default": "list"
+    },
+	{
+      "type": "number",
+      "id": "limit",
+      "label": "Limit articles show",
+      "default": 6
+    },
+	{
+      "type": "checkbox",
+      "id": "sidebar",
+      "label": "Enable sidebar mobile",
+      "default": true
+    },
+	{
+      "type": "header",
+      "content": "Responsive width"
+    },
+    {
+      "type": "select",
+      "id": "col",
+      "label": "Width",
+      "info": "For small screen (0px - 575px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "col_sm",
+      "label": "Width",
+      "info": "For medium screen (576px - 767px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "col_md",
+      "label": "Width",
+      "info": "For large screen (768px - 991px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "col_lg",
+      "label": "Width",
+      "info": "For xlarge screen (992px - 1199px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "col_xl",
+      "label": "Width",
+      "info": "For xxlarge screen (1200px - 1399px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "col_xxl",
+      "label": "Width",
+      "info": "For xxxlarge screen (1400px - infinity)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "1"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Listing",
+      "type": "blog-link-list",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left_sidebar",
+              "label": "Left sidebar"
+            },
+            {
+              "value": "right_sidebar",
+              "label": "Right sidebar"
+            }
+          ],
+      	  "default": "left_sidebar"
+        },
+        {
+          "type": "link_list",
+          "id": "link_list",
+          "label": "Link list"
+        }
+      ]
+    },
+    {
+      "name": "Recent Articles",
+      "type": "blog-article",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left_sidebar",
+              "label": "Left sidebar"
+            },
+            {
+              "value": "right_sidebar",
+              "label": "Right sidebar"
+            }
+          ],
+      	  "default": "left_sidebar"
+        },
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": "Select blog"
+        },
+        {
+          "type": "number",
+          "id": "limit",
+          "label": "Limit",
+          "default": 3
+        }
+      ]
+    },
+    {
+      "name": "Banner",
+      "type": "blog-banner",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left_sidebar",
+              "label": "Left sidebar"
+            },
+            {
+              "value": "right_sidebar",
+              "label": "Right sidebar"
+            }
+          ],
+      	  "default": "left_sidebar"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Upload banner"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link banner"
+        }
+      ]
+    },
+    {
+      "name": "Tags",
+      "type": "blog-tag",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left_sidebar",
+              "label": "Left sidebar"
+            },
+            {
+              "value": "right_sidebar",
+              "label": "Right sidebar"
+            }
+          ],
+      	  "default": "left_sidebar"
+        }
+      ]
+    },
+    {
+      "name": "HTML",
+      "type": "blog-html",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left_sidebar",
+              "label": "Left sidebar"
+            },
+            {
+              "value": "right_sidebar",
+              "label": "Right sidebar"
+            }
+          ],
+      	  "default": "left_sidebar"
+        },
+        {
+          "type": "html",
+          "id": "html",
+          "label": "HTML"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

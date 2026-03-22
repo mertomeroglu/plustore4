@@ -1,0 +1,21 @@
+<div class="article-item__grid">
+  <div class="article-item__left">
+    <a class="article-item__link">
+      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+    </a>
+  </div>
+  <div class="article-item__right">
+    <ul class="article-item__info no-bullet">
+      <li class="article-item__author">
+        {{ 'blogs.article.by' |t }}
+        <span class="article-item__author-user">{{ 'sections.featured_blog.onboarding_author' | t }}</span>
+      </li>
+      <li class="article-item__date">
+        {{ 'sections.featured_blog.onboarding_date' | t }}
+      </li>
+    </ul>
+    <a class="article-item__title h3">
+      {{ 'sections.featured_blog.onboarding_title' | t }}
+    </a>
+  </div>
+</div>

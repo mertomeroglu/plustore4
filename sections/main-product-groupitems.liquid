@@ -1,0 +1,2280 @@
+{% comment %}theme-check-disable TemplateLength{% endcomment %}
+{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-rte.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+{{ 'component-mobile-facet.css' | asset_url | stylesheet_tag }}
+{{ 'component-collection-sidebar.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-template__info.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'main-product.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-media.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'main-product-groupitems.js' | asset_url }}" defer="defer"></script>
+
+{%- if section.settings.enable_zoom -%}
+{{ 'photoswipe.min.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'photoswipe.min.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+<link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-deferred-media.css' | asset_url }}" media="print" onload="this.media='all'">
+
+{%- liquid 
+  assign leftSidebar = false
+  assign rightSidebar = false
+  assign bottomContent = false
+  for block in section.blocks
+    if block.settings.position == 'left_sidebar'
+       if leftSidebar == true
+          continue
+       else
+         assign leftSidebar = true
+       endif
+    elsif block.settings.position == 'right_sidebar'
+       if rightSidebar == true
+          continue
+       else
+         assign rightSidebar = true
+       endif
+    else
+       if bottomContent == true
+          continue
+       else
+         assign bottomContent = true
+       endif
+    endif
+  endfor
+  assign widthImage = 'col-lg-7'
+  assign widthInfo = 'col-lg-5'
+  if section.settings.width_content == 'small'
+  	assign widthImage = 'col-lg-5'
+    assign widthInfo = 'col-lg-7'
+  elsif section.settings.width_content == 'medium'
+    assign widthImage = 'col-lg-6'
+    assign widthInfo = 'col-lg-6'
+  endif
+  assign position = section.settings.thumbnail_position
+  assign fixed_aspect_ratio = false
+  unless section.settings.image_size == 'natural'
+    assign fixed_aspect_ratio = true
+  endunless
+-%}
+{%- assign first_3d_model = product.media | where: "media_type", "model" | first -%}
+{%- if first_3d_model -%}
+  {{ 'component-product-model.css' | asset_url | stylesheet_tag }}
+  <link id="ModelViewerStyle" rel="stylesheet" href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css" media="print" onload="this.media='all'">
+  <link id="ModelViewerOverride" rel="stylesheet" href="{{ 'component-model-viewer-ui.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+
+<div class="product-template__layout" itemscope itemtype="http://schema.org/Product">
+  {%- liquid 
+    assign current_variant = product.selected_or_first_available_variant
+    assign inventory_quantity = current_variant.inventory_quantity
+    assign inventory_management = current_variant.inventory_management
+    assign featured_image = current_variant.featured_image | default: product.featured_image 
+  -%}
+  <meta itemprop="name" content="{{ product.title }}{% unless product.has_only_default_variant %} - {{ current_variant.title }}{% endunless %}">
+  <meta itemprop="url" content="{{ shop.url }}{{ current_variant.url }}">
+  {%- if section.settings.show_vendor -%}
+    <meta itemprop="brand" content="{{ product.vendor }}">
+  {%- endif -%}
+  <meta itemprop="image" content="{{ featured_image | img_url: 'master' }}">
+
+  <div class="container">
+    <div class="product-template__container row">
+      {%- if leftSidebar -%}
+        <div class="collection--template__sidebar collection-sidebar__left d-none d-md-block col-12 col-md-2-4" data-sticky-sidebar="30">
+          <div class="collection-sidebar__content">
+            <accordion-component data-accordion-parent="true">
+              {%- liquid  
+              for block in section.blocks
+                if block.settings.position == 'left_sidebar'
+                  unless block.settings.display == 'd-block d-md-none'
+                    include block.type
+                  endunless
+                endif
+              endfor 
+              -%}
+           </accordion-component>
+          </div>
+        </div>
+      {%- endif -%}
+      <div class="product-template__content product-template__content-{{ section.settings.image_position }} {% if leftSidebar %}padding-left{% endif %} {% if rightSidebar %}padding-right{% endif %} {% if leftSidebar or rightSidebar %}is-sidebar col-12 col-md-4-5{% else %}col-12 col-md-12{% endif %}">
+        {%- if leftSidebar or rightSidebar -%}
+          <menu-drawer class="mobile-facets__wrapper d-block d-md-none" data-breakpoint="mobile">
+            <details class="mobile-facets__disclosure disclosure-has-popup">
+              <summary class="mobile-facets__open-wrapper focus-offset">
+                <span class="mobile-facets__open">
+                  {% render 'icon-filter' %}
+                  <span class="mobile-facets__open-label button-label">{{ 'products.sidebar.title' | t }}</span>
+                </span>
+                <span tabindex="0" class="mobile-facets__close mobile-facets__close--no-js">{%- render 'icon-close' -%}</span>
+              </summary>
+              <div class="mobile-facets">
+                <div class="mobile-facets__inner component-scrollbar">
+                  <div class="mobile-facets__header">
+                    <div class="mobile-facets__header-inner">
+                      <h2 class="mobile-facets__heading">{{ 'products.sidebar.title' | t }}</h2>
+                    </div>
+                  </div>
+                  <div class="mobile-facets__main">
+                    {%- liquid  
+                    for block in section.blocks
+                      if block.settings.position == 'left_sidebar' or block.settings.position == 'right_sidebar'
+                        unless block.settings.display == 'd-none d-md-block'
+                          assign name = block.type | append: '-mobile'
+                          include name
+                        endunless
+                      endif
+                    endfor 
+                    -%}
+                  </div>
+                </div>
+              </div>
+            </details>
+          </menu-drawer>
+        {%- endif -%}
+        <div class="product-template__inner row">
+          <div class="product-template__media col-12 col-sm-12 {{ widthImage }}" data-sticky-sidebar="30">
+            {%- if product.images.size -%}
+              <product-media-component>
+                {%- capture thumbnail -%}
+                  <div class="product-template__thumbnail product-thumbnail__{{ position }}" data-product-thumbnail="{{ section.settings.thumbnail_position }}">
+                    <div class="product-template__thumbnail-content">
+                      <div class="product-thumbnail_nav-prev" data-carousel-nav-prev><em class="cs-icon icon-ion-ios-arrow-up"></em></div>
+                      <div class="swiper-container" data-carousel-container style="height: 100%;">
+                        <div class="swiper-wrapper">
+                          {%- for media in product.media -%}
+                          <div class="swiper-slide" data-carousel-item="{{ media.id }}">
+                            {% render 'media-thumbnail', media: media %}
+                          </div>
+                          {%- endfor -%}
+                        </div>
+                      </div>
+                      <div class="product-thumbnail_nav-next" data-carousel-nav-next><em class="cs-icon icon-ion-ios-arrow-down"></em></div>
+                    </div>
+                  </div>
+                {%- endcapture -%}
+                <div class="product-template__media-content row">
+                  {%- if position == 'left'  -%}
+                    <div class="col-12 col-lg-2 d-none d-lg-block {% if product.media.size <= 1 %}hidden{% endif %}">
+                      {{ thumbnail }}
+                    </div>
+                  {%- endif -%}
+                    <div class="col-12 {% if position == 'bottom' or position == 'none' %}col-lg-12{% else %}col-lg-10{% endif %}">
+                      <div class="product-gallery carousel" data-product-gallery>
+                        <div class="carousel-wrapper carousel-nav-middle">
+                          <div class="swiper-container" data-carousel-container>
+                            <div class="swiper-wrapper">
+                              {%- assign image_item = 0 -%}
+                              {%- for media in product.media -%}
+                              <div class="swiper-slide swiper-slide-gallery height-100" data-carousel-item="{{ media.id }}">
+                                {% render 'product-thumbnail', media: media, position: forloop.index, zoom: section.settings.enable_zoom, loop: section.settings.enable_video_looping, modal_id: section.id, xr_button: true, image_item: image_item, fixed_aspect_ratio: fixed_aspect_ratio, image_size: section.settings.image_size %}
+                                {%- if media.media_type == 'image' -%}
+                                  {%- assign image_item = image_item | plus: 1 -%}
+                                {%- endif -%}
+                              </div>
+                              {%- endfor -%}
+                            </div>
+                          </div>
+                          {%- if section.settings.navigation -%}
+                            <div class="carousel-navigation carousel-nav-prev" data-carousel-nav-prev><i class="cs-icon icon-ios-arrow-left"></i></div>
+                            <div class="carousel-navigation carousel-nav-next" data-carousel-nav-next><i class="cs-icon icon-ios-arrow-right"></i></div>
+                          {%- endif -%}
+                        </div>
+                        {%- if section.settings.pagination -%}
+                          <div class="carousel-pagination" data-carousel-pagination></div>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  {%- if position == 'right' -%}
+                    <div class="col-12 col-lg-2 d-none d-lg-block {% if product.media.size <= 1 %}hidden{% endif %}">
+                      {{ thumbnail }}
+                    </div>
+                  {%- endif -%}
+                  {%- if position == 'bottom' -%}
+                    <div class="col-12 col-lg-12 d-none d-md-block {% if product.media.size <= 1 %}hidden{% endif %}">
+                      {{ thumbnail }}
+                    </div>
+                  {%- endif -%}
+                  {%- if position == 'none' -%}
+                    <div class="d-none d-lg-none">
+                      {{ thumbnail }}
+                    </div>
+                  {%- endif -%}
+                </div>
+              </product-media-component>
+            {%- endif -%}
+          </div>
+          <div class="product-template__info col-12 col-sm-12 {{ widthInfo }}" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            {%- assign product_form_id = 'product-form-' | append: section.id -%}
+            <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+            <meta itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+            <link itemprop="available" href="http://schema.org/{% if current_variant.available %}InStock{%- else -%}OutOfStock{%- endif -%}">
+            {%- if section.settings.show_discount -%}
+              <div class="product-template__discount">
+                <div class="product-discount__content">
+                  {%- if section.settings.discount_subtitle != blank -%}
+                    <div class="product-discount__subtitle">{{ section.settings.discount_subtitle }}</div>
+                  {%- endif -%}
+                  {%- if section.settings.discount_title != blank -%}
+                    <div class="product-discount__title">{{ section.settings.discount_title }}</div>
+                  {%- endif -%}
+                  {%- if section.settings.discount_text != blank -%}
+                    <div class="product-discount__text">{{ section.settings.discount_text }}</div>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+            <h1 class="product-template__title">{{ product.title }}</h1>
+            <div class="no-js-hidden" id="price-{{ section.id }}">
+              {%- assign price_max = 0 -%}
+              {%- assign price_min = 0 -%}
+              {%- for group in product.metafields.my_fields.product_group.value -%}
+              	{%- liquid
+                    assign productGroup = all_products[group['handle']]
+                    assign currentVariant = productGroup.selected_or_first_available_variant
+                    assign price = currentVariant.price
+                    if price_max < price
+                      assign price_max = price
+                    endif
+                    if price_min > price or price_min == 0
+                      assign price_min = price
+                    endif
+                -%}
+              {%- endfor -%}
+              <div class="product-template__price-range">
+                <span class="price-item price-item--regular">
+                  {{ price_min | money }}
+                </span>
+                <span class='_dot'>-</span>
+                <span class="price-item price-item--regular">
+                  {{ price_max | money }}
+                </span>
+              </div>
+            </div>
+            {%- if section.settings.rating_star != blank -%}
+              <div class="product-template__rating">
+                {{ section.settings.rating_star }}
+                {%- if section.settings.show_write_review -%}
+                  <span class="product-template__rating-add"><a href="#product-detail-review" data-review-anchor>{{ 'products.review.add' | t }}</a></span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            {%- if section.settings.show_earnpoints -%}
+              <div class="product-template__earnpoints">
+                {% assign point = current_variant.price | divided_by: 200 %}
+                {%- render 'icon-diamond' -%} <span class="earnpoints-text">{{ 'products.product.earn_points' | t : point: point }}</span>
+                <modal-component>
+                  <a href="#" class="product-earnpoints__action" data-modal="product-template-earnpoints">{{ 'products.product.learn_more' |t }}</a>
+                </modal-component>
+                <div class="modal__layout" id="product-template-earnpoints">
+                  <div class="modal__close" data-modal-close></div>
+                  <div class="modal__content">
+                    <div class="modal__header">
+                      <a class="modal__close-icon" aria-label="Close" data-modal-close><span class="cs-icon icon-close"></span></a>
+                    </div>
+                    <div class="modal__body">
+                      {{ section.settings.earnpoints_content }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+            
+            {%- if product.metafields.my_fields.product_group.value != blank -%}
+              <product-groupitems class="product-template__group" id="group-{{ section.id }}">
+                {%- if product.metafields.my_fields.product_group.value != blank -%}
+                  {%- liquid
+                    assign fixed_aspect_ratio = false
+                    unless settings.product_image_size == 'natural'
+                      assign fixed_aspect_ratio = true
+                    endunless
+                  -%}
+                  <div class="product-group__content">
+                    <div class="product-group__heading">
+                      <div class="product-group__item product-group__info">
+                        {{ 'sections.cart.headings.product' | t }}
+                      </div>
+                      <div class="product-group__item product-group__qty">
+                        {{ 'sections.cart.headings.quantity' | t }}
+                      </div>
+                      <div class="product-group__item product-group__prices">
+                        {{ 'sections.cart.headings.price' | t }}
+                      </div>
+                    </div>
+                    <div class="product-group__product">
+                      {%- for group in product.metafields.my_fields.product_group.value -%}
+                        {%- liquid
+                          assign productGroup = all_products[group['handle']]
+                          assign currentVariant = productGroup.selected_or_first_available_variant
+                          assign compare_at_price = currentVariant.compare_at_price
+                          assign price = currentVariant.price
+                          -%}
+                        <div class="product-group__product-item" data-product-group-item>
+                          <div class="product-group__item product-group__info">
+							<div class="product-group__image">
+                              <a href="{{ productGroup.url }}">
+                                <img class="lazy-bg product-item__image lazyload"
+                                     src="{{ productGroup.featured_image.src | product_img_url: '150x', crop: 'center' }}"
+                                     alt="{{ productGroup.title | escape }}"
+                                     loading="lazy"
+                                     data-product-group-image
+                                     >
+                              </a>
+                            </div>
+                            <div class="product-group__title">
+                              <h4 class="product-group__title-title">
+                                <a href="{{ productGroup.url }}">{{ productGroup.title }}</a>
+                              </h4>
+                              <div class="product-group__title-variants">
+                                <select class="{%- unless currentVariant.available -%}hidden{%- endunless -%}" data-collection-variant>
+                                  {%- for variant in productGroup.variants -%}
+                                    <option 
+                                            data-variant-available="{%- if variant.available -%}1{%- else -%}2{%- endif -%}" 
+                                            data-variant-image="{{ variant.featured_image | product_img_url: '150x', crop: 'center' }}" 
+                                            data-variant-price="{{ variant.price }}"
+                                            data-variant-price-compare="{% if variant.compare_at_price != blank %}{{ variant.compare_at_price }}{% else %}{{ variant.price }}{% endif %}"
+                                            {% if variant == current_variant %}selected="selected"{%- endif -%} 
+                                            {% unless variant.available %}disabled="disabled"{% endunless %} 
+                                            value="{{ variant.id }}">
+                                      {{ variant.title }}
+                                    </option>
+                                  {%- endfor -%}
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="product-group__item product-group__qty">
+                            <quantity-input class="quantity">
+                              <button class="quantity__button no-js-hidden" name="minus" type="button">
+                                <span class="visually-hidden">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span>
+                                {% render 'icon-minus' %}
+                              </button>
+                              <input class="quantity__input"
+                                     type="number"
+                                     name="quantity"
+                                     id="Quantity-{{ productGroup.id }}"
+                                     min="0"
+                                     value="0"
+                                     form="product-form-{{ productGroup.id }}"
+                                     data-product-group-quantity
+                                     >
+                              <button class="quantity__button no-js-hidden" name="plus" type="button">
+                                <span class="visually-hidden">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span>
+                                {% render 'icon-plus' %}
+                              </button>
+                            </quantity-input>
+                          </div>
+                          <div class="product-group__item product-group__prices {%- if compare_at_price > price %} price--on-sale {% endif -%}" data-product-group-prices>
+                            <dd class="price__compare">
+                              <s class="price-item price-item--regular" data-product-group-price-compare>
+                                {{ compare_at_price | money }}
+                              </s>
+                            </dd>
+                            <dd>
+                              <span class="price-item price-item--sale" data-product-group-price>
+                                {{ price | money }}
+                              </span>
+                            </dd>
+                          </div>
+                        </div>
+                      {%- endfor -%}
+                    </div>
+                    <div class="product-group__total">
+                      <span class="product-group__total-title">
+                        {{ 'sections.cart.headings.total' | t }}
+                      </span>
+                      <span class="product-group__total-price" data-group-prices>
+                        <s class="price-group--sale" data-group-price-compare>
+                          {{ 0 | money }}
+                        </s>
+                        <span class="price-group--regular" data-group-price>
+                          {{ 0 | money }}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <button type="button" class="product-group__button button button--full-width button--primary" data-group-submit disabled>
+                    {{ 'products.product.add_to_cart' | t }}
+                  </button>
+                {%- endif -%}
+              </product-groupitems>
+            {%- endif -%}
+            
+            {% if section.settings.show_details %}
+              <div class="product-template__details">
+                {%- if section.settings.detail_title != blank -%}<div class="product-template__title-area">{{ section.settings.detail_title }}</div>{%- endif -%}
+                <div class="product-template__content-area">
+                  <ul>
+                    {%- if section.settings.show_sku -%}
+                      <li class="product-template__sku">
+                        <span class="product-template__info-title">{{ 'products.product.sku' | t }}</span>
+                        <span class="product-template__info-text" data-product-sku>{{ current_variant.sku }}</span>
+                      </li>              
+                    {%- endif -%}
+                    {%- if section.settings.show_vendor -%}
+                      <li class="product-template__vendor">   
+                        <span class="product-template__info-title">{{ 'products.product.vendor' | t }}</span>
+                        <span class="product-template__info-text">{{ product.vendor }}</span>
+                      </li>
+                    {%- endif -%}
+                    {%- if section.settings.show_type -%}
+                      <li class="product-template__type">   
+                        <span class="product-template__info-title">{{ 'products.product.type' | t }}</span>
+                        <span class="product-template__info-text">{{ product.type }}</span>
+                      </li>
+                    {% endif %}
+                    {%- if section.settings.show_inventory -%}
+                      <li class="product-template__inventory">
+                        {% if current_variant.available %}
+                        {%- assign available = 'products.product.in_stock' | t -%}
+                        {%- else -%}
+                        {%- assign available = 'products.product.out_stock' | t -%}
+                        {%- endif -%}
+                        <span class="product-template__info-title">{{ 'products.product.available' | t }}:</span>
+                        <span class="product-template__info-text" data-product-inventory data-in-stock="{{ 'products.product.in_stock' | t }}" data-out-stock="{{ 'products.product.out_stock' | t }}">{{ available }}</span>
+                      </li>
+                    {%- endif -%}
+                  </ul>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.show_description %}
+              <div class="product-template__description">
+                {%- if section.settings.desc_title -%}<div class="product-template__title-area">{{ section.settings.desc_title }}</div>{%- endif -%}
+                <div class="product-template__content-area">
+                  {{ product.description }}
+                </div>
+              </div>
+            {% endif %}
+            {%- if section.settings.show_share_buttons -%}
+              <div class="product-template__sharing">
+                <div class="product-sharing__desktop d-none d-md-block">
+                  <div class="product-sharing__title">{{ 'general.share.share' | t }}</div>
+                  {%- include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product -%}
+                </div>
+                <share-button class="share-button d-block d-md-none">
+                  <button class="share-button__button button button--tertiary hidden">
+                    {% render 'icon-share' %}
+                    {{ 'general.share.share' | t }}
+                  </button>
+                  <details>
+                    <summary class="share-button__button button button--tertiary">
+                      {% render 'icon-share' %}
+                      {{ 'general.share.share' | t }}
+                    </summary>
+                    <div id="Product-share-{{ section.id }}" class="share-button__fallback motion-reduce">
+                      <div class="field">
+                        <span id="ShareMessage-{{ section.id }}" class="share-button__message hidden" role="status">
+                        </span>
+                        <input type="text"
+                               class="field__input"
+                               id="url"
+                               value="{{ shop.url | append: product.url }}"
+                               placeholder="{{ 'general.share.share_url' | t }}"
+                               onclick="this.select();"
+                               readonly
+                               >
+                        <label class="field__label" for="url">{{ 'general.share.share_url' | t }}</label>
+                      </div>
+                      <button class="share-button__close hidden no-js-hidden">
+                        {% render 'icon-close' %}
+                        <span class="visually-hidden">{{ 'general.share.close' | t }}</span>
+                      </button>
+                      <button class="share-button__copy no-js-hidden">
+                        {% render 'icon-clipboard' %}
+                        <span class="visually-hidden">{{ 'general.share.copy_to_clipboard' | t }}</span>
+                      </button>
+                    </div>
+                  </details>
+                </share-button>
+                <script src="{{ 'share.js' | asset_url }}" defer="defer"></script>
+              </div>
+            {%- endif -%}
+            {% if section.settings.customimage %}
+              <div class="product-template__safecheckout">
+                <div class="lazy-bg product-safecheckout__image" style="padding-bottom: {{ 100 | divided_by: section.settings.customimage.aspect_ratio }}%;">
+                  {%- assign preview_img = section.settings.customimage -%}
+                  <img {% render 'lazyload', preview_img: preview_img  %} />
+                  <span class="data-lazy-loading"></span>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        {%- if bottomContent -%}
+          <div class="product-template__bottom">
+            {%- liquid  
+                for block in section.blocks
+                  if block.settings.position == 'bottom_content'
+                    unless block.settings.display == 'd-block d-md-none'
+                      include block.type
+                    endunless
+                  endif
+                endfor
+            -%}
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if rightSidebar -%}
+        <div class="collection--template__sidebar collection-sidebar__right d-none d-md-block col-12 col-md-2-4" data-sticky-sidebar="30">
+          <div class="collection-sidebar__content">
+            <accordion-component data-accordion-parent="true">
+              {%- liquid  
+              for block in section.blocks
+                if block.settings.position == 'right_sidebar'
+                  include block.type
+                endif
+              endfor 
+              -%}
+           </accordion-component>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% if section.settings.show_faqs %}
+  <div class="modal__layout" id="product-template-faqs">
+    <div class="modal__close" data-modal-close></div>
+    <div class="modal__content">
+      <div class="modal__header">
+        <h3 class="modal__title">
+          {{ section.settings.faqs_title }}
+        </h3>
+        <a class="modal__close-icon" aria-label="Close" data-modal-close><span class="cs-icon icon-close"></span></a>
+      </div>
+      <div class="modal__body">
+        {%- form 'contact', id: 'FAQForm' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="form-status form-status-list form__message" tabindex="-1" autofocus>{% render 'icon-success' %} {{ 'templates.contact.form.post_success' | t }}</div>
+          {%- elsif form.errors -%}
+            <div class="form__message">
+              <h2 class="form-status caption-large" role="alert" tabindex="-1" autofocus>{% render 'icon-error' %} {{ 'templates.contact.form.error_heading' | t }}</h2>
+            </div>
+            <ul class="form-status-list caption-large" role="list">
+              <li>
+                <a href="#ContactForm-email" class="link">
+                  {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+                </a>
+              </li>
+            </ul>
+          {%- endif -%}
+          <div class="contact__fields row">
+            <div class="field col-12 col-sm-6">
+              <input class="field__input" autocomplete="name" type="text" id="ContactForm-name" name="contact[{{ 'templates.contact.form.name' | t }}]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" placeholder="{{ 'templates.contact.form.name' | t }}">
+              <label class="field__label" for="ContactForm-name">{{ 'templates.contact.form.name' | t }}</label>
+            </div>
+            <div class="field field--with-error col-12 col-sm-6">
+              <input
+                autocomplete="email"
+                type="email"
+                id="ContactForm-email"
+                class="field__input"
+                name="contact[email]"
+                spellcheck="false"
+                autocapitalize="off"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                aria-required="true"
+                {% if form.errors contains 'email' %}
+                  aria-invalid="true"
+                  aria-describedby="ContactForm-email-error"
+                {% endif %}
+                placeholder="{{ 'templates.contact.form.email' | t }}"
+              >
+              <label class="field__label" for="ContactForm-email">{{ 'templates.contact.form.email' | t }} <span aria-hidden="true">*</span></label>
+              {%- if form.errors contains 'email' -%}
+                <small class="contact__field-error" id="ContactForm-email-error">
+                  <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                  <span class="form__message">{% render 'icon-error' %}{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</span>
+                </small>
+              {%- endif -%}
+            </div>
+            <div class="field col-12 col-sm-12">
+              <input type="text" id="ContactForm-subject" class="field__input" autocomplete="tel" name="contact[{{ 'templates.contact.form.subject' | t }}]" value="{{- form.subject -}}" placeholder="{{ 'templates.contact.form.subject' | t }}">
+              <label class="field__label" for="ContactForm-subject">{{ 'templates.contact.form.subject' | t }}</label>
+            </div>
+            <div class="field col-12 col-sm-12">
+              <textarea
+                rows="10"
+                id="ContactForm-faq"
+                class="text-area field__input"
+                name="contact[{{ 'templates.contact.form.faq' | t }}]"
+                placeholder="{{ 'templates.contact.form.faq' | t }}"
+              >
+                {{- form.faq -}}
+              </textarea>
+              <label class="form__label field__label" for="ContactForm-faq">{{ 'templates.contact.form.faq' | t }}</label>
+            </div>
+          </div>
+          <div class="contact__button">
+            <button type="submit" class="button">
+              {{ 'templates.contact.form.send' | t }}
+            </button>
+          </div>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{%- if section.settings.enable_zoom -%}
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="pswp__bg"></div>
+  <div class="pswp__scroll-wrap">
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <div class="pswp__counter"></div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--share" title="Share"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div> 
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+<script>
+  window.inventory_quantity = {
+    {%- for variant in product.variants -%}
+    {{ variant.id }}: {{ variant.inventory_quantity }},
+    {%- endfor -%}
+  };
+  document.addEventListener('DOMContentLoaded', function() {
+    function isIE() {
+      const ua = window.navigator.userAgent;
+      const msie = ua.indexOf('MSIE ');
+      const trident = ua.indexOf('Trident/');
+
+      return (msie > 0 || trident > 0);
+    }
+
+    if (!isIE()) return;
+    const hiddenInput = document.querySelector('#{{ product_form_id }} input[name="id"]');
+    const noScriptInputWrapper = document.createElement('div');
+    const variantSwitcher = document.querySelector('variant-radios[data-section="{{ section.id }}"]') || document.querySelector('variant-selects[data-section="{{ section.id }}"]');
+    noScriptInputWrapper.innerHTML = document.querySelector('.product-form__noscript-wrapper-{{ section.id }}').textContent;
+    variantSwitcher.outerHTML = noScriptInputWrapper.outerHTML;
+
+    document.querySelector('#Variants-{{ section.id }}').addEventListener('change', function(event) {
+      hiddenInput.value = event.currentTarget.value;
+    });
+  });
+</script>
+
+{%- if first_3d_model -%}
+  <script type="application/json" id="ProductJSON-{{ product.id }}">
+    {{ product.media | where: 'media_type', 'model' | json }}
+  </script>
+
+  <script src="{{ 'product-model.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product template",
+  "class": "product-template product-groupitems-template",
+  "settings": [
+	{
+      "type": "header",
+      "content": "Product image settings"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Images position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "width_content",
+      "label": "Width Content",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "large"
+    },
+	{
+      "type": "select",
+      "id": "image_size",
+      "label": "Image size",
+      "default": "natural",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "square",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait (2:3)"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "thumbnail_position",
+      "label": "Thumbnail position",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "left"
+    },
+	{
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Enable zoom image",
+      "default": true
+    },
+	{
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "label": "Enable video looping",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "navigation",
+      "label": "Enable navigaiton",
+      "default": true
+    },    
+    {
+      "type": "checkbox",
+      "id": "pagination",
+      "label": "Enable pagination",
+      "default": true
+    },
+	{
+      "type": "header",
+      "content": "Discount"
+    },
+	{
+      "type": "checkbox",
+      "id": "show_discount",
+      "label": "Show discount",
+      "default": true
+    },
+	{
+      "type": "text",
+      "id": "discount_subtitle",
+      "label": "Sub heading",
+      "default": "November Sale 20%! *"
+    },
+	{
+      "type": "text",
+      "id": "discount_title",
+      "label": "Heading",
+      "default": "Enter Code <strong>NOV20</strong> at checkout"
+    },
+	{
+      "type": "textarea",
+      "id": "discount_text",
+      "label": "Subtext"
+    },
+	{
+      "type": "header",
+      "content": "Rating star"
+    },
+	{
+      "type": "liquid",
+      "id": "rating_star",
+      "label": "Code rating star",
+      "default": "<span class='shopify-product-reviews-badge' data-id='{{ product.id }}'></span>"
+    },
+	{
+      "type": "checkbox",
+      "id": "show_write_review",
+      "label": "Show write review",
+      "default": true
+    },
+	{
+      "type": "header",
+      "content": "Earn reward points"
+    }, 
+	{
+      "type": "checkbox",
+      "id": "show_earnpoints",
+      "label": "Show earn reward points",
+      "default": true,
+	  "info":"You need install the Apps to use it, we only use simple syntax!"
+    },
+	{
+      "type": "textarea",
+      "id": "earnpoints_content",
+      "label": "Content popup"
+    },
+	{
+      "type": "header",
+      "content": "Shipping infomration"
+    }, 
+	{
+      "type": "checkbox",
+      "id": "show_shipping",
+      "label": "Show shipping infomration",
+      "default": true
+    },
+	{
+      "type": "range",
+      "id": "shippingdate",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+	  "unit": "d",
+      "label": "Shipping date",
+      "default": 5
+    },
+	{
+      "type": "text",
+      "id": "ct_timer",
+      "label": "Deal time",
+      "default": "2021/12/06 16:25:00",
+	  "info":"Syntax YYYY/MM/DD HH:MM:SS"
+    },	
+	{
+      "type": "header",
+      "content": "FAQs area"
+    }, 
+	{
+      "type": "checkbox",
+      "id": "show_faqs",
+      "label": "Show FAQs",
+      "default": true
+    },
+	{
+      "type": "text",
+      "id": "faqs_title",
+      "label": "FAQs heading",
+      "default": "Ask us any Question"
+    },
+	{
+      "type": "header",
+      "content": "Details area"
+    },
+	{
+      "type": "checkbox",
+      "id": "show_details",
+      "label": "Show details",
+      "default": true
+    },
+	{
+      "type": "text",
+      "id": "detail_title",
+      "label": "Detail heading",
+      "default": "Details"
+    },
+	{
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "Show SKU",
+      "default": true
+    },
+	{
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendor",
+      "default": true
+    },
+	{
+      "type": "checkbox",
+      "id": "show_type",
+      "label": "Show product type",
+      "default": true
+    },	
+	{
+      "type": "checkbox",
+      "id": "show_inventory",
+      "label": "Show inventory management",
+      "default": true
+    },	
+	{
+      "type": "header",
+      "content": "Decription area"
+    },
+	{
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show product decription",
+      "default": true
+    },
+	{
+      "type": "text",
+      "id": "desc_title",
+      "label": "Description heading",
+      "default": "Description"
+    },
+	{
+      "type": "header",
+      "content": "Other information"
+    },
+	{
+      "type": "image_picker",
+      "id": "customimage",
+      "label": "Payment security image"
+    },	
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Show social sharing buttons",
+      "default": true
+    }
+  ],
+  "blocks": [
+	{
+      "name": "Listing",
+      "type": "product-listing",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left_sidebar",
+              "label": "Left sidebar"
+            },
+            {
+              "value": "right_sidebar",
+              "label": "Right sidebar"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "display",
+          "label": "Display on",
+          "options": [
+            {
+              "value": "",
+              "label": "Desktop & Mobile"
+            },
+            {
+              "value": "d-none d-md-block",
+              "label": "Desktop only"
+            },
+            {
+              "value": "d-block d-md-none",
+              "label": "Mobile only"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "link_list",
+          "id": "listing_linklist",
+          "label": "Link list"
+        }
+      ]
+    },
+	{
+      "name": "Filters",
+      "type": "product-filters",
+	  "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Customize filters",
+		  "info": "[Customize filters](\/admin\/menus)"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left_sidebar",
+              "label": "Left sidebar"
+            },
+            {
+              "value": "right_sidebar",
+              "label": "Right sidebar"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "display",
+          "label": "Display on",
+          "options": [
+            {
+              "value": "",
+              "label": "Desktop & Mobile"
+            },
+            {
+              "value": "d-none d-md-block",
+              "label": "Desktop only"
+            },
+            {
+              "value": "d-block d-md-none",
+              "label": "Mobile only"
+            }
+          ],
+          "default": ""
+        }
+      ]
+    },
+    {
+      "name": "Related products",
+      "type": "product-related",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left_sidebar",
+              "label": "Left sidebar"
+            },
+            {
+              "value": "right_sidebar",
+              "label": "Right sidebar"
+            },
+            {
+              "value": "bottom_content",
+              "label": "Bottom content"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "display",
+          "label": "Display on",
+          "options": [
+            {
+              "value": "",
+              "label": "Desktop & Mobile"
+            },
+            {
+              "value": "d-none d-md-block",
+              "label": "Desktop only"
+            },
+            {
+              "value": "d-block d-md-none",
+              "label": "Mobile only"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "checkbox",
+          "id": "related",
+          "label": "Related products (High priority)"
+        },
+        {
+          "type": "text",
+          "id": "limit",
+          "label": "Limit products show",
+          "default":"8"
+        },
+        {
+          "type": "checkbox",
+          "id": "slidable",
+          "label": "Enable slide function?"
+        },
+        {
+          "type": "checkbox",
+          "id": "autoplay",
+          "label": "Auto-play slides",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "autoplay_speed",
+          "label": "Change slides every",
+          "options": [
+            {
+              "value": "3000",
+              "label": "3 seconds"
+            },
+            {
+              "value": "4000",
+              "label": "4 seconds"
+            },
+            {
+              "value": "5000",
+              "label": "5 seconds"
+            },
+            {
+              "value": "6000",
+              "label": "6 seconds"
+            },
+            {
+              "value": "7000",
+              "label": "7 seconds"
+            },
+            {
+              "value": "8000",
+              "label": "8 seconds"
+            },
+            {
+              "value": "9000",
+              "label": "9 seconds"
+            },
+            {
+              "value": "10000",
+              "label": "10 seconds"
+            }
+          ],
+          "default": "5000"
+        },
+        {
+          "type": "select",
+          "id": "effect",
+          "label": "Slide effect",
+          "options": [
+            {
+              "value": "slide",
+              "label": "Sliding"
+            },
+            {
+              "value": "fade",
+              "label": "Fading"
+            },
+            {
+              "value": "cube",
+              "label": "Cube"
+            },
+            {
+              "value": "flip",
+              "label": "Flipping"
+            }
+          ],
+          "default": "slide"
+        },
+        {
+          "type": "number",
+          "id": "space",
+          "label": "Space between images",
+          "default": 15
+        },
+        {
+          "type": "header",
+          "content": "Responsive columns"
+        },
+        {
+          "type": "select",
+          "id": "col",
+          "label": "Width",
+          "info": "For small screen (0px - 575px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "2"
+        },
+        {
+          "type": "select",
+          "id": "col_sm",
+          "label": "Width",
+          "info": "For medium screen (576px - 767px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "3"
+        },
+        {
+          "type": "select",
+          "id": "col_md",
+          "label": "Width",
+          "info": "For large screen (768px - 991px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "col_lg",
+          "label": "Width",
+          "info": "For xlarge screen (992px - 1199px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "col_xl",
+          "label": "Width",
+          "info": "For xxlarge screen (1200px - 1399px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "col_xxl",
+          "label": "Width",
+          "info": "For xxxlarge screen (1400px - infinity)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "number",
+          "id": "row",
+          "label": "Number of rows",
+          "default": 1
+        },
+        {
+          "type": "checkbox",
+          "id": "navigation",
+          "label": "Enable navigaiton",
+          "default": true
+        },    
+        {
+          "type": "checkbox",
+          "id": "pagination",
+          "label": "Enable pagination",
+          "default": true
+        }
+      ]
+    },
+    {
+      "name": "Recently viewed",
+      "type": "product-recently",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "bottom_content",
+              "label": "Bottom content"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "display",
+          "label": "Display on",
+          "options": [
+            {
+              "value": "",
+              "label": "Desktop & Mobile"
+            },
+            {
+              "value": "d-none d-md-block",
+              "label": "Desktop only"
+            },
+            {
+              "value": "d-block d-md-none",
+              "label": "Mobile only"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "text",
+          "id": "limit",
+          "label": "Limit products show",
+          "default":"8"
+        },
+        {
+          "type": "checkbox",
+          "id": "slidable",
+          "label": "Enable slide function?"
+        },
+        {
+          "type": "checkbox",
+          "id": "autoplay",
+          "label": "Auto-play slides",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "autoplay_speed",
+          "label": "Change slides every",
+          "options": [
+            {
+              "value": "3000",
+              "label": "3 seconds"
+            },
+            {
+              "value": "4000",
+              "label": "4 seconds"
+            },
+            {
+              "value": "5000",
+              "label": "5 seconds"
+            },
+            {
+              "value": "6000",
+              "label": "6 seconds"
+            },
+            {
+              "value": "7000",
+              "label": "7 seconds"
+            },
+            {
+              "value": "8000",
+              "label": "8 seconds"
+            },
+            {
+              "value": "9000",
+              "label": "9 seconds"
+            },
+            {
+              "value": "10000",
+              "label": "10 seconds"
+            }
+          ],
+          "default": "5000"
+        },
+        {
+          "type": "select",
+          "id": "effect",
+          "label": "Slide effect",
+          "options": [
+            {
+              "value": "slide",
+              "label": "Sliding"
+            },
+            {
+              "value": "fade",
+              "label": "Fading"
+            },
+            {
+              "value": "cube",
+              "label": "Cube"
+            },
+            {
+              "value": "flip",
+              "label": "Flipping"
+            }
+          ],
+          "default": "slide"
+        },
+        {
+          "type": "number",
+          "id": "space",
+          "label": "Space between images",
+          "default": 15
+        },
+        {
+          "type": "header",
+          "content": "Responsive columns"
+        },
+        {
+          "type": "select",
+          "id": "col",
+          "label": "Width",
+          "info": "For small screen (0px - 575px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "2"
+        },
+        {
+          "type": "select",
+          "id": "col_sm",
+          "label": "Width",
+          "info": "For medium screen (576px - 767px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "3"
+        },
+        {
+          "type": "select",
+          "id": "col_md",
+          "label": "Width",
+          "info": "For large screen (768px - 991px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "col_lg",
+          "label": "Width",
+          "info": "For xlarge screen (992px - 1199px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "col_xl",
+          "label": "Width",
+          "info": "For xxlarge screen (1200px - 1399px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "col_xxl",
+          "label": "Width",
+          "info": "For xxxlarge screen (1400px - infinity)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "number",
+          "id": "row",
+          "label": "Number of rows",
+          "default": 1
+        },
+        {
+          "type": "checkbox",
+          "id": "navigation",
+          "label": "Enable navigaiton",
+          "default": true
+        },    
+        {
+          "type": "checkbox",
+          "id": "pagination",
+          "label": "Enable pagination",
+          "default": true
+        }
+      ]
+    },
+	{
+      "name": "Product recommendations",
+      "type": "product-recommendations",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "bottom_content",
+              "label": "Bottom content"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "display",
+          "label": "Display on",
+          "options": [
+            {
+              "value": "",
+              "label": "Desktop & Mobile"
+            },
+            {
+              "value": "d-none d-md-block",
+              "label": "Desktop only"
+            },
+            {
+              "value": "d-block d-md-none",
+              "label": "Mobile only"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "text",
+          "id": "limit",
+          "label": "Limit products show",
+          "default":"8"
+        },
+        {
+          "type": "checkbox",
+          "id": "slidable",
+          "label": "Enable slide function?"
+        },
+        {
+          "type": "checkbox",
+          "id": "autoplay",
+          "label": "Auto-play slides",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "autoplay_speed",
+          "label": "Change slides every",
+          "options": [
+            {
+              "value": "3000",
+              "label": "3 seconds"
+            },
+            {
+              "value": "4000",
+              "label": "4 seconds"
+            },
+            {
+              "value": "5000",
+              "label": "5 seconds"
+            },
+            {
+              "value": "6000",
+              "label": "6 seconds"
+            },
+            {
+              "value": "7000",
+              "label": "7 seconds"
+            },
+            {
+              "value": "8000",
+              "label": "8 seconds"
+            },
+            {
+              "value": "9000",
+              "label": "9 seconds"
+            },
+            {
+              "value": "10000",
+              "label": "10 seconds"
+            }
+          ],
+          "default": "5000"
+        },
+        {
+          "type": "select",
+          "id": "effect",
+          "label": "Slide effect",
+          "options": [
+            {
+              "value": "slide",
+              "label": "Sliding"
+            },
+            {
+              "value": "fade",
+              "label": "Fading"
+            },
+            {
+              "value": "cube",
+              "label": "Cube"
+            },
+            {
+              "value": "flip",
+              "label": "Flipping"
+            }
+          ],
+          "default": "slide"
+        },
+        {
+          "type": "number",
+          "id": "space",
+          "label": "Space between images",
+          "default": 15
+        },
+        {
+          "type": "header",
+          "content": "Responsive columns"
+        },
+        {
+          "type": "select",
+          "id": "col",
+          "label": "Width",
+          "info": "For small screen (0px - 575px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "2"
+        },
+        {
+          "type": "select",
+          "id": "col_sm",
+          "label": "Width",
+          "info": "For medium screen (576px - 767px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "3"
+        },
+        {
+          "type": "select",
+          "id": "col_md",
+          "label": "Width",
+          "info": "For large screen (768px - 991px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "col_lg",
+          "label": "Width",
+          "info": "For xlarge screen (992px - 1199px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "col_xl",
+          "label": "Width",
+          "info": "For xxlarge screen (1200px - 1399px)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "col_xxl",
+          "label": "Width",
+          "info": "For xxxlarge screen (1400px - infinity)",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "number",
+          "id": "row",
+          "label": "Number of rows",
+          "default": 1
+        },
+        {
+          "type": "checkbox",
+          "id": "navigation",
+          "label": "Enable navigaiton",
+          "default": true
+        },    
+        {
+          "type": "checkbox",
+          "id": "pagination",
+          "label": "Enable pagination",
+          "default": true
+        }
+      ]
+    },
+	{
+      "name": "Banner",
+      "type": "product-banner",
+      "settings": [
+		{
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left_sidebar",
+              "label": "Left sidebar"
+            },
+            {
+              "value": "right_sidebar",
+              "label": "Right sidebar"
+            },
+            {
+              "value": "bottom_content",
+              "label": "Bottom content"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "display",
+          "label": "Display on",
+          "options": [
+            {
+              "value": "",
+              "label": "Desktop & Mobile"
+            },
+            {
+              "value": "d-none d-md-block",
+              "label": "Desktop only"
+            },
+            {
+              "value": "d-block d-md-none",
+              "label": "Mobile only"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Upload banner"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+	{
+      "name": "HTML",
+      "type": "product-html",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+		{
+          "type": "checkbox",
+          "id": "review",
+          "label": "Enable to review",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left_sidebar",
+              "label": "Left sidebar"
+            },
+            {
+              "value": "right_sidebar",
+              "label": "Right sidebar"
+            },
+            {
+              "value": "bottom_content",
+              "label": "Bottom content"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "display",
+          "label": "Display on",
+          "options": [
+            {
+              "value": "",
+              "label": "Desktop & Mobile"
+            },
+            {
+              "value": "d-none d-md-block",
+              "label": "Desktop only"
+            },
+            {
+              "value": "d-block d-md-none",
+              "label": "Mobile only"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "liquid",
+          "id": "html",
+          "label": "HTML code"
+        }
+	  ]
+	}
+  ]
+}
+{% endschema %}

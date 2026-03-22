@@ -1,0 +1,54 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "blocks": {
+        "206a57be-e849-4d45-b5ba-6aed4a87f403": {
+          "type": "blog-link-list",
+          "settings": {
+            "title": "Category",
+            "position": "left_sidebar",
+            "link_list": "shop-by-blog"
+          }
+        },
+        "0d5b240e-95ab-40ed-823a-a9f202b8e828": {
+          "type": "blog-article",
+          "settings": {
+            "title": "Recent posts",
+            "position": "left_sidebar",
+            "blog": "news",
+            "limit": 3
+          }
+        },
+        "15622336-4739-4775-8259-6509d8eec777": {
+          "type": "blog-banner",
+          "settings": {
+            "title": "",
+            "position": "left_sidebar",
+            "image": "shopify:\/\/shop_images\/Categories_d1cd0d9d-e9c3-45c0-a225-4d487de84efe.png",
+            "link": "shopify:\/\/blogs\/news"
+          }
+        }
+      },
+      "block_order": [
+        "206a57be-e849-4d45-b5ba-6aed4a87f403",
+        "0d5b240e-95ab-40ed-823a-a9f202b8e828",
+        "15622336-4739-4775-8259-6509d8eec777"
+      ],
+      "settings": {
+        "layout": "grid",
+        "limit": 6,
+        "sidebar": true,
+        "col": "1",
+        "col_sm": "2",
+        "col_md": "2",
+        "col_lg": "2",
+        "col_xl": "2",
+        "col_xxl": "2"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

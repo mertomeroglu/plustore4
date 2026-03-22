@@ -1,0 +1,86 @@
+/*Collection*/
+.collections-list-template .collection-item__content{
+  margin-bottom: 30px;   
+}
+.collections-list-template .collection-item__grid{
+  position: relative;
+}
+.collections-list-template  .collection-item__grid .collection-item__link{
+  display: block;
+}
+.collections-list-template .collection-item__grid .collection-item__hover{
+  position: absolute;
+  left: 0;         
+  right: 0;
+  bottom: 0;
+  transform: none;     
+  transition: all 500ms ease;
+  background-color: rgba(255,255,255,0.7);
+}
+
+@media screen and (min-width: 992px){
+  .collections-list-template{
+    margin-bottom: 50px;
+    margin-top: 30px;
+  }
+  .collections-list-template .collections-list-template__collection{
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+  .collections-list-template .collection-item__content{
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+ 
+  .collections-list-template .collection-item__grid{
+    overflow: hidden;
+  }
+  .collections-list-template .collection-item__grid .collection-item__link{
+    transition: all 500ms ease;
+  }
+  .collections-list-template .collection-item__grid:hover .collection-item__link{
+     transform: scale(1.1);
+  }  
+}
+.collections-list-template .collection-item__grid .collection-item__hover .collection-item__title{
+  background-color: var(--color_primary);
+    color: #fff;
+    font-size: 18px;
+    line-height: 1em;
+    text-transform: uppercase;
+    font-family: var(--font_1);
+      letter-spacing: 5px;
+      padding: 3.5px 15px;
+      margin-bottom: 5px;
+      }
+.collections-list-template .collection-item__grid .collection-item__action,
+.collections-list-template .collection-item__grid .collection-item__count{
+  font-size: 16px;
+  letter-spacing: 5px;
+}
+.collections-list-template .collection-item__grid .collection-item__count{
+  color: var(--color_tertiary);    
+    padding: 0 15px;
+    }
+.collections-list-template .collection-item__grid .collection-item__action{
+  text-decoration: underline;  
+    color:var(--color_primary);
+    margin-left: 15px;
+    }
+.collections-list-template .collection-item__grid .collection-item__action:hover{
+  color: var(--color_sub);
+}
+
+@media screen and (max-width: 767px){
+  .collections-list-template .collection-item__grid .collection-item__hover .collection-item__title{
+    font-size: 12px;
+    letter-spacing: 4px;
+    padding: 3px 10px 3px;
+  }
+  .collections-list-template .collection-item__grid .collection-item__action,
+  .collections-list-template .collection-item__grid .collection-item__count{
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+}
+/*End collection*/

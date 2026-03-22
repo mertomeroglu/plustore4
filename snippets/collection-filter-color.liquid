@@ -1,0 +1,8 @@
+{%- assign _color = settings.product_color_check | downcase | split: '|' -%}
+{%- assign tmp_option = label | downcase -%}
+{%- for _checkcolor in _color -%}
+  {%- if _checkcolor contains tmp_option -%}
+    {%- assign _showcolor = true -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}

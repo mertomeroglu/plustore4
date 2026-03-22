@@ -1,0 +1,441 @@
+{% doc %}
+  @prompt
+    video ekleme
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-video-block-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .ai-video-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    overflow: hidden;
+  }
+
+  .ai-video-container-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: {{ block.settings.aspect_ratio }};
+    overflow: hidden;
+  }
+
+  .ai-video-iframe-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .ai-video-shopify-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ai-video-shopify-{{ ai_gen_id }} video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-video-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+  }
+
+  .ai-video-placeholder-{{ ai_gen_id }} svg {
+    width: 80px;
+    height: 80px;
+    opacity: 0.3;
+  }
+
+  .ai-video-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .ai-video-heading-{{ ai_gen_id }} {
+    text-align: {{ block.settings.heading_alignment }};
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    margin: 0 0 {{ block.settings.heading_spacing }}px;
+    padding: 0 20px;
+  }
+
+  .ai-video-description-{{ ai_gen_id }} {
+    text-align: {{ block.settings.description_alignment }};
+    color: {{ block.settings.description_color }};
+    font-size: {{ block.settings.description_size }}px;
+    margin: {{ block.settings.description_spacing }}px 0 0;
+    padding: 0 20px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-video-block-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-video-heading-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.heading_size }}px * 0.8);
+    }
+
+    .ai-video-description-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.description_size }}px * 0.9);
+    }
+  }
+{% endstyle %}
+
+<video-block-{{ ai_gen_id }}
+  class="ai-video-block-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.heading != blank %}
+    <h2 class="ai-video-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+  {% endif %}
+
+  <div class="ai-video-wrapper-{{ ai_gen_id }}">
+    <div class="ai-video-container-{{ ai_gen_id }}">
+      {% if block.settings.video_url != blank %}
+        {% liquid
+          assign video_id = block.settings.video_url.id
+          assign video_type = block.settings.video_url.type
+        %}
+
+        {% if video_type == 'youtube' %}
+          <iframe
+            class="ai-video-iframe-{{ ai_gen_id }}"
+            src="https://www.youtube.com/embed/{{ video_id }}?autoplay={{ block.settings.autoplay }}&mute={{ block.settings.mute }}&loop={{ block.settings.loop }}&controls={{ block.settings.show_controls }}&rel=0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        {% elsif video_type == 'vimeo' %}
+          <iframe
+            class="ai-video-iframe-{{ ai_gen_id }}"
+            src="https://player.vimeo.com/video/{{ video_id }}?autoplay={{ block.settings.autoplay }}&muted={{ block.settings.mute }}&loop={{ block.settings.loop }}&controls={{ block.settings.show_controls }}"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        {% endif %}
+      {% elsif block.settings.video_shopify != blank %}
+        <div class="ai-video-shopify-{{ ai_gen_id }}">
+          {{
+            block.settings.video_shopify
+            | video_tag:
+              autoplay: block.settings.autoplay,
+              muted: block.settings.mute,
+              loop: block.settings.loop,
+              controls: block.settings.show_controls
+          }}
+        </div>
+      {% else %}
+        <div class="ai-video-placeholder-{{ ai_gen_id }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <div class="ai-video-empty-state-{{ ai_gen_id }}">
+            Video eklemek için YouTube/Vimeo URL'si veya video dosyası yükleyin
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if block.settings.description != blank %}
+    <div class="ai-video-description-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+  {% endif %}
+</video-block-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class VideoBlock{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        const videoContainer = this.querySelector('.ai-video-shopify-{{ ai_gen_id }}');
+        if (videoContainer) {
+          const video = videoContainer.querySelector('video');
+          if (video) {
+            this.setupVideoObserver(video);
+          }
+        }
+      }
+
+      setupVideoObserver(video) {
+        const options = {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && {{ block.settings.autoplay }}) {
+              video.play().catch(() => {});
+            } else {
+              video.pause();
+            }
+          });
+        }, options);
+
+        observer.observe(video);
+      }
+    }
+
+    customElements.define('video-block-{{ ai_gen_id }}', VideoBlock{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Video",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video kaynağı"
+    },
+    {
+      "type": "paragraph",
+      "content": "YouTube veya Vimeo URL'si girin ya da video dosyası yükleyin"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video URL (YouTube veya Vimeo)",
+      "accept": ["youtube", "vimeo"]
+    },
+    {
+      "type": "video",
+      "id": "video_shopify",
+      "label": "Video dosyası"
+    },
+    {
+      "type": "header",
+      "content": "Video ayarları"
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "En boy oranı",
+      "options": [
+        {
+          "value": "56.25%",
+          "label": "16:9"
+        },
+        {
+          "value": "75%",
+          "label": "4:3"
+        },
+        {
+          "value": "100%",
+          "label": "1:1"
+        },
+        {
+          "value": "133.33%",
+          "label": "3:4"
+        }
+      ],
+      "default": "56.25%"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Otomatik oynat",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "mute",
+      "label": "Sessiz başlat",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Döngü",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Kontrolleri göster",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Başlık"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Başlık"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Başlık boyutu",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Başlık hizalama",
+      "options": [
+        {
+          "value": "left",
+          "label": "Sol"
+        },
+        {
+          "value": "center",
+          "label": "Orta"
+        },
+        {
+          "value": "right",
+          "label": "Sağ"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Başlık rengi",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "Başlık alt boşluk",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Açıklama"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Açıklama"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Açıklama boyutu",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "description_alignment",
+      "label": "Açıklama hizalama",
+      "options": [
+        {
+          "value": "left",
+          "label": "Sol"
+        },
+        {
+          "value": "center",
+          "label": "Orta"
+        },
+        {
+          "value": "right",
+          "label": "Sağ"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Açıklama rengi",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "description_spacing",
+      "label": "Açıklama üst boşluk",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Stil"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Masaüstü genişlik",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Arka plan rengi",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Köşe yuvarlama",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
+{% endschema %}

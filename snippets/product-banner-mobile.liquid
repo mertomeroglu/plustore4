@@ -1,0 +1,24 @@
+<details class="mobile-facets__details js-filter" data-index="mobile-listing">
+  <summary class="mobile-facets__summary focus-inset">
+    <div>
+      <span>{{ block.settings.title }}</span>                        
+      <span class="mobile-facets__arrow no-js-hidden">{% render 'icon-arrow' %}</span>
+      <noscript>{% render 'icon-caret' %}</noscript>
+    </div>
+  </summary>
+  <div class="mobile-facets__submenu">
+    <button class="mobile-facets__close-button link link--text focus-inset" aria-expanded="true" type="button">
+      {% render 'icon-arrow' %}
+      {{ block.settings.title }}
+    </button>
+    <div class="collection-sidebar__banner-content">
+      <a href="{{ block.settings.link }}">
+        {%- assign preview_img = block.settings.image -%}
+        <div class="lazy-bg about-info__image" style="padding-bottom: {{ 100 | divided_by: preview_img.aspect_ratio }}%;">
+          <img {% render 'lazyload', preview_img: preview_img  %} />
+          <span class="data-lazy-loading"></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</details>

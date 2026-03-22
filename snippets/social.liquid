@@ -1,0 +1,107 @@
+<ul class="list-unstyled list-social" role="list">
+  {%- if settings.social_twitter_link != blank -%}
+    <li class="list-social__item list-social__twitter">
+      <a href="{{ settings.social_twitter_link }}" class="link link--text list-social__link" aria-describedby="a11y-external-message">
+        {%- render 'icon-twitter' -%}
+        <span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+
+ <li class="list-social__item list-social__trendyol">
+  <a href="http://www.trendyol.com/magaza/plus-store-m-129564" target="_blank" class="link link--text list-social__link" aria-label="Trendyol">
+    <img src="{{ 'trendyol.png' | asset_url }}" alt="Trendyol">
+  </a>
+</li>
+
+<li class="list-social__item list-social__hepsiburada">
+  <a href="http://hepsiburada.com/magaza/plusstore" target="_blank" class="link link--text list-social__link" aria-label="Hepsiburada">
+    <img src="{{ 'hepsiburada.png' | asset_url }}" alt="Hepsiburada">
+  </a>
+</li>
+
+<li class="list-social__item list-social__amazon">
+  <a href="http://www.amazon.com.tr/s?me=A1I2ZF2B41DOV7" target="_blank" class="link link--text list-social__link" aria-label="Amazon">
+    <img src="{{ 'amazon.png' | asset_url }}" alt="Amazon">
+  </a>
+</li>
+
+<li class="list-social__item list-social__whatsapp">
+  <a href="https://wa.me/905558802818" target="_blank" class="link link--text list-social__link" aria-label="WhatsApp">
+    <img src="{{ 'whatsapp.png' | asset_url }}" alt="WhatsApp">
+  </a>
+</li>
+
+  {%- if settings.social_facebook_link != blank -%}
+    <li class="list-social__item list-social__facebook">
+      <a href="{{ settings.social_facebook_link }}" class="link link--text list-social__link" aria-describedby="a11y-external-message">
+        {%- render 'icon-facebook' -%}
+        <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+
+  {%- if settings.social_pinterest_link != blank -%}
+    <li class="list-social__item list-social__pinterest">
+      <a href="{{ settings.social_pinterest_link }}" class="link link--text list-social__link" aria-describedby="a11y-external-message">
+        {%- render 'icon-pinterest' -%}
+        <span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+
+  {%- if settings.social_instagram_link != blank -%}
+    <li class="list-social__item list-social__instagram">
+  <a href="{{ settings.social_instagram_link }}" target="_blank" class="list-social__link" aria-label="Instagram">
+    <img src="{{ 'instagram_color_icon_512.png' | asset_url }}" alt="Instagram">
+  </a>
+</li>
+  {%- endif -%}
+
+  {%- if settings.social_tiktok_link != blank -%}
+    <li class="list-social__item list-social__tiktok">
+      <a href="{{ settings.social_tiktok_link }}" class="link link--text list-social__link" aria-describedby="a11y-external-message">
+        {%- render 'icon-tiktok' -%}
+        <span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+
+  {%- if settings.social_tumblr_link != blank -%}
+    <li class="list-social__item list-social__tumblr">
+      <a href="{{ settings.social_tumblr_link }}" class="link link--text list-social__link" aria-describedby="a11y-external-message">
+        {%- render 'icon-tumblr' -%}
+        <span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+
+  {%- if settings.social_snapchat_link != blank -%}
+    <li class="list-social__item list-social__snapchat">
+      <a href="{{ settings.social_snapchat_link }}" class="link link--text list-social__link" aria-describedby="a11y-external-message">
+        {%- render 'icon-snapchat' -%}
+        <span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+
+  {%- if settings.social_youtube_link != blank -%}
+    <li class="list-social__item list-social__youtube">
+      <a href="{{ settings.social_youtube_link }}" class="link link--text list-social__link" aria-describedby="a11y-external-message">
+        {%- render 'icon-youtube' -%}
+        <span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+
+  {%- if settings.social_vimeo_link != blank -%}
+    <li class="list-social__item list-social__vimeo">
+      <a href="{{ settings.social_vimeo_link }}" class="link link--text list-social__link" aria-describedby="a11y-external-message">
+        {%- render 'icon-vimeo' -%}
+        <span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+
+  <li class="list-social__item--placeholder">{{ 'sections.footer.social_placeholder' | t }}</li>
+</ul>

@@ -1,0 +1,18 @@
+.map .container-fluid{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.map .map__container.row{
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-top: 0 !important;
+}
+.map .map__container.row *{
+  padding: 0 !important;
+}
+@media screen and (max-width: 767px){
+  .map iframe{
+	max-height: 300px
+  }
+}
+

@@ -1,0 +1,89 @@
+{%- liquid 
+  assign classContent = 'collection-sidebar'
+  assign classAccordion = 'accordion'
+  if block.settings.position == 'bottom_content'
+    assign classContent = 'product-collection'
+    assign classAccordion = 'product-collection'
+  endif
+  
+  if block.settings.related
+    assign productsCollection = product.collections[0].handle
+  else
+    assign productsCollection = block.settings.collection
+  endif
+-%}
+<div class="{{ block.settings.display }} {{ classContent }}__item accordion {{ classContent }}__best is-active open">
+  {%- if block.settings.title != blank -%}
+    {%- if classAccordion == 'product-collection' -%}
+      <div class="box-divider title-best_{{ block.id }}">
+        {%- if block.settings.icon != blank -%}              
+        <div class="group-icon">              
+        {%- endif -%}              
+          {%- if block.settings.icon != blank -%}
+          <img class="box-icon"
+               srcset="{% render 'bgset', image: block.settings.icon %}"
+               src="{% render 'srcset', image: block.settings.icon %}"
+               alt="{{ block.settings.icon.alt | escape }}"
+               loading="lazy"
+               width="{{ block.settings.icon.width }}"
+               height="{{ block.settings.icon.height }}"
+               >
+          {%- endif -%}
+          <h4 class="box-title">{{ block.settings.title }}</h4>
+        {%- if block.settings.icon != blank -%}                           
+        </div>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <h4 class="accordion__title">
+        <span>{{ block.settings.title }}</span>
+      </h4>
+    {%- endif -%}
+  {%- endif -%}
+  <div class="{{ classAccordion }}__content {{ classContent }}__best-content">
+    {%- if block.settings.slidable -%}
+      <slider-component>
+        <div class="carousel" data-carousel-param='{"effect": "{{ block.settings.effect }}", "autoplay": "{{ block.settings.autoplay }}", "autoplaySpeed": "{{ block.settings.autoplay_speed }}", "space": "{{ block.settings.space }}", "col": "{{ block.settings.col }}", "col_sm": "{{ block.settings.col_sm }}", "col_md": "{{ block.settings.col_md }}", "col_lg": "{{ block.settings.col_lg }}", "col_xl": "{{ block.settings.col_xl }}", "col_xxl": "{{ block.settings.col_xxl }}", "row": "{{ block.settings.row }}"}' data-carousel>
+          <div class="carousel-wrapper">
+            <div class="swiper-container" data-carousel-container>
+              <div class="swiper-wrapper row row-cols-{{ block.settings.col }} row-cols-sm-{{ block.settings.col_sm }} row-cols-md-{{ block.settings.col_md }} row-cols-lg-{{ block.settings.col_lg }} row-cols-xl-{{ block.settings.col_xl }} row-cols-xxl-{{ block.settings.col_xxl }}">
+                {%- for product in collections[productsCollection].products limit: block.settings.limit -%}
+                  <div class="swiper-slide col product-item__content" data-carousel-item>
+                    {%- liquid 
+                      if block.settings.position == 'bottom_content'
+                        render 'index-product-item', product: product
+                      else
+                        render 'index-product-item-list', product: product
+                      endif
+                    -%}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+            {%- if block.settings.navigation -%}
+            <div class="carousel-navigation carousel-nav-prev" data-carousel-nav-prev><i class="cs-icon icon-ios-arrow-left"></i></div>
+            <div class="carousel-navigation carousel-nav-next" data-carousel-nav-next><i class="cs-icon icon-ios-arrow-right"></i></div>
+            {%- endif -%}
+          </div>
+          {%- if block.settings.pagination -%}
+          <div class="carousel-pagination" data-carousel-pagination></div>
+          {%- endif -%}
+        </div>
+      </slider-component>
+    {%- else -%}
+      <div class="{{ classAccordion }}__product row row-cols-{{ block.settings.col }} row-cols-sm-{{ block.settings.col_sm }} row-cols-md-{{ block.settings.col_md }} row-cols-lg-{{ block.settings.col_lg }} row-cols-xl-{{ block.settings.col_xl }} row-cols-xxl-{{ block.settings.col_xxl }}">
+        {%- for product in collections[productsCollection].products limit: block.settings.limit -%}
+          <div class="col product-item__content">
+            {%- liquid 
+              if block.settings.position == 'bottom_content'
+                render 'index-product-item', product: product
+              else
+                render 'index-product-item-list', product: product
+              endif
+            -%}
+          </div>
+        {% endfor %}
+      </div>
+    {%- endif -%}
+  </div>
+</div>

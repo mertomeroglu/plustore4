@@ -1,0 +1,12 @@
+<div class="product-item__grid">
+  <a class="product-item__title h5">{{ 'onboarding.product_title' | t }}</a>
+  <div class="product-item__top">
+    <a class="product-item__link">
+      {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+      {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+    </a>
+  </div>
+  <div class="product-item__bottom">
+    {% render 'price', price_class: 'product-item__price' %}
+  </div>
+</div>

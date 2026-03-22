@@ -1,0 +1,459 @@
+<!-- /sections/index-categories.liquid -->
+{%- if section.blocks.size > 0 -%}
+<div data-section-type="categories-section" class="spaced-section {{ section.settings.display }}" data-section-name="categories-section">
+  <div class="container">
+    <div class="categories__container">
+      {%- if section.settings.title != blank -%}
+        <div class="box-divider title-{{ section.id }}">         
+          {%- if section.settings.icon != blank -%}
+          	<div class="group-icon">
+          {%- endif -%}
+          {%- if section.settings.icon != blank -%}
+            <img class="box-icon"
+                 srcset="{% render 'bgset', image: section.settings.icon %}"
+                 src="{% render 'srcset', image: section.settings.icon %}"
+                 alt="{{ section.settings.icon.alt | escape }}"
+                 loading="lazy"
+                 width="{{ section.settings.icon.width }}"
+                 height="{{ section.settings.icon.height }}"
+                 >
+          {%- endif -%}
+          <h2 class="box-title">{{ section.settings.title }}</h2>
+              {%- if section.settings.icon != blank -%}
+          </div>
+                {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="categories__content row">
+        <slider-component class="categories__slider">
+          <div class="carousel" data-carousel-param='{"loop": "true", "effect": "{{ section.settings.effect }}", "autoplay": "{{ section.settings.autoplay }}", "autoplaySpeed": "{{ section.settings.autoplay_speed }}", "space": "{{ section.settings.space }}", "col": "{{ section.settings.col }}", "col_sm": "{{ section.settings.col_sm }}", "col_md": "{{ section.settings.col_md }}", "col_lg": "{{ section.settings.col_lg }}", "col_xl": "{{ section.settings.col_xl }}", "col_xxl": "{{ section.settings.col_xxl }}", "row": "1"}' data-carousel>
+            <div class="carousel-wrapper carousel-{{ section.settings.navigation_position }}">
+              <div class="swiper-container" data-carousel-container>
+                <div class="swiper-wrapper row row-cols-{{ section.settings.col }} row-cols-sm-{{ section.settings.col_sm }} row-cols-md-{{ section.settings.col_md }} row-cols-lg-{{ section.settings.col_lg }} row-cols-xl-{{ section.settings.col_xl }} row-cols-xxl-{{ section.settings.col_xxl }}">
+                  {%- for block in section.blocks -%}
+                    <div class="swiper-slide col categories__item" data-carousel-item>
+                      {%- if block.settings.title != blank -%}
+                      <p class="h3 categories__item-title">{{ block.settings.title }}</p>
+                      {%- endif -%}
+                      <div class="categories__image-content" style="max-width: {{ block.settings.image_width }}px; max-height: {{ block.settings.image_width }}px;">
+                        {%- if block.settings.image -%}
+                          {%- assign preview_img = block.settings.image -%}
+                          <div class="lazy-bg categories__image" style="padding-bottom: {{ 100 | divided_by: preview_img.aspect_ratio }}%;">
+                            <img {% render 'lazyload', preview_img: preview_img  %} />
+                            <span class="data-lazy-loading"></span>
+                          </div>
+                        {%- else -%}
+                          <img class="categories__image lazyload"
+                           src="{{ '150x150.png' | asset_url }}"
+                           loading="lazy">
+                        {%- endif -%}
+                      </div>
+                      {%- if block.settings.linklist != blank -%}
+                      <ul class="categories__linklist list-unstyled">
+                        {%- for link in block.settings.linklist.links -%}
+                        <li>
+                          <a href="{{ link.url }}" class="link link--text list-menu__item list-menu__item--link">
+                            {{ link.title }}
+                          </a>
+                        </li>
+                        {%- endfor -%}
+                      </ul>
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+              </div>
+              {%- if section.settings.navigation -%}
+              <div class="carousel-navigation carousel-nav-prev" data-carousel-nav-prev><i class="cs-icon icon-ios-arrow-left"></i></div>
+              <div class="carousel-navigation carousel-nav-next" data-carousel-nav-next><i class="cs-icon icon-ios-arrow-right"></i></div>
+              {%- endif -%}
+            </div>
+            {%- if section.settings.pagination -%}
+            <div class="carousel-pagination" data-carousel-pagination></div>
+            {%- endif -%}
+          </div>
+        </slider-component>
+      </div>
+    </div>
+  </div>
+</div>
+{% style %}
+  .title-{{ section.id }}:after{
+    background-color: {{ section.settings.color }};
+  }
+{% endstyle %}
+{%- endif -%}
+{% schema %}
+{
+  "name": "Categories",
+  "class": "index-categories",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display on",
+      "options": [
+        {
+          "value": "",
+          "label": "Desktop & Mobile"
+        },
+        {
+          "value": "d-none d-md-block",
+          "label": "Desktop only"
+        },
+        {
+          "value": "d-block d-md-none",
+          "label": "Mobile only"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+	{
+      "type": "image_picker",
+      "id": "icon",
+      "label": "Upload icon"
+    },
+	{
+      "type": "color",
+      "id": "color",
+      "label": "Color border",
+	  "default": "#df1e31"
+    },
+	{
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-play slides",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Change slides every",
+      "options": [
+        {
+          "value": "3000",
+          "label": "3 seconds"
+        },
+        {
+          "value": "4000",
+          "label": "4 seconds"
+        },
+        {
+          "value": "5000",
+          "label": "5 seconds"
+        },
+        {
+          "value": "6000",
+          "label": "6 seconds"
+        },
+        {
+          "value": "7000",
+          "label": "7 seconds"
+        },
+        {
+          "value": "8000",
+          "label": "8 seconds"
+        },
+        {
+          "value": "9000",
+          "label": "9 seconds"
+        },
+        {
+          "value": "10000",
+          "label": "10 seconds"
+        }
+      ],
+      "default": "5000"
+    },
+    {
+      "type": "select",
+      "id": "effect",
+      "label": "Slide effect",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Sliding"
+        },
+        {
+          "value": "fade",
+          "label": "Fading"
+        },
+        {
+          "value": "cube",
+          "label": "Cube"
+        },
+        {
+          "value": "flip",
+          "label": "Flipping"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "number",
+      "id": "space",
+      "label": "Space between images",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Responsive columns"
+    },
+    {
+      "type": "select",
+      "id": "col",
+      "label": "Width",
+      "info": "For small screen (0px - 575px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "col_sm",
+      "label": "Width",
+      "info": "For medium screen (576px - 767px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "col_md",
+      "label": "Width",
+      "info": "For large screen (768px - 991px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "5"
+    },
+    {
+      "type": "select",
+      "id": "col_lg",
+      "label": "Width",
+      "info": "For xlarge screen (992px - 1199px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "5"
+    },
+    {
+      "type": "select",
+      "id": "col_xl",
+      "label": "Width",
+      "info": "For xxlarge screen (1200px - 1399px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "5"
+    },
+    {
+      "type": "select",
+      "id": "col_xxl",
+      "label": "Width",
+      "info": "For xxxlarge screen (1400px - infinity)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "navigation",
+      "label": "Enable navigaiton",
+      "default": true
+    },    
+    {
+      "type": "checkbox",
+      "id": "pagination",
+      "label": "Enable pagination",
+      "default": true
+    }
+  ],
+  "blocks": [
+	{
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Upload image"
+        },
+		{
+          "type": "range",
+          "id": "image_width",
+          "label": "Image width",
+          "default": 155,
+          "min": 100,
+          "max": 500,
+          "step": 5,
+          "unit": "px"
+        },
+		{
+          "type": "link_list",
+          "id": "linklist",
+          "label": "Select menu"
+    	}
+	  ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Categories",
+      "category": "Categories"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,112 @@
+{%- capture contentForQuerystring -%}
+{{ content_for_header }} 
+{%- endcapture -%}
+
+{%- liquid
+  layout none
+  
+  assign pageUrl = contentForQuerystring | split:'"pageurl":"' | last | split:'"' | first | split:'.myshopify.com' | last | replace:'\/','/' | replace:'%20',' ' |  replace:'\u0026','&'
+  assign data = pageUrl | split:'?' | last  | remove_first: "view=media&data="
+  assign data = data | split: '-'
+  assign size = data[0] | strip
+  assign position = data[1] | strip
+  assign zoom = data[2] | strip
+  assign video = data[3] | strip
+  assign navigation = data[4] | strip
+  assign pagination = data[5] | strip
+  
+  assign fixed_aspect_ratio = false
+  unless size == 'natural'
+    assign fixed_aspect_ratio = true
+  endunless
+-%}
+
+{%- for option in product.options_with_values -%}
+  {%- liquid 
+     assign option_index = forloop.index0
+     capture option_type
+        include 'product-option-detector', option_name: option.name
+     endcapture
+     assign option_type = option_type | strip | strip_newlines 
+  -%}
+  {%- if option_type == 'color' -%}
+    {%- for value in option.values -%}
+      {%- assign color = value | escape | downcase | strip | strip_newlines -%}
+	  <div class="product-layout-media" data-media-color="{{ color }}">
+        <product-media-component>
+          {%- capture thumbnail -%}
+            <div class="product-template__thumbnail product-thumbnail__{{ position }}" data-product-thumbnail="{{ position }}">
+              <div class="product-template__thumbnail-content">
+                <div class="product-thumbnail_nav-prev" data-carousel-nav-prev><em class="cs-icon icon-ion-ios-arrow-up"></em></div>
+                <div class="swiper-container" data-carousel-container style="height: 100%;">
+                  <div class="swiper-wrapper">
+                    {%- for media in product.media -%}
+                      {%- assign alt = media.alt | downcase | remove_first: 'color' | strip | strip_newlines -%}
+                      {%- if alt == color -%}
+                        <div class="swiper-slide" data-carousel-item="{{ media.id }}">
+                          {% render 'media-thumbnail', media: media %}
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                </div>
+                <div class="product-thumbnail_nav-next" data-carousel-nav-next><em class="cs-icon icon-ion-ios-arrow-down"></em></div>
+              </div>
+            </div>
+          {%- endcapture -%}
+          <div class="product-template__media-content row">
+            {%- if position == 'left'  -%}
+            <div class="col-12 col-lg-2 d-none d-lg-block {% if product.media.size <= 1 %}hidden{% endif %}">
+              {{ thumbnail }}
+            </div>
+            {%- endif -%}
+            <div class="col-12 {% if position == 'bottom' or position == 'none' %}col-lg-12{% else %}col-lg-10{% endif %}">
+              <div class="product-gallery carousel" data-product-gallery>
+                <div class="carousel-wrapper carousel-nav-middle">
+                  <div class="swiper-container" data-carousel-container>
+                    <div class="swiper-wrapper">
+                      {%- assign image_item = 0 -%}
+                      {%- for media in product.media -%}
+                        {%- assign alt = media.alt | downcase | remove_first: 'color' | strip | strip_newlines -%}
+                    	{%- if alt == color -%}
+                          <div class="swiper-slide swiper-slide-gallery height-100" data-carousel-item="{{ media.id }}">
+                            {% render 'product-thumbnail', media: media, position: forloop.index, zoom: zoom, loop: video, modal_id: section.id, xr_button: true, image_item: image_item, fixed_aspect_ratio: fixed_aspect_ratio, image_size: size %}
+                            {%- if media.media_type == 'image' -%}
+                              {%- assign image_item = image_item | plus: 1 -%}
+                            {%- endif -%}
+                          </div>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                  {%- if navigation -%}
+                  <div class="carousel-navigation carousel-nav-prev" data-carousel-nav-prev><i class="cs-icon icon-ios-arrow-left"></i></div>
+                  <div class="carousel-navigation carousel-nav-next" data-carousel-nav-next><i class="cs-icon icon-ios-arrow-right"></i></div>
+                  {%- endif -%}
+                </div>
+                {%- if pagination -%}
+                <div class="carousel-pagination" data-carousel-pagination></div>
+                {%- endif -%}
+              </div>
+            </div>
+            {%- if position == 'right' -%}
+            <div class="col-12 col-lg-2 d-none d-lg-block {% if product.media.size <= 1 %}hidden{% endif %}">
+              {{ thumbnail }}
+            </div>
+            {%- endif -%}
+            {%- if position == 'bottom' -%}
+              <div class="col-12 col-lg-12 d-none d-md-block {% if product.media.size <= 1 %}hidden{% endif %}">
+                {{ thumbnail }}
+              </div>
+            {%- endif -%}
+            {%- if position == 'none' -%}
+              <div class="d-none d-lg-none">
+                {{ thumbnail }}
+              </div>
+            {%- endif -%}
+          </div>
+        </product-media-component>
+      </div>
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}

@@ -1,0 +1,15 @@
+{%- for link in child_links.links -%}
+  <li class="level1-menu {% if link.active %}active{% endif %}">
+    <a href="{{ link.url }}">{{ link.title }}</a>
+    {% if link.links != blank %}
+      {%- assign child_links = link.links -%}
+      <div class="sub-menu">
+        {% for link in child_links %}
+        <div class="level2-menu {% if link.active %}active{% endif %}">
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        </div>
+        {% endfor %}
+      </div>
+    {%- endif -%}
+  </li>
+{%- endfor -%}

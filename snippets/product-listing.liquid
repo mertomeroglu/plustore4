@@ -1,0 +1,18 @@
+<div class="{{ block.settings.display }} collection-sidebar__item accordion collection-sidebar__listing is-active open">
+  <h4 class="accordion__title">
+    <span>{{ block.settings.title }}</span>
+  </h4>
+  <div class="accordion__content component-scrollbar">
+    {%- if block.settings.listing_linklist != blank -%}
+      <ul class="collection-sidebar__listing-content list-unstyled">
+        {%- for link in block.settings.listing_linklist.links -%}
+        <li>
+          <a href="{{ link.url }}" class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}">
+            {{ link.title }}
+          </a>
+        </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</div>

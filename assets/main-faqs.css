@@ -1,0 +1,86 @@
+.main-faqs__title{
+  text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.8em;
+  text-transform: uppercase;
+  color: var(--color_heading);
+  margin-bottom: 15px;
+  margin-top: 60px;
+    
+}
+
+.faqs-questions__item{
+  font-size: 15px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.faqs-questions__item .accordion__title{
+  color: #333;
+  background-color: #f5f5f5;
+  border-color: #ddd;
+  padding: 10px 30px 10px 15px;  
+  margin-bottom: 0;
+}
+.faqs-questions__item .accordion__title span{
+  font-size: 16px;
+  line-height: 20px;
+}
+.faqs-questions__item .accordion__title:before{
+  right: 15px;
+}
+.faqs-questions__item:not(:first-child){
+  margin-top: 5px;
+}
+
+.faqs-contact__content .field textarea + .field__label{
+  top: 30px;  
+}
+.faqs-contact__content .field input:-webkit-autofill~label, 
+.faqs-contact__content .field input:focus~label, 
+.faqs-contact__content .field input:not(:placeholder-shown)~label, 
+.faqs-contact__content .field__input:-webkit-autofill~.field__label, 
+.faqs-contact__content .field__input:focus~.field__label, 
+.faqs-contact__content .field__input:not(:placeholder-shown)~.field__label{
+  top: .5em;
+}
+.faqs-contact__content .field__input{
+  height: 40px;
+  line-height: 40px;
+  outline: none;  
+}
+.faqs-contact__content  .contact__fields .field:nth-child(2){
+  margin-top: 20px;
+}
+.faqs-contact__content .contact__button{
+  text-align: center;
+  margin-top: 30px;
+}
+.faqs-contact__content .contact__button button{
+  min-width: 120px;
+}
+.main-faqs__layout{
+  margin-bottom: 60px;
+}
+.faqs-contact__content .field__input,
+.faqs-contact__content .field textarea{
+  background-color: #f7f7f7;
+}
+.faqs-questions__item .accordion__content{  
+  font-size: 14px;
+  line-height: 1.6em;
+  color: var(--color_body);    
+}
+@media only screen and (max-width: 575px){  
+  .faqs-contact__content .contact__fields .field{
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  .faqs-contact__content .contact__button{
+    margin-top: 0;
+  }
+  .main-faqs__title{
+    margin-top: 30px;
+  }  
+}

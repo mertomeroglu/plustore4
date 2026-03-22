@@ -1,0 +1,1636 @@
+{{ 'component-slideshow.css' | asset_url | stylesheet_tag }}
+<!-- /sections/index-slideshow.liquid -->
+<div data-section-type="slideshow" class="spaced-section spaced-section--full-width {{ section.settings.display }}" data-section-name="index-slideshow">
+  <div class="container">
+    <div class="slideshow-categories__content row">
+	  {%- if section.settings.header_categorie and section.settings.categorie_link_list != blank -%}
+        <div class="slideshow__categories-content navigation-header__categorie">
+          <div class="header__categorie-content">
+            {%- render 'theme-header-categorie', config: section.settings, blocks: section.blocks, menu: linklists[section.settings.categorie_link_list] -%}
+          </div>
+        </div>
+      {%- endif -%}
+      <slideshow-component>
+        <div class="slideshow-{{ section.id}} index-slideshow-container {{ section.settings.display }}" data-section-id="{{ section.id }}" data-slideshow-param='{"effect": "{{ section.settings.effect }}", "autoplay": "{{ section.settings.autoplay }}", "autoplaySpeed": "{{ section.settings.autoplay_speed }}", "height": "{{ section.settings.slideshow_height }}", "width": "{{ section.settings.slideshow_width }}"}' data-index-slideshow>
+          {%- assign slideshow_size = section.settings.slideshow_width | append: 'x' | append: section.settings.slideshow_height -%}
+          {%- if section.blocks.size > 0 -%}
+          <div class="swiper-container" data-slideshow-container>
+            <div class="swiper-wrapper">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'image' -%}
+                <div class="swiper-slide" data-slideshow-slide-type="image" data-slideshow-slide>
+                  {%- if block.settings.link != blank and block.settings.action == blank -%}
+                  	<a class="index-slideshow-link" href="{{ block.settings.link }}"></a>
+                  {%- endif -%}
+                  <div class="index-slideshow-background">
+                    {%- if block.settings.background -%}
+                      {%- assign preview_img = block.settings.background -%}
+                      <div class="lazy-bg index-slideshow__background" style="padding-bottom: {{ 100 | divided_by: preview_img.aspect_ratio }}%;">
+                        <img {% render 'lazyload', preview_img: preview_img  %} />
+                        <span class="data-lazy-loading"></span>
+                      </div>
+                    {%- else -%}
+                    <img class="index-slideshow__background lazyload"
+                         src="{{ '865x468.png' | asset_url }}"
+                         loading="lazy">
+                    {%- endif -%}
+                  </div>
+                  {%- if block.settings.title != blank -%}
+                    <div class="index-slideshow-caption title-{{ section.id }}-{{ block.id }} index-slideshow-caption-title {{ block.settings.title_style }}">
+                      <div class="hidden animated" data-slideshow-caption='{"type": "text", "positionX": "{{ block.settings.title_x }}", "positionY": "{{ block.settings.title_y }}", "zIndex": "{{ block.settings.title_z }}", "align" : "{{ block.settings.title_align }}", "entranceEffect": "{{ block.settings.entrance_effect }}", "exitEffect": "{{ block.settings.exit_effect }}"}'>{{ block.settings.title }}</div>
+                    </div>
+                    {% style %}
+                      .title-{{ section.id }}-{{ block.id }}{
+                        color: {{ block.settings.color_title_desktop }};
+                      }
+                      @media screen and (max-width: 767px){    
+                        .title-{{ section.id }}-{{ block.id }}{
+                          color: {{ block.settings.color_title_mobile }} !important;
+                        }
+                      }
+                    {% endstyle %}
+                  {%- endif -%}
+                  {%- if block.settings.description != blank -%}
+                    <div class="index-slideshow-caption description-{{ section.id }}-{{ block.id }} index-slideshow-caption-description {{ block.settings.description_style }}">
+                      <div class="hidden animated" data-slideshow-caption='{"type": "text", "positionX": "{{ block.settings.description_x }}", "positionY": "{{ block.settings.description_y }}", "zIndex": "{{ block.settings.description_z }}", "align" : "{{ block.settings.description_align }}", "entranceEffect": "{{ block.settings.entrance_effect }}", "exitEffect": "{{ block.settings.exit_effect }}"}'>{{ block.settings.description }}</div>
+                    </div>
+                    {% style %}
+                      .description-{{ section.id }}-{{ block.id }}{
+                        color: {{ block.settings.color_description_desktop }};
+                      }
+                      @media screen and (max-width: 767px){    
+                        .description-{{ section.id }}-{{ block.id }}{
+                          color: {{ block.settings.color_description_mobile }} !important;
+                        }
+                      }
+                    {% endstyle %}
+                  {%- endif -%}
+                  {%- if block.settings.action != blank -%}
+                    <div class="index-slideshow-caption index-slideshow-caption-action {{ block.settings.action_style }}">
+                      <a href="{{ block.settings.link }}" class="hidden action-{{ section.id }}-{{ block.id }} flex-container align-middle animated" data-slideshow-caption='{"type": "text", "positionX": "{{ block.settings.action_x }}", "positionY": "{{ block.settings.action_y }}", "zIndex": "{{ block.settings.action_z }}", "align" : "{{ block.settings.action_align }}", "entranceEffect": "{{ block.settings.entrance_effect }}", "exitEffect": "{{ block.settings.exit_effect }}"}'>
+                        {{ block.settings.action }}
+                      </a>
+                    </div>
+                    {% style %}
+                      .action-{{ section.id }}-{{ block.id }}{
+                        color: {{ block.settings.color_action_desktop }};
+    					border-color: {{ block.settings.color_action_desktop }};
+                      }
+                      .action-{{ section.id }}-{{ block.id }}:hover{
+                        color: {{ block.settings.color_action_hover_desktop }};
+    					border-color: {{ block.settings.color_action_hover_desktop }};
+                      }
+                      @media screen and (max-width: 767px){    
+                        .action-{{ section.id }}-{{ block.id }}{
+                          color: {{ block.settings.color_action_mobile }};
+                          border-color: {{ block.settings.color_action_mobile }};
+                        }
+                        .action-{{ section.id }}-{{ block.id }}:hover{
+                          color: {{ block.settings.color_action_hover_mobile }};
+                          border-color: {{ block.settings.color_action_hover_mobile }};
+                        }
+                      }
+                    {% endstyle %}
+                  {%- endif -%}
+                  {%- if block.settings.caption_1 != blank -%}
+                    <div class="index-slideshow-caption index-slideshow-caption-image">
+                      <img src="{{ block.settings.caption_1 | img_url: 'master' }}" alt="{{ block.settings.caption_1.alt }}" class="animated" data-slideshow-caption='{"type": "image", "positionX": "{{ block.settings.caption_1_x }}", "positionY": "{{ block.settings.caption_1_y }}", "zIndex": "{{ block.settings.caption_1_z }}", "align" : "{{ block.settings.caption_1_align }}", "entranceEffect": "{{ block.settings.entrance_effect }}", "exitEffect": "{{ block.settings.exit_effect }}"}'/>
+                    </div>
+                  {%- endif -%}
+                  {%- if block.settings.caption_2 != blank -%}
+                    <div class="index-slideshow-caption index-slideshow-caption-image">
+                      <img src="{{ block.settings.caption_2 | img_url: 'master' }}" alt="{{ block.settings.caption_2.alt }}" class="animated" data-slideshow-caption='{"type": "image", "positionX": "{{ block.settings.caption_2_x }}", "positionY": "{{ block.settings.caption_2_y }}", "zIndex": "{{ block.settings.caption_2_z }}", "align" : "{{ block.settings.caption_2_align }}", "entranceEffect": "{{ block.settings.entrance_effect }}", "exitEffect": "{{ block.settings.exit_effect }}"}'/>
+                    </div>
+                  {%- endif -%}
+                  {%- if block.settings.caption_3 != blank -%}
+                    <div class="index-slideshow-caption index-slideshow-caption-image">
+                      <img src="{{ block.settings.caption_3 | img_url: 'master' }}" alt="{{ block.settings.caption_3.alt }}" class="animated" data-slideshow-caption='{"type": "image", "positionX": "{{ block.settings.caption_3_x }}", "positionY": "{{ block.settings.caption_3_y }}", "zIndex": "{{ block.settings.caption_3_z }}", "align" : "{{ block.settings.caption_3_align }}", "entranceEffect": "{{ block.settings.entrance_effect }}", "exitEffect": "{{ block.settings.exit_effect }}"}'/>
+                    </div>
+                  {%- endif -%}
+                  {%- if block.settings.caption_4 != blank -%}
+                    <div class="index-slideshow-caption index-slideshow-caption-image">
+                      <img src="{{ block.settings.caption_4 | img_url: 'master' }}" alt="{{ block.settings.caption_4.alt }}" class="animated" data-slideshow-caption='{"type": "image", "positionX": "{{ block.settings.caption_4_x }}", "positionY": "{{ block.settings.caption_4_y }}", "zIndex": "{{ block.settings.caption_4_z }}", "align" : "{{ block.settings.caption_4_align }}", "entranceEffect": "{{ block.settings.entrance_effect }}", "exitEffect": "{{ block.settings.exit_effect }}"}'/>
+                    </div>
+                  {%- endif -%}
+                  {%- if block.settings.caption_5 != blank -%}
+                    <div class="index-slideshow-caption index-slideshow-caption-image">
+                      <img src="{{ block.settings.caption_5 | img_url: 'master' }}" alt="{{ block.settings.caption_5.alt }}" class="animated" data-slideshow-caption='{"type": "image", "positionX": "{{ block.settings.caption_5_x }}", "positionY": "{{ block.settings.caption_5_y }}", "zIndex": "{{ block.settings.caption_5_z }}", "align" : "{{ block.settings.caption_5_align }}", "entranceEffect": "{{ block.settings.entrance_effect }}", "exitEffect": "{{ block.settings.exit_effect }}"}'/>
+                    </div>
+                  {%- endif -%}
+                  {%- if block.settings.caption_6 != blank -%}
+                    <div class="index-slideshow-caption index-slideshow-caption-image">
+                      <img src="{{ block.settings.caption_6 | img_url: 'master' }}" alt="{{ block.settings.caption_6.alt }}" class="animated" data-slideshow-caption='{"type": "image", "positionX": "{{ block.settings.caption_6_x }}", "positionY": "{{ block.settings.caption_6_y }}", "zIndex": "{{ block.settings.caption_6_z }}", "align" : "{{ block.settings.caption_6_align }}", "entranceEffect": "{{ block.settings.entrance_effect }}", "exitEffect": "{{ block.settings.exit_effect }}"}'/>
+                    </div>
+                  {%- endif -%}
+                </div>
+                {%- endif -%}
+                {%- if block.type == 'video_youtube' -%}
+                  <div class="swiper-slide" data-slideshow-slide-type="video" data-slideshow-slide>
+                    <div id="slideshow-video-container-{{ block.id }}" class="index-slideshow-video-container" data-slideshow-video>
+                      <iframe src="https://www.youtube.com/embed/{{ block.settings.video_url.id }}?enablejsapi=1&autohide=0&cc_load_policy=0&controls=0&loop=1&playlist={{ block.settings.video_url.id }}" class="js-youtube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                  </div>
+                {%- endif -%}
+                {%- if block.type == 'video_files' -%}
+                  <div class="swiper-slide" data-slideshow-slide-type="video-files" data-slideshow-slide>
+                    <div class="index-slideshow-video-container" data-slideshow-video>
+                      <video {% if block.settings.image %}poster="{{ block.settings.image | img_url: slideshow_size }}"{% endif %}
+                             {% if forloop.first %}muted autoplay{% endif %}
+                             preload="auto" playsinline="" loop="">
+                        <source src="{{ block.settings.video_url }}" type="video/mp4">
+                      </video>
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>        
+          </div>
+          <div class="swiper-wrapper-loader"></div>
+          {%- if section.settings.pagination -%}
+          <!-- If we need pagination -->
+          <div class="index-slideshow-pagination" data-slideshow-pagination></div>
+          {%- endif -%}
+          {%- if section.settings.navigation -%}
+          <!-- If we need navigation buttons -->
+          <div class="index-slideshow-navigation index-slideshow-nav-prev show-for-large" data-slideshow-nav-prev>
+            <em class="cs-icon sli icon-ios-arrow-left"></em>
+          </div>
+          <div class="index-slideshow-navigation index-slideshow-nav-next show-for-large" data-slideshow-nav-next>
+            <em class="cs-icon sli icon-ios-arrow-right"></em>
+          </div>
+          {%- endif -%}
+          {%- else -%}
+          <div class="text-center">
+            {{ 'homepage.onboarding.no_content' | t }}
+          </div>
+          {%- endif -%}
+        </div>
+      </slideshow-component>
+      {%- if section.settings.daily_enable -%}
+        <div class="best-sellers__daily">
+          {%- if section.settings.daily_title != blank -%}
+            <div class="box-divider title-daily_{{ section.id }}">
+              {%- if section.settings.daily_icon != blank -%}              
+              <div class="group-icon">              
+              {%- endif -%}              
+              {%- if section.settings.daily_icon != blank -%}
+                <img class="box-icon"
+                     srcset="{% render 'bgset', image: section.settings.daily_icon %}"
+               		 src="{% render 'srcset', image: section.settings.daily_icon %}"
+                     alt="{{ section.settings.daily_icon.alt | escape }}"
+                     loading="lazy"
+                     width="{{ section.settings.daily_icon.width }}"
+                     height="{{ section.settings.daily_icon.height }}"
+                     >
+              {%- endif -%}
+              <h2 class="box-title">{{ section.settings.daily_title }}</h2>
+              {%- if section.settings.daily_icon != blank -%}                           
+              </div>
+              {%- endif -%} 
+              {%- if section.settings.daily_dealtime != blank -%}
+                <countdown-component class="countdown countdown_{{ section.id }}">
+                  <div class="countdown-timer" data-timer data-timervalue="{{ section.settings.daily_dealtime }}" data-timer-languages='{"days": "", "hours": "", "minutes": "", "seconds": ""}' data-timer-point=':'>              
+                  </div>
+                </countdown-component>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          <div class="best-sellers__daily-product">
+            {%- liquid
+              assign product = all_products[section.settings.daily_product]
+              unless product == empty
+                render 'index-product-item', product: product
+              else
+                render 'index-product-item-sample'
+              endunless
+             -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>  
+  </div>
+</div>
+{% style %}
+.slideshow-{{ section.id}} .index-slideshow-navigation{
+  color: {{ section.settings.color_navigation_text }};
+  background-color: {{ section.settings.color_navigation_bkg }};
+}
+.slideshow-{{ section.id}} .index-slideshow-pagination-bullet{
+  background-color: {{ section.settings.color_pagination }};
+}
+.slideshow-{{ section.id}} .index-slideshow-pagination-bullet.index-slideshow-pagination-bullet-active, 
+.slideshow-{{ section.id}} .index-slideshow-pagination-bullet:hover{
+  background-color: {{ section.settings.color_pagination_hover }};
+}
+{% endstyle %}
+{% schema %}
+{
+  "name": "Slideshow & Categories",
+  "class": "index-slideshow-categories",
+  "settings": [
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display on",
+      "options": [
+        {
+          "value": "",
+          "label": "Desktop & Mobile"
+        },
+        {
+          "value": "d-none d-md-block",
+          "label": "Desktop only"
+        },
+        {
+          "value": "d-block d-md-none",
+          "label": "Mobile only"
+        }
+      ],
+      "default": ""
+    },
+	{
+      "type": "header",
+      "content": "Categories Setting"
+    },
+	{
+      "type": "checkbox",
+      "id": "header_categorie",
+      "label": "Enable Categories header",
+      "default": true
+    },
+	{
+      "type": "text",
+      "id": "categorie_title",
+      "label": "Heading",
+	  "info": "Set icon in 'Add Content' with type 'Icon Category'"
+    },
+    {
+      "type": "url",
+      "id": "categorie_link",
+      "label": "Link title"
+    },
+    {
+      "type": "link_list",
+      "id": "categorie_link_list",
+      "label": "Categories Link"
+    },
+	{
+      "type": "header",
+      "content": "Slideshow Settings"
+    },
+    {
+      "type": "select",
+      "id": "effect",
+      "label": "Slide effect",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Sliding"
+        },
+        {
+          "value": "fade",
+          "label": "Fading"
+        },
+        {
+          "value": "cube",
+          "label": "Cube"
+        },
+        {
+          "value": "flip",
+          "label": "Flipping"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Change slides every",
+      "options": [
+        {
+          "value": "5000",
+          "label": "5 seconds"
+        },
+        {
+          "value": "6000",
+          "label": "6 seconds"
+        },
+        {
+          "value": "7000",
+          "label": "7 seconds"
+        },
+        {
+          "value": "8000",
+          "label": "8 seconds"
+        },
+        {
+          "value": "9000",
+          "label": "9 seconds"
+        },
+        {
+          "value": "10000",
+          "label": "10 seconds"
+        }
+      ],
+      "default": "7000"
+    },
+    {
+      "type": "number",
+      "id": "slideshow_width",
+      "label": "Slide width in px (Desktop)",
+      "default": 1920
+    },
+    {
+      "type": "number",
+      "id": "slideshow_height",
+      "label": "Slide height in px (Desktop)",
+      "default": 1080
+    },
+    {
+      "type": "checkbox",
+      "id": "navigation",
+      "label": "Enable Navigaiton",
+      "default": true
+    },
+	{
+      "type": "color",
+      "id": "color_navigation_text",
+      "label": "Color text Navigaiton",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_navigation_bkg",
+      "label": "Color background Navigaiton",
+      "default": "#333333"
+    },
+    {
+      "type": "checkbox",
+      "id": "pagination",
+      "label": "Enable Pagination",
+      "default": true
+    },
+	{
+      "type": "color",
+      "id": "color_pagination",
+      "label": "Color Pagination",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_pagination_hover",
+      "label": "Color hover Navigaiton",
+      "default": "#f87733"
+    },
+	{
+      "type": "header",
+      "content": "Daily Deals"
+    },
+	{
+      "type": "checkbox",
+      "id": "daily_enable",
+      "label": "Set active this block"
+    },
+	{
+      "type": "text",
+      "id": "daily_title",
+      "label": "Heading"
+    },
+	{
+      "type": "image_picker",
+      "id": "daily_icon",
+      "label": "Upload icon"
+    },
+	{
+      "type": "color",
+      "id": "daily_color",
+      "label": "Color border",
+	  "default": "#f70000"
+    },
+	{
+      "type": "product",
+      "id": "daily_product",
+      "label": "Select product"
+    },
+	{
+      "type": "text",
+      "id": "daily_dealtime",
+      "label": "Timer",
+      "default": "2021/12/06 00:00:00",
+      "info":"Syntax YYYY/MM/DD HH:MM:SS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "background",
+          "label": "Slide Background",
+          "info": "Required"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Slide link"
+        },
+        {
+          "type": "select",
+          "id": "entrance_effect",
+          "label": "Captions Entrances Effect",
+          "options": [
+            {
+              "group": "Bouncing",
+              "value": "bounceIn",
+              "label": "Bouncing"
+            },
+            {
+              "group": "Bouncing",
+              "value": "bounceInDown",
+              "label": "Bouncing Down"
+            },
+            {
+              "group": "Bouncing",
+              "value": "bounceInLeft",
+              "label": "Bouncing Left"
+            },
+            {
+              "group": "Bouncing",
+              "value": "bounceInRight",
+              "label": "Bouncing Right"
+            },
+            {
+              "group": "Bouncing",
+              "value": "bounceInUp",
+              "label": "Bouncing Up"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeIn",
+              "label": "Fade"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeInDown",
+              "label": "Fade Down"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeInDownBig",
+              "label": "Fade Down (Long)"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeInLeft",
+              "label": "Fade Left"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeInLeftBig",
+              "label": "Fade Left (Long)"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeInRight",
+              "label": "Fade Right"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeInRightBig",
+              "label": "Fade Right (Long)"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeInUp",
+              "label": "Fade Up"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeInUpBig",
+              "label": "Fade Up (Long)"
+            },
+            {
+              "group": "Flippers",
+              "value": "flipInX",
+              "label": "Fade (Vertical)"
+            },
+            {
+              "group": "Flippers",
+              "value": "flipInY",
+              "label": "Fade (Horizontal)"
+            },
+            {
+              "group": "Lightspeed",
+              "value": "lightSpeedIn",
+              "label": "Light Speed"
+            },
+            {
+              "group": "Rotating",
+              "value": "rotateIn",
+              "label": "Rotate"
+            },
+            {
+              "group": "Rotating",
+              "value": "rotateInDownLeft",
+              "label": "Rotate Down Left"
+            },
+            {
+              "group": "Rotating",
+              "value": "rotateInDownRight",
+              "label": "Rotate Down Right"
+            },
+            {
+              "group": "Rotating",
+              "value": "rotateInUpLeft",
+              "label": "Rotate Up Left"
+            },
+            {
+              "group": "Rotating",
+              "value": "rotateInUpRight",
+              "label": "Rotate Up Right"
+            },
+            {
+              "group": "Sliding",
+              "value": "slideInUp",
+              "label": "Slide Up"
+            },
+            {
+              "group": "Sliding",
+              "value": "slideInDown",
+              "label": "Slide Down"
+            },
+            {
+              "group": "Sliding",
+              "value": "slideInLeft",
+              "label": "Slide Left"
+            },
+            {
+              "group": "Sliding",
+              "value": "slideInRight",
+              "label": "Slide Right"
+            },
+            {
+              "group": "Zoom",
+              "value": "zoomIn",
+              "label": "Zoom"
+            },
+            {
+              "group": "Zoom",
+              "value": "zoomInDown",
+              "label": "Zoom Down"
+            },
+            {
+              "group": "Zoom",
+              "value": "zoomInLeft",
+              "label": "Zoom Left"
+            },
+            {
+              "group": "Zoom",
+              "value": "zoomInRight",
+              "label": "Zoom Right"
+            },
+            {
+              "group": "Zoom",
+              "value": "zoomInUp",
+              "label": "Zoom Up"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "exit_effect",
+          "label": "Captions Exits Effect",
+          "options": [
+            {
+              "group": "Bouncing",
+              "value": "bounceOut",
+              "label": "Bouncing"
+            },
+            {
+              "group": "Bouncing",
+              "value": "bounceOutDown",
+              "label": "Bouncing Down"
+            },
+            {
+              "group": "Bouncing",
+              "value": "bounceOutLeft",
+              "label": "Bouncing Left"
+            },
+            {
+              "group": "Bouncing",
+              "value": "bounceOutRight",
+              "label": "Bouncing Right"
+            },
+            {
+              "group": "Bouncing",
+              "value": "bounceOutUp",
+              "label": "Bouncing Up"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeOut",
+              "label": "Fade"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeOutDown",
+              "label": "Fade Down"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeOutDownBig",
+              "label": "Fade Down (Long)"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeOutLeft",
+              "label": "Fade Left"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeOutLeftBig",
+              "label": "Fade Left (Long)"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeOutRight",
+              "label": "Fade Right"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeOutRightBig",
+              "label": "Fade Right (Long)"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeOutUp",
+              "label": "Fade Up"
+            },
+            {
+              "group": "Fading",
+              "value": "fadeOutUpBig",
+              "label": "Fade Up (Long)"
+            },
+            {
+              "group": "Flippers",
+              "value": "flipOutX",
+              "label": "Fade (Vertical)"
+            },
+            {
+              "group": "Flippers",
+              "value": "flipOutY",
+              "label": "Fade (Horizontal)"
+            },
+            {
+              "group": "Lightspeed",
+              "value": "lightSpeedOut",
+              "label": "Light Speed"
+            },
+            {
+              "group": "Rotating",
+              "value": "rotateOut",
+              "label": "Rotate"
+            },
+            {
+              "group": "Rotating",
+              "value": "rotateOutDownLeft",
+              "label": "Rotate Down Left"
+            },
+            {
+              "group": "Rotating",
+              "value": "rotateOutDownRight",
+              "label": "Rotate Down Right"
+            },
+            {
+              "group": "Rotating",
+              "value": "rotateOutUpLeft",
+              "label": "Rotate Up Left"
+            },
+            {
+              "group": "Rotating",
+              "value": "rotateOutUpRight",
+              "label": "Rotate Up Right"
+            },
+            {
+              "group": "Sliding",
+              "value": "slideOutUp",
+              "label": "Slide Up"
+            },
+            {
+              "group": "Sliding",
+              "value": "slideOutDown",
+              "label": "Slide Down"
+            },
+            {
+              "group": "Sliding",
+              "value": "slideOutLeft",
+              "label": "Slide Left"
+            },
+            {
+              "group": "Sliding",
+              "value": "slideOutRight",
+              "label": "Slide Right"
+            },
+            {
+              "group": "Zoom",
+              "value": "zoomOut",
+              "label": "Zoom"
+            },
+            {
+              "group": "Zoom",
+              "value": "zoomOutDown",
+              "label": "Zoom Down"
+            },
+            {
+              "group": "Zoom",
+              "value": "zoomOutLeft",
+              "label": "Zoom Left"
+            },
+            {
+              "group": "Zoom",
+              "value": "zoomOutRight",
+              "label": "Zoom Right"
+            },
+            {
+              "group": "Zoom",
+              "value": "zoomOutUp",
+              "label": "Zoom Up"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Title"
+        },
+        {
+          "type": "html",
+          "id": "title",
+          "label": "Title",
+          "info": "HTML is allowed"
+        },
+        {
+          "type": "color",
+          "id": "color_title_desktop",
+          "label": "Color Title for Desktop",
+          "default": "#101010"
+        },
+        {
+          "type": "color",
+          "id": "color_title_mobile",
+          "label": "Color Title for Mobile",
+          "default": "#f87733"
+        },
+        {
+          "type": "number",
+          "id": "title_x",
+          "label": "Title horizontal position(x)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "title_align",
+          "label": "Title align with horizontal position",
+          "info": "At the vertical position, the Title will be aligned left, center or right by this position.",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "number",
+          "id": "title_y",
+          "label": "Title vertical position(y)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "title_z",
+          "label": "Title layer order(z)",
+          "info": "Integer, greater than 0.",
+          "default": 9
+        },
+        {
+          "type": "header",
+          "content": "Description"
+        },
+        {
+          "type": "html",
+          "id": "description",
+          "label": "Description",
+          "info": "HTML is allowed"
+        },
+        {
+          "type": "color",
+          "id": "color_description_desktop",
+          "label": "Color Description for Desktop",
+          "default": "#101010"
+        },
+        {
+          "type": "color",
+          "id": "color_description_mobile",
+          "label": "Color Description for Mobile",
+          "default": "#f87733"
+        },
+        {
+          "type": "number",
+          "id": "description_x",
+          "label": "Description horizontal position(x)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "description_align",
+          "label": "Description align with horizontal position",
+          "info": "At the vertical position, the Description will be aligned left, center or right by this position.",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "number",
+          "id": "description_y",
+          "label": "Description vertical position(y)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "description_z",
+          "label": "Description layer order(z)",
+          "info": "Integer, greater than 0.",
+          "default": 9
+        },
+        {
+          "type": "header",
+          "content": "Action"
+        },
+        {
+          "type": "text",
+          "id": "action",
+          "label": "Action"
+        },
+        {
+          "type": "color",
+          "id": "color_action_desktop",
+          "label": "Color Action for Desktop",
+          "default": "#f87733"
+        },
+        {
+          "type": "color",
+          "id": "color_action_hover_desktop",
+          "label": "Color Action hover for Desktop",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_action_mobile",
+          "label": "Color Action for Mobile",
+          "default": "#f87733"
+        },
+        {
+          "type": "color",
+          "id": "color_action_hover_mobile",
+          "label": "Color Action hover for Mobile",
+          "default": "#ffffff"
+        },
+        {
+          "type": "number",
+          "id": "action_x",
+          "label": "Action horizontal position(x)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "action_align",
+          "label": "Action align with horizontal position",
+          "info": "At the vertical position, the Action will be aligned left, center or right by this position.",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "number",
+          "id": "action_y",
+          "label": "Action vertical position(y)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "action_z",
+          "label": "Action layer order(z)",
+          "info": "Integer, greater than 0.",
+          "default": 9
+        },
+        {
+          "type": "header",
+          "content": "Caption #1"
+        },
+        {
+          "type": "image_picker",
+          "id": "caption_1",
+          "label": "Caption #1 image"
+        },
+        {
+          "type": "number",
+          "id": "caption_1_x",
+          "label": "Caption #1 horizontal position(x)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "caption_1_align",
+          "label": "Caption #1 align with horizontal position",
+          "info": "At the vertical position, the Caption #1 will be aligned left, center or right by this position.",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "number",
+          "id": "caption_1_y",
+          "label": "Caption #1 vertical position(y)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "caption_1_z",
+          "label": "Caption #1 layer order(z)",
+          "info": "Integer, greater than 0.",
+          "default": 9
+        },
+        {
+          "type": "header",
+          "content": "Caption #2"
+        },
+        {
+          "type": "image_picker",
+          "id": "caption_2",
+          "label": "Caption #2 image"
+        },
+        {
+          "type": "number",
+          "id": "caption_2_x",
+          "label": "Caption #2 horizontal position(x)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "caption_2_align",
+          "label": "Caption #2 align with horizontal position",
+          "info": "At the vertical position, the Caption #2 will be aligned left, center or right by this position.",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "number",
+          "id": "caption_2_y",
+          "label": "Caption #2 vertical position(y)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "caption_2_z",
+          "label": "Caption #2 layer order(z)",
+          "info": "Integer, greater than 0.",
+          "default": 9
+        },
+        {
+          "type": "header",
+          "content": "Caption #3"
+        },
+        {
+          "type": "image_picker",
+          "id": "caption_3",
+          "label": "Caption #3 image"
+        },
+        {
+          "type": "number",
+          "id": "caption_3_x",
+          "label": "Caption #3 horizontal position(x)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "caption_3_align",
+          "label": "Caption #3 align with horizontal position",
+          "info": "At the vertical position, the Caption #3 will be aligned left, center or right by this position.",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "number",
+          "id": "caption_3_y",
+          "label": "Caption #3 vertical position(y)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "caption_3_z",
+          "label": "Caption #3 layer order(z)",
+          "info": "Integer, greater than 0.",
+          "default": 9
+        },
+        {
+          "type": "header",
+          "content": "Caption #4"
+        },
+        {
+          "type": "image_picker",
+          "id": "caption_4",
+          "label": "Caption #4 image"
+        },
+        {
+          "type": "number",
+          "id": "caption_4_x",
+          "label": "Caption #4 horizontal position(x)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "caption_4_align",
+          "label": "Caption #4 align with horizontal position",
+          "info": "At the vertical position, the Caption #4 will be aligned left, center or right by this position.",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "number",
+          "id": "caption_4_y",
+          "label": "Caption #4 vertical position(y)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "caption_4_z",
+          "label": "Caption #4 layer order(z)",
+          "info": "Integer, greater than 0.",
+          "default": 9
+        },
+        {
+          "type": "header",
+          "content": "Caption #5"
+        },
+        {
+          "type": "image_picker",
+          "id": "caption_5",
+          "label": "Caption #5 image"
+        },
+        {
+          "type": "number",
+          "id": "caption_5_x",
+          "label": "Caption #5 horizontal position(x)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "caption_5_align",
+          "label": "Caption #5 align with horizontal position",
+          "info": "At the vertical position, the Caption #5 will be aligned left, center or right by this position.",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "number",
+          "id": "caption_5_y",
+          "label": "Caption #5 vertical position(y)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "caption_5_z",
+          "label": "Caption #5 layer order(z)",
+          "info": "Integer, greater than 0.",
+          "default": 9
+        },
+        {
+          "type": "header",
+          "content": "Caption #6"
+        },
+        {
+          "type": "image_picker",
+          "id": "caption_6",
+          "label": "Caption #6 image"
+        },
+        {
+          "type": "number",
+          "id": "caption_6_x",
+          "label": "Caption #6 horizontal position(x)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "caption_6_align",
+          "label": "Caption #6 align with horizontal position",
+          "info": "At the vertical position, the Caption #6 will be aligned left, center or right by this position.",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "number",
+          "id": "caption_6_y",
+          "label": "Caption #6 vertical position(y)",
+          "info": "Unit %. Accept decimal number.",
+          "default": 0
+        },
+        {
+          "type": "number",
+          "id": "caption_6_z",
+          "label": "Caption #6 layer order(z)",
+          "info": "Integer, greater than 0.",
+          "default": 9
+        }
+      ]
+    },
+    {
+      "type": "video_youtube",
+      "name": "Video Youtube",
+      "settings": [
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "label": "Video link",
+          "accept": [
+            "youtube"
+          ],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+        }
+      ]
+    },
+    {
+      "type": "video_files",
+      "name": "Video Files",
+      "settings": [
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video link files",
+		  "info": "Upload Video in Settings > Files"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image Loader",
+          "info": "Fallback when autoplaying video is not supported on mobile devices"
+        }
+      ]
+    },
+	{
+      "name": "Icon Category",
+      "type": "icon_categories",
+	  "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_1",
+          "label": "Icon 1: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_1_hover",
+          "label": "Icon 1: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_2",
+          "label": "Icon 2: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_2_hover",
+          "label": "Icon 2: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_3",
+          "label": "Icon 3: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_3_hover",
+          "label": "Icon 3: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_4",
+          "label": "Icon 4: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_4_hover",
+          "label": "Icon 4: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_5",
+          "label": "Icon 5: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_5_hover",
+          "label": "Icon 5: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_6",
+          "label": "Icon 6: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_6_hover",
+          "label": "Icon 6: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_7",
+          "label": "Icon 7: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_7_hover",
+          "label": "Icon 7: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_8",
+          "label": "Icon 8: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_8_hover",
+          "label": "Icon 8: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_9",
+          "label": "Icon 9: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_9_hover",
+          "label": "Icon 9: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_10",
+          "label": "Icon 10: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_10_hover",
+          "label": "Icon 10: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_11",
+          "label": "Icon 11: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_11_hover",
+          "label": "Icon 11: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_12",
+          "label": "Icon 12: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_12_hover",
+          "label": "Icon 12: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_13",
+          "label": "Icon 13: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_13_hover",
+          "label": "Icon 13: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_14",
+          "label": "Icon 14: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_14_hover",
+          "label": "Icon 14: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_15",
+          "label": "Icon 15: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_15_hover",
+          "label": "Icon 15: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_16",
+          "label": "Icon 16: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_16_hover",
+          "label": "Icon 16: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_17",
+          "label": "Icon 17: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_17_hover",
+          "label": "Icon 17: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_18",
+          "label": "Icon 18: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_18_hover",
+          "label": "Icon 18: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_19",
+          "label": "Icon 19: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_19_hover",
+          "label": "Icon 19: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_20",
+          "label": "Icon 20: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_20_hover",
+          "label": "Icon 20: Image hover"
+        }
+	  ]
+	},
+    {
+      "name": "Sub Category",
+      "type": "sub_category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Target",
+          "info": "The name of a menu in the first level of list categories"
+        },
+		{
+          "type": "select",
+          "id": "column",
+          "label": "Number of column",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "3"
+        },		
+		{
+          "type": "text",
+          "id": "col1_title",
+          "label": "1st Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col1_linklist",
+          "label": "1st Column: Menu links"
+        },		
+		{
+          "type": "text",
+          "id": "col2_title",
+          "label": "2nd Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col2_linklist",
+          "label": "2nd Column: Menu links"
+        },		
+		{
+          "type": "text",
+          "id": "col3_title",
+          "label": "3rd Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col3_linklist",
+          "label": "3rd Column: Menu links"
+        },		
+		{
+          "type": "text",
+          "id": "col4_title",
+          "label": "4th Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col4_linklist",
+          "label": "4th Column: Menu links"
+        },		
+		{
+          "type": "text",
+          "id": "col5_title",
+          "label": "5th Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col5_linklist",
+          "label": "5th Column: Menu links"
+        },		
+		{
+          "type": "text",
+          "id": "col6_title",
+          "label": "6th Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col6_linklist",
+          "label": "6th Column: Menu links"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slideshow & Categories",
+      "category": "Image",
+      "settings": {
+        "autoplay": true,
+        "autoplay_speed": "5000"
+      }
+    }
+  ]
+}
+{% endschema %}

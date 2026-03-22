@@ -1,0 +1,197 @@
+<!-- /snippets/breadcrumbs.liquid -->
+  {{ 'component-breadcrumb.css' | asset_url | stylesheet_tag }}
+  <div class="breadcrumbs-content">
+    <div class="container">
+      <nav class="breadcrumb-nav {% if request.page_type == blank %} breadcrumb-nav__no-template{% endif %}" aria-label="breadcrumbs">
+        <span itemscope itemtype="http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="{{ routes.root_url }}" itemprop="item" title="{{ 'general.breadcrumbs.home_link_title' | t }}">
+              <span itemprop="name">{{ 'general.breadcrumbs.home' | t }}</span>
+            </a>
+            <span itemprop="position" hidden>1</span>
+          </span>
+          <span class="arrow-space" aria-hidden="true" id="breadcrumb-home"><i class="cs-icon icon-ios-arrow-right"></i></span>
+          {% case request.page_type %}
+          {% when 'collection' %}
+            {% if current_tags %}
+              {% assign collection_url = current_tags.first | link_to_remove_tag: current_tags.first | split: 'href="' | last | split: '"' | first %}
+              <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <a href="{{ collection_url }}" itemprop="item">
+                  <span itemprop="name">
+                    {% if collection.handle == 'all' %}
+                      {{ 'sections.collection_template.collection_all' | t }}
+                    {% else %}
+                      {{ collection.title }}
+                    {% endif %}
+                  </span>
+                </a>
+                <span itemprop="position" hidden>2</span>
+              </span>
+              <span class="arrow-space" aria-hidden="true"><i class="cs-icon icon-ios-arrow-right"></i></span>
+              <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <span itemprop="name">{{ current_tags.first }}</span>
+                <span itemprop="position" hidden>3</span>
+              </span>
+            {% else %}
+              <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <span itemprop="name">
+                  {% if collection.handle == 'all' %}
+                    {{ 'sections.collection_template.collection_all' | t }}
+                  {% else %}
+                    {{ collection.title }}
+                  {% endif %}
+                </span>
+                <span itemprop="position" hidden>2</span>
+              </span>
+            {% endif %}
+          {% when 'list-collections' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ 'general.breadcrumbs.list_collection' | t }}</span>
+              <span itemprop="position" hidden>2</span>
+            </span>
+          {% when 'product' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ product.title }}</span>
+              {% assign item_prop_position = 2 %}
+              {% if request.path contains 'collections' %}
+                {% assign item_prop_position = 3 %}
+              {% endif %}
+              <span itemprop="position" hidden>{{ item_prop_position }}</span>
+            </span>
+          {% when 'blog' %}
+            {% if current_tags %}
+              <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <a href="{{ blog.url }}" itemprop="item">
+                  <span itemprop="name">{{ blog.title }}</span>
+                </a>
+                <span itemprop="position" hidden>2</span>
+              </span>
+              <span class="arrow-space" aria-hidden="true"><i class="cs-icon icon-ios-arrow-right"></i></span>
+              <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <span itemprop="name">{{ current_tags.first }}</span>
+                <span itemprop="position" hidden>3</span>
+              </span>
+            {% else %}
+              <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <span itemprop="name">{{ blog.title }}</span>
+                <span itemprop="position" hidden>2</span>
+              </span>
+            {% endif %}
+          {% when 'article' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="{{ blog.url }}" itemprop="item">
+                <span itemprop="name">{{ blog.title }}</span>
+              </a>
+              <span itemprop="position" hidden>2</span>
+            </span>
+            <span class="arrow-space" aria-hidden="true"><i class="cs-icon icon-ios-arrow-right"></i></span>
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ article.title }}</span>
+              <span itemprop="position" hidden>3</span>
+            </span>
+          {% when 'page' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ page.title }}</span>
+              <span itemprop="position" hidden>2</span>
+            </span>
+          {% when 'search' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              {% if search.performed %}
+                {%- liquid 
+                    assign searchUrl = search.terms | split:'product_type:'
+                    assign searchTerms = searchUrl[0] | strip
+                -%}
+                <span itemscope="name">{{ 'templates.search.breadcrumb' | t }} "{{ searchTerms }}"</span>
+              {% else%}
+                <span itemscope="name">{{ 'templates.search.title' | t }}</span>
+              {% endif%}
+              <span itemprop="position" hidden>2</span>
+            </span>
+          {% when 'cart' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ 'templates.cart.cart' | t }}</span>
+              <span itemprop="position" hidden>2</span>
+            </span>
+          {% when 'customers/account' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ 'customer.account.title' | t }}</span>
+              <span itemprop="position" hidden>2</span>
+            </span>
+          {% when 'customers/activate_account' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="{{ routes.account_url }}" itemprop="item">
+                <span itemprop="name">{{ 'customer.account.title' | t }}</span>
+              </a>
+              <span itemprop="position" hidden>2</span>
+            </span>
+            <span class="arrow-space" aria-hidden="true"><i class="cs-icon icon-ios-arrow-right"></i></span>
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ 'customer.activate_account.title' | t }}</span>
+              <span itemprop="position" hidden>3</span>
+            </span>
+          {% when 'customers/addresses' %}
+          	<span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="{{ routes.account_url }}" itemprop="item">
+                <span itemprop="name">{{ 'customer.account.title' | t }}</span>
+              </a>
+              <span itemprop="position" hidden>2</span>
+            </span>
+            <span class="arrow-space" aria-hidden="true"><i class="cs-icon icon-ios-arrow-right"></i></span>
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ 'customer.addresses.title' | t }}</span>
+              <span itemprop="position" hidden>3</span>
+            </span>
+          {% when 'customers/order' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="{{ routes.account_url }}" itemprop="item">
+                <span itemprop="name">{{ 'customer.account.title' | t }}</span>
+              </a>
+              <span itemprop="position" hidden>2</span>
+            </span>
+          	<span class="arrow-space" aria-hidden="true"><i class="cs-icon icon-ios-arrow-right"></i></span>
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ 'customer.orders.title' | t }}</span>
+              <span itemprop="position" hidden>3</span>
+            </span>
+          {% when 'customers/login' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ 'customer.log_in' | t }}</span>
+              <span itemprop="position" hidden>2</span>
+            </span>
+          {% when 'customers/register' %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ 'customer.create_account' | t }}</span>
+              <span itemprop="position" hidden>2</span>
+            </span>
+          {% else %}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <span itemprop="name">{{ page_title }}</span>
+              <span itemprop="position" hidden>2</span>
+            </span>
+          {% endcase %}
+        </span>
+      </nav>
+    </div>
+  </div>
+<script>
+  if(sessionStorage.breadcrumb) {
+    window.breadcrumbs = {};
+    window.breadcrumbs.collection = JSON.parse(sessionStorage.breadcrumb);
+    var showCollection = false;
+    {%- if request.page_type == "product" -%}
+      var breadcrumbHTML = '<span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="' + window.breadcrumbs.collection.link + '" itemprop="item"><span itemprop="name">' + window.breadcrumbs.collection.title + '</span></a><span itemprop="position" hidden>2</span></span><span class="arrow-space" aria-hidden="true"><i class="cs-icon icon-ios-arrow-right"></i></span>';
+      var homeBreadcrumb = document.getElementById('breadcrumb-home');
+      var productCollections = {{ product.collections | json }};
+      if (productCollections) {
+        productCollections.forEach(function(collection) {
+          if (collection.title === window.breadcrumbs.collection.title) {
+            showCollection = true;
+          }
+        });
+      }
+      if(homeBreadcrumb && showCollection) {
+        homeBreadcrumb.insertAdjacentHTML('afterend', breadcrumbHTML);
+      }
+    {%- endif -%}
+  }
+</script>

@@ -1,0 +1,285 @@
+{{ 'template-search.css' | asset_url | stylesheet_tag }}
+
+<div class="search-template__layout">
+  <div class="container">
+    <div class="search-template__content">
+      <h1 class="hidden">{{ 'templates.search.title' | t }}</h1>
+      <search-form>
+        {%- liquid 
+                assign searchUrl = search.terms | split:'product_type:'
+                assign searchTerms = searchUrl[0] | strip
+                assign searchType = searchUrl[1] | strip
+              -%}
+        <form action="{{ routes.search_url }}" method="get" role="search" class="search__form">
+          <input type="hidden" name="type" value="product" />
+          <input type="hidden" name="options[unavailable_products]" value="hide" />
+          <input type="hidden" name="options[prefix]" value="last" />
+          <input type="text" name="q" class="search_box" placeholder="{{ 'general.search.placeholder' | t }}" value="{{ searchTerms }}"  />
+          {%- if section.settings.search_type and shop.types.size > 0 -%}
+            {%- unless shop.types[0] == blank and shop.types.size == 1 %}
+              <div class="search__form-collections">
+                <select name="product_type">
+                  <option value="*" >{{ 'general.search.all_types' | t }}</option>
+                  {%- for product_type in shop.types -%}
+                  {%- if product_type == blank %}{% continue-%}{% endif -%}
+                  <option value="{{ product_type }}" {% if searchType == product_type %}selected="selected"{% endif %}>
+                    {{ product_type }}
+                  </option>
+                  {%- endfor -%}                       
+                </select>
+              </div>
+            {%- endunless -%}
+          {%- endif -%}
+          <button class="search_submit" type="submit">
+            <i class="cs-icon icon-search"></i>
+          </button>
+        </form>
+        <div class="search__form-results " data-search-autocomplete="false"></div>
+      </search-form>
+      {%- if search.performed -%}
+        <p class="element-margin" role="status">
+          {%- if search.results_count == 0 -%}
+            {{ 'templates.search.no_results' | t: terms: searchTerms }}
+          {%- else -%}
+            {{ 'templates.search.results_with_count' | t: terms: searchTerms, count: search.results_count }}
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+      {%- if search.performed and search.results.size > 0 -%}
+        {% paginate search.results by section.settings.limit %}
+          <div class="search-template__results">
+            <div class="row row-cols-{{ section.settings.col }} row-cols-sm-{{ section.settings.col_sm }} row-cols-md-{{ section.settings.col_md }} row-cols-lg-{{ section.settings.col_lg }} row-cols-xl-{{ section.settings.col_xl }} row-cols-xxl-{{ section.settings.col_xxl }}">
+              {%- for item in search.results -%}
+                {%- if item.object_type == 'product' -%}
+                  <div class="product-item__content col">
+                    {%- render 'index-product-item', product: item -%}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            {%- if search.performed -%}
+              <div class="search-template__toolbar row">
+                {%- if paginate.pages > 1 -%}
+                  <div class="search-template__pagination col-6 col-sm-6">
+                    {% render 'pagination', paginate: paginate %}
+                  </div>
+                {%- endif -%}
+                {%- if search.performed -%}
+                  <div class="search-template__counter col-6 col-sm-6">
+                    {%- if paginate.current_page == 1 -%} 
+                    {%- capture xnumber -%}1{%- endcapture -%}
+                    {%- else -%} 
+                    {%- capture xnumber -%} {{ paginate.current_page | minus:1 | times: section.settings.limit | plus: 1 }} {%- endcapture -%}
+                    {% endif %}
+                    {%- capture ynumber -%}{{ paginate.current_page | times: section.settings.limit }} {%- endcapture -%}
+                    {%- if paginate.pages == paginate.current_page -%} {%- capture ynumber -%} {{ search.results_count }} {%- endcapture -%}{%- endif -%}
+                    {{ 'sections.collection_template.showing' | t:x:xnumber,y:ynumber,z:search.results_count }}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {% endpaginate %}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Search template",
+  "class": "search-template",
+  "settings": [
+	{
+      "type": "checkbox",
+      "id": "search_type",
+      "label": "Show product types",
+	  "info": "Filter search results with product type",
+      "default": true
+    },
+	{
+      "type": "number",
+      "id": "limit",
+      "label": "Limit products show",
+      "default": 8
+    },
+	{
+      "type": "header",
+      "content": "Responsive width"
+    },
+    {
+      "type": "select",
+      "id": "col",
+      "label": "Width",
+      "info": "For small screen (0px - 575px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "col_sm",
+      "label": "Width",
+      "info": "For medium screen (576px - 767px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_md",
+      "label": "Width",
+      "info": "For large screen (768px - 991px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_lg",
+      "label": "Width",
+      "info": "For xlarge screen (992px - 1199px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_xl",
+      "label": "Width",
+      "info": "For xxlarge screen (1200px - 1399px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_xxl",
+      "label": "Width",
+      "info": "For xxxlarge screen (1400px - infinity)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        },
+        {
+          "value": "5",
+          "label": "1/5"
+        }
+      ],
+      "default": "4"
+    }
+  ]
+}
+{% endschema %}

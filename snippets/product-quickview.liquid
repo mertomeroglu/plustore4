@@ -1,0 +1,20 @@
+<!-- /snippets/product-quickview.liquid -->
+<script src="{{ 'product-quickview.js' | asset_url }}" defer="defer"></script>
+{%- unless request.page_type == 'product' -%}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'main-product.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-media.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-model.js' | asset_url }}" defer></script>
+{%- endunless -%}
+<div class="modal__layout" id="product-quickview">
+  <div class="modal__close" data-modal-close></div>
+  <div class="modal__content">
+    <div class="modal__header">
+      <a class="modal__close-icon" data-modal-close><span class="cs-icon icon-close"></span></a>
+    </div>
+    <div class="modal__body">
+      <div class="product-quickview-modal__content"></div>
+    </div>
+  </div>
+</div>

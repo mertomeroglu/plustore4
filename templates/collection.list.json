@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "main-collection": {
+      "type": "main-collection",
+      "settings": {
+        "collection_title": true,
+        "collection_image": true,
+        "collection_image_banner": "shopify:\/\/shop_images\/banner_a603f010-061e-46e3-afcb-4bbaf8e8b177.png",
+        "collection_image_slider": true,
+        "collection_description": false,
+        "collection_sub": true,
+        "collection_grid_list": true,
+        "layout": "list",
+        "collection_result": true,
+        "collection_col": "2",
+        "collection_col_sm": "2",
+        "collection_col_md": "4",
+        "collection_col_lg": "4",
+        "collection_col_xl": "4",
+        "collection_col_xxl": "4",
+        "pagination_limit": 28,
+        "collection_sorting": true
+      }
+    }
+  },
+  "order": [
+    "main-collection"
+  ]
+}

@@ -1,0 +1,83 @@
+{%- liquid
+  assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
+  assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
+  assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+%}
+
+{% style %}
+  {{ settings.type_body_font | font_face: font_display: 'swap' }}
+  {{ body_font_bold | font_face: font_display: 'swap' }}
+  {{ body_font_italic | font_face: font_display: 'swap' }}
+  {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+  {{ settings.type_header_font | font_face: font_display: 'swap' }}
+
+  :root {
+	{%- comment -%}
+		Font
+    {%- endcomment -%}
+    --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+    --font-body-style: {{ settings.type_body_font.style }};
+    --font-body-weight: {{ settings.type_body_font.weight }};
+
+    --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
+    --font-heading-style: {{ settings.type_header_font.style }};
+    --font-heading-weight: {{ settings.type_header_font.weight }};
+	{%- comment -%}
+		Global color
+    {%- endcomment -%}
+	--color_primary: {{ settings.color_primary }};	    
+	--color_body: {{ settings.color_body }};	   	    	
+	--color_heading: {{ settings.color_heading }};	
+	--color_line: {{ settings.color_line }};	
+	--color_body_bg: {{ settings.color_body_bg}};	
+	--color_content_bg: {{ settings.color_content_bg}};		
+	{%- comment -%}
+		Header color
+    {%- endcomment -%}
+	--color_header_text: {{ settings.color_header_text }};
+	--color_header_border: {{ settings.color_header_border }};	
+	--color_header_bg: {{ settings.color_header_bg }};		
+	--color_topheader_text: {{ settings.color_topheader_text }};	
+	--color_topheader_border: {{ settings.color_topheader_border }};	
+	--color_topheader_bg: {{ settings.color_topheader_bg }};		
+	{%- comment -%}
+		Navigation
+    {%- endcomment -%}
+	--color_navigation_text: {{ settings.color_navigation_text}};	
+	--color_navigation_bg: {{ settings.color_navigation_bg}};
+	--color_navigation_text_hover: {{ settings.color_navigation_text_hover}};												
+	{%- comment -%}
+		Color Product
+    {%- endcomment -%}
+	--color_product_title_text : {{ settings.color_product_title_text }};			
+	--color_price_text : {{ settings.color_price_text }};
+	--color_price_compare_text : {{ settings.color_price_compare_text}};	
+	--color_rating_text: {{ settings.color_rating_text}};
+	--color_price_text_detail: {{ settings.color_price_text_detail}};
+	--color_price_compare_text_detail: {{ settings.color_price_compare_text_detail}};				
+	{%- comment -%}
+		Button general
+    {%- endcomment -%}
+	--color_button_text: {{ settings.color_button_text}};
+	--color_button_border: {{ settings.color_button_border}};
+	--color_button_bg: {{ settings.color_button_bg}};	
+	{%- comment -%}
+		Button general hover
+    {%- endcomment -%}
+	--color_btn_text1: {{ settings.color_btn_text1}};
+	--color_btn_border1: {{ settings.color_btn_border1}};
+	--color_btn_bg1: {{ settings.color_btn_bg1}};   				
+	{%- comment -%}
+      Colors Footer
+    {%- endcomment -%}
+	--color_footer_title_text : {{ settings.color_footer_title_text }};
+	--color_footer_text : {{ settings.color_footer_text }};	
+	--color_footer_border : {{ settings.color_footer_border }};
+	--color_footer_bg : {{ settings.color_footer_bg }};	
+	--color_copyright_border : {{ settings.color_copyright_border }};
+	--color_copyright_text : {{ settings.color_copyright_text }};	
+	--color_copyright_text_hover : {{ settings.color_copyright_text_hover }};			
+	--color_copyright_link : {{ settings.color_copyright_link }};	
+	--color_copyright_bg : {{ settings.color_copyright_bg }};
+  }	  
+{% endstyle %}

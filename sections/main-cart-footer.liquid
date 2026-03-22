@@ -1,0 +1,141 @@
+<div class="cart-template-footer__layout {% if cart == empty %}is-empty{% endif %}" id="main-cart-footer" data-id="{{ section.id }}">
+  <div class="container">
+    <div class="js-contents cart-template__totals">
+      <div class="totals">
+        <h3 class="totals__subtotal">{{ 'sections.cart.subtotal' | t }}</h3>
+        <p class="totals__subtotal-value">{{ cart.total_price | money_with_currency }}</p>
+      </div>
+      <div>
+        {%- if cart.cart_level_discount_applications.size > 0 -%}
+        <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+          {%- for discount in cart.cart_level_discount_applications -%}
+          <li class="discounts__discount discounts__discount--end">
+            {%- render 'icon-discount' -%}
+            {{ discount.title }}
+            (-{{ discount.total_allocated_amount | money }})
+          </li>
+          {%- endfor -%}
+        </ul>
+        {%- endif -%}
+      </div>
+      <small class="tax-note caption-large rte">
+        {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+        {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+        {%- elsif cart.taxes_included -%}
+        {{ 'sections.cart.taxes_included_but_shipping_at_checkout' | t }}
+        {%- elsif shop.shipping_policy.body != blank -%}
+        {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+        {%- else -%}
+        {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
+        {%- endif -%}
+      </small>
+    </div>
+    <div class="cart-template__button row">
+      <div class="col-12 col-sm-6">
+        {%- if section.settings.show_continue -%}
+        <a href="{{ routes.all_products_collection_url }}" class="button button--secondary">
+          {{ 'general.continue_shopping' | t }}
+        </a>
+        {%- endif -%}
+      </div>
+      <div class="col-12 col-sm-6">
+        <a class="button button--secondary" id="cart-clear">{{ 'sections.cart.clear_all' | t }}</a>
+      </div>
+    </div>
+    <div class="cart-template__bottom row">
+      <div class="col-12 col-sm-6 shipping-calculator">
+        {%- if section.settings.show_shipping_calculator -%}
+        {% render 'cart_shipping-calculator' %}
+        {%- endif -%}
+      </div>
+      <div class="col-12 col-sm-6">
+        {%- if section.settings.show_cart_note -%}
+        <cart-note class="cart__note field">
+          <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
+          <textarea class="text-area text-area--resize-vertical field__input" name="note" id="Cart-note" placeholder="{{ 'sections.cart.note_placeholder' | t }}">{{ cart.note }}</textarea>
+        </cart-note>
+        {%- endif -%}
+        <button type="submit" class="cart__checkout-button button button--secondary" name="checkout"{% if cart == empty %} disabled{% endif %} form="cart">
+          {{ 'sections.cart.checkout' | t }}
+        </button>
+        {%- if additional_checkout_buttons -%}
+        <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
+          {{ content_for_additional_checkout_buttons }}
+        </div>
+        {%- endif -%}
+      </div>
+    </div>
+    <div id="cart-errors"></div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Cart footer",
+  "class": "main-cart-footer",
+  "settings": [
+	{
+      "type": "checkbox",
+      "id": "show_continue",
+      "label": "Enable continue shopping",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_note",
+      "label": "Enable cart note",
+      "default": true
+    },
+	{
+      "type": "header",
+      "content": "Shipping rates calculator",
+      "info": "This is shipping estimates, it will not added to Total price after caalculate."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_calculator",
+      "label": "Enable shipping calculator?",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_calculator_heading",
+      "label": "Heading",
+      "default": "Get shipping estimates"
+    },
+    {
+      "type": "text",
+      "id": "shipping_country",
+      "label": "Heading country",
+      "default": "Country"
+    },
+    {
+      "type": "text",
+      "id": "shipping_zip",
+      "label": "Heading Zip/Postal Code",
+      "default": "Zip/Postal Code"
+    },
+    {
+      "type": "text",
+      "id": "shipping_calculator_default_country",
+      "label": "Default country selection",
+      "default": "United States"
+    },
+    {
+      "type": "paragraph",
+      "content": "If your customer is logged-in, the country in his default shipping address will be selected. If you are not sure about the spelling to use here, refer to the first checkout page."
+    },
+    {
+      "type": "text",
+      "id": "shipping_calculator_submit_button_label",
+      "label": "Submit button label",
+      "default": "Calculate shipping"
+    },
+    {
+      "type": "text",
+      "id": "shipping_calculator_submit_button_label_disabled",
+      "label": "Submit button label when calculating",
+      "default": "Calculating..."
+    }
+  ]
+}
+{% endschema %}

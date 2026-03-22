@@ -1,0 +1,1451 @@
+{{ 'section-header.css' | asset_url | stylesheet_tag }}
+{{ 'component-article.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-cart.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'cart-dropdown.js' | asset_url }}" defer="defer"></script> 
+  <div class="container">
+    <div class="top-header__content">
+      {%- if section.settings.header_welcome != blank -%}
+        <div class="top-header__welcome">{{ section.settings.header_welcome }}</div>
+      {%- endif -%}
+      <nav class="top-header__menu">
+        <ul class="top-header__menu-content list-menu--inline no-bullet clearfix">
+          {%- if shop.customer_accounts_enabled -%}
+            <li class="top-header__menu-root header__menu-account menu__dropdown">
+              <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="dropdown-toggle top-header__menu-item list-menu__item"{% if link.current %} aria-current="page"{% endif %}>
+                {%- liquid
+                        if customer
+                          echo 'customer.account_fallback' | t
+                        else
+                          echo 'customer.log_in' | t
+                        endif
+                      -%}
+              </a>
+              {%- unless customer -%}
+              <ul class="header__menu-login no-bullet dropdown-menu">
+                <li class="header__menu-login-content">
+                  <div class="account-login">
+                    {%- form 'customer_login', novalidate: 'novalidate', id:'customer_login_box' -%}
+                    {%- if form.errors -%}
+                    {{ form.errors | default_errors }}
+                    {%- endif -%}
+                    <input type="email" name="customer[email]" class="account-field {% if form.errors contains 'email' %} input-error{% endif %}" placeholder="{{ 'customer.login_page.email' | t }}" autocapitalize="off" autocomplete="email">
+                    {%- if form.password_needed -%}
+                    <input type="password" value="" name="customer[password]" class="account-field {% if form.errors contains 'password' %}  input-error{% endif %}" placeholder="{{ 'customer.login_page.password' | t }}" autocomplete="current-password"/>
+                    {%- endif -%}
+                    <div class="sign-in_create-account">
+                      <button type="submit" class="button account-login-submit">{{ 'customer.login_page.sign_in' | t }}</button>
+                    </div>
+                    {%- if form.password_needed -%}
+                    <a href="{{ routes.account_login_url }}#recover" class="account-login-recover">> {{'customer.login_page.forgot_password'|t}}</a>
+                    {%- endif -%}
+                    <a href="{{ routes.account_register_url }}"><span>> {{'customer.login_page.create_account'|t}}</span></a>
+                    {%- endform -%}
+                  </div>
+                </li>
+              </ul>
+              {%- endunless -%}
+            </li>
+            <li class="top-header__menu-root header__menu-account">
+              <a href="{%- if customer -%}{{ routes.account_logout_url }}{%- else -%}{{ routes.account_register_url }}{%- endif -%}" class="top-header__menu-item list-menu__item"{% if link.current %} aria-current="page"{% endif %}>
+                <span class="header__menu-account-or">{{ 'general.or' | t }}</span>
+                {%- liquid
+                        if customer
+                          echo 'customer.log_out' | t
+                        else
+                          echo 'customer.create_account' | t
+                        endif
+                      -%}
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.top_enable -%}
+            {%- for link in section.settings.nav_linklist.links -%}
+              <li class="top-header__menu-root">
+                <a href="{{ link.url }}" class="top-header__menu-item list-menu__item {% if link.current %}list-menu__item--active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+                  {{ link.title | escape }}
+                </a>
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+          {%- if section.settings.show_currency_selector and localization.available_countries.size > 1 -%}
+            <li class="top-header__menu-root header__menu-currency">
+              <localization-form>
+                {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
+                <div class="localization-form__content menu__dropdown">
+                  <button type="button" class="localization-form__select dropdown-toggle" data-toggle="HeaderCountryList">
+                    {{ localization.country.currency.iso_code }}
+                  </button>
+                  <ul id="HeaderCountryList" role="list" class="dropdown-menu no-bullet localization-form__list" hidden>
+                    {%- for country in localization.available_countries -%}
+                    <li class="localization-form__item {% if country.iso_code == localization.country.iso_code %} localization-form__active{% endif %}" tabindex="-1">
+                      <a class="localization-form__link" href="#"{% if country.iso_code == localization.country.iso_code %} aria-current="true"{% endif %} data-value="{{ country.iso_code }}">
+                        {{ country.currency.iso_code }}
+                      </a>
+                    </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+                <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+                {%- endform -%}
+              </localization-form>
+            </li>
+          {%- endif -%}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<div class="main-header header-wrapper--border-bottom" {% if section.settings.header_sticky %}data-sticky='{"stickTo": "body", "stickyClass": "sticky", "mobileFirst": "true", "responsive": {"992": {"disable": true}}}'{% endif %}>
+  <div class="container">
+    <div class="main-header-content row">
+      <div class="mobile-header__left d-block d-lg-none">
+        {%- if section.settings.link_list != blank -%}
+          <header-drawer data-breakpoint="tablet">
+            <details class="menu-drawer-container">
+              <summary class="header__icon header__icon--menu header__icon--summary link link--text focus-inset" aria-label="{{ 'sections.header.menu' | t }}">
+  <i class="cs-icon icon-view-list"></i>
+  <span class="mobile-categories-label">Kategoriler</span>
+  <i class="cs-icon icon-close"></i>
+</summary>
+              <div id="menu-drawer" class="menu-drawer motion-reduce" tabindex="-1">
+                <div class="menu-drawer__inner-container">
+                  <div class="menu-drawer__navigation-container component-scrollbar">
+                    <nav class="menu-drawer__navigation">
+                      {% if section.settings.categorie_link_list != blank %}
+  <div class="menu-drawer__categories-title">
+    {{ section.settings.categorie_title | default: 'Kategoriler' }}
+  </div>
+
+  <ul class="menu-drawer__menu list-menu" role="list">
+    {%- for cat in linklists[section.settings.categorie_link_list].links -%}
+      <li>
+        <a href="{{ cat.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+          {{ cat.title | escape }}
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  <div class="menu-drawer__extra">
+{% endif %}
+                      <ul class="menu-drawer__menu list-menu" role="list">
+                        {%- for link in section.settings.link_list.links -%}
+                          <li>
+                            {%- if link.links != blank -%}
+                              <details>
+                                <summary class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.child_active %} menu-drawer__menu-item--active{% endif %}">
+                                  {{ link.title | escape }}
+                                  {% render 'icon-arrow' %}
+                                  {% render 'icon-caret' %}
+                                </summary>
+                                <div id="link-{{ link.title | escape }}" class="menu-drawer__submenu motion-reduce" tabindex="-1">
+                                  <div class="menu-drawer__inner-submenu">
+                                    <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                                      {% render 'icon-arrow' %}
+                                      {{ link.title | escape }}
+                                    </button>
+                                    <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                      {%- for childlink in link.links -%}
+                                        <li>
+                                          {%- if childlink.links == blank -%}
+                                            <a href="{{ childlink.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>
+                                              {{ childlink.title | escape }}
+                                            </a>
+                                          {%- else -%}
+                                            <details>
+                                              <summary class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                                {{ childlink.title | escape }}
+                                                {% render 'icon-arrow' %}
+                                                {% render 'icon-caret' %}
+                                              </summary>
+                                              <div id="childlink-{{ childlink.title | escape }}" class="menu-drawer__submenu motion-reduce">
+                                                <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                                                  {% render 'icon-arrow' %}
+                                                  {{ childlink.title | escape }}
+                                                </button>
+                                                <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                                  {%- for grandchildlink in childlink.links -%}
+                                                    <li>
+                                                      <a href="{{ grandchildlink.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"{% if grandchildlink.current %} aria-current="page"{% endif %}>
+                                                        {{ grandchildlink.title | escape }}
+                                                      </a>
+                                                    </li>
+                                                  {%- endfor -%}
+                                                </ul>
+                                              </div>
+                                            </details>
+                                          {%- endif -%}
+                                        </li>
+                                      {%- endfor -%}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </details>
+                            {%- else -%}
+                              <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+                                {{ link.title | escape }}
+                              </a>
+                            {%- endif -%}
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </header-drawer>
+        {%- endif -%}
+        <div class="mobile-header__search">
+          <header-drawer data-breakpoint="tablet">
+            <details class="menu-drawer-container">
+              <summary class="header__icon header__icon--menu header__icon--summary link link--text focus-inset" aria-label="{{ 'general.search.search' | t }}">
+                <i class="cs-icon icon-search"></i>
+                <i class="cs-icon icon-close"></i>
+              </summary>
+              <div id="search-drawer" class="menu-drawer motion-reduce" tabindex="-1">
+                <div class="search-drawer__content">
+                  <search-form>
+                    {%- liquid 
+                    assign searchUrl = search.terms | split:'product_type:'
+                    assign searchTerms = searchUrl[0] | strip
+                    assign searchType = searchUrl[1] | strip
+                  -%}
+                    <form action="{{ routes.search_url }}" method="get" role="search" class="search__form">
+                      <input type="hidden" name="type" value="product" />
+                      <input type="hidden" name="options[unavailable_products]" value="hide" />
+                      <input type="hidden" name="options[prefix]" value="last" />
+                      <input type="text" name="q" class="search_box" placeholder="{{ 'general.search.placeholder' | t }}" value="{{ searchTerms }}"  />
+                      {%- if section.settings.search_type and shop.types.size > 0 -%}
+                      {%- unless shop.types[0] == blank and shop.types.size == 1 %}
+                  <div class="search__form-collections">
+                    <select name="product_type">
+                      <option value="*" >{{ 'general.search.all_types' | t }}</option>
+                      {%- for product_type in shop.types -%}
+                      {%- if product_type == blank %}{% continue-%}{% endif -%}
+                      <option value="{{ product_type }}" {% if searchType == product_type %}selected="selected"{% endif %}>
+                        {{ product_type }}
+                      </option>
+                      {%- endfor -%}                       
+                    </select>
+                      </div>
+                      {%- endunless -%}
+                      {%- endif -%}
+                      <button class="search_submit" type="submit" aria-label="icon search">
+                        <i class="cs-icon icon-search"></i>
+                      </button>
+                    </form>
+                    <div class="search__form-results " data-search-autocomplete="{{ section.settings.search_auto }}">
+                    </div>
+                  </search-form>
+                </div>
+              </div>
+            </details>
+          </header-drawer>
+        </div>
+      </div>
+      <div class="main-header__logo">
+        {%- if request.page_type == 'index' -%}
+        <h1 class="header__heading">
+          {%- endif -%}
+          <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+            {%- if section.settings.logo != blank or section.settings.logo_mobile != blank -%}
+              {%- if section.settings.logo != blank -%}
+                {%- assign image_size = section.settings.logo_width | append: 'x' -%}
+                <img srcset="{% render 'bgset', image: section.settings.logo %}"
+                     src="{% render 'srcset', section.settings.logo %}"
+                     class="header__heading-logo d-none d-lg-block"
+                     width="{{ section.settings.logo.width }}"
+                     height="{{ section.settings.logo.height }}"
+                     alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
+                     >
+              {%- endif -%}
+              {%- if section.settings.logo_mobile != blank -%}
+                {%- assign image_size = section.settings.logo_mobile_width | append: 'x' -%}
+                <img srcset="{% render 'bgset', image: section.settings.logo_mobile %}"
+                     src="{% render 'srcset', section.settings.logo_mobile %}"
+                     class="header__heading-logo d-block d-lg-none"
+                     width="{{ section.settings.logo_mobile.width }}"
+                     height="{{ section.settings.logo_mobile.height }}"
+                     alt="{{ section.settings.logo_mobile.alt | default: shop.name | escape }}"
+                     >
+              {%- endif -%}
+            {%- else -%}
+              <span class="h2">{{ shop.name }}</span>
+            {%- endif -%}
+          </a>
+          {%- if request.page_type == 'index' -%}
+        </h1>
+        {%- endif -%}
+      </div>
+      <div class="main-header__right ">
+        <div class="main-header__search">
+          <search-form>
+            {%- liquid 
+              assign searchUrl = search.terms | split:'product_type:'
+              assign searchTerms = searchUrl[0] | strip
+              assign searchType = searchUrl[1] | strip
+            -%}
+            <form action="{{ routes.search_url }}" method="get" role="search" class="search__form">
+              <input type="hidden" name="type" value="product" />
+              <input type="hidden" name="options[unavailable_products]" value="hide" />
+              <input type="hidden" name="options[prefix]" value="last" />
+              <input type="text" name="q" class="search_box" placeholder="{{ 'general.search.placeholder' | t }}" value="{{ searchTerms }}"  />
+              {%- if section.settings.search_type and shop.types.size > 0 -%}
+                {%- unless shop.types[0] == blank and shop.types.size == 1 %}
+                  <div class="search__form-collections">
+                    <select name="product_type">
+                      <option value="*" >{{ 'general.search.all_types' | t }}</option>
+                      {%- for product_type in shop.types -%}
+                      {%- if product_type == blank %}{% continue-%}{% endif -%}
+                        <option value="{{ product_type }}" {% if searchType == product_type %}selected="selected"{% endif %}>
+                          {{ product_type }}
+                        </option>
+                      {%- endfor -%}                       
+                    </select>
+                  </div>
+                {%- endunless -%}
+              {%- endif -%}
+              <button class="search_submit" type="submit" aria-label="icon search">
+                <i class="cs-icon icon-search"></i>
+              </button>
+            </form>
+            <div class="search__form-results " data-search-autocomplete="{{ section.settings.search_auto }}">
+            </div>
+          </search-form>
+        </div>
+        {% if section.settings.contact_enable %}
+          <div class="main-header__contact d-none d-lg-block">
+            <div class="header__contact-content">
+              <div class="header__contact-icon">
+               {% if section.settings.contact_enable %}
+  <div class="main-header__contact d-none d-lg-block">
+    <div class="header__contact-content header__contact-wa">
+  <span class="header__contact-icon header__contact-icon--wa" aria-hidden="true">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+      width="18"
+      height="18"
+      alt="WhatsApp"
+      loading="lazy"
+      style="display:block;"
+    >
+  </span>
+
+  <div class="header__contact-caption">
+    <a href="https://wa.me/905558802818" target="_blank" rel="noopener">
+      {{ section.settings.contact_phone }}
+    </a>
+  </div>
+</div>
+
+      <span class="header__contact-caption">
+        <span class="wa-title">{{ section.settings.contact_title }}</span>
+        <span class="wa-phone">{{ section.settings.contact_phone }}</span>
+      </span>
+
+    </a>
+  </div>
+{% endif %}
+              <div class="header__contact-caption">
+                <p>{{ section.settings.contact_title }}</p>
+                <a href="https://wa.me/905558802818" target="_blank">
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        <div class="main-header__cart menu__dropdown">
+          
+          <a href="{{ routes.cart_url }}" class="header__cart-icon dropdown-toggle" id="cart-icon-bubble" data-cart-icon-bubble>
+            <i class="cs-icon icon-cs-cart"></i>
+            <div class="cart-count-bubble">
+              {%- if cart.item_count < 100 -%}
+              <span aria-hidden="true">{{ cart.item_count }}</span>
+              {%- endif -%}
+              <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+            </div>
+            <a href="https://wa.me/905558802818" class="header-wa" target="_blank" rel="noopener">
+  <img class="header-wa__icon" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+  <span class="header-wa__text">+90 555 880 2818</span>
+          </a>
+          {%- unless template == 'cart' -%}
+            <div class="dropdown-menu header__cart-dropdown component-scrollbar" id="cart-dropdown-bubble">
+              {%- render 'cart-dropdown-bubble' -%}
+            </div>
+          {%- endunless -%}
+        </div>
+        {%- if section.settings.categorie_link_list != blank -%}
+          <header-drawer data-breakpoint="tablet" class="d-block d-lg-none">
+            <details class="menu-drawer-container">
+              <summary class="header__icon header__icon--menu header__icon--summary link link--text focus-inset" aria-label="{{ section.settings.categorie_title }}">
+                <i class="cs-icon icon-menu"></i>
+                <i class="cs-icon icon-close"></i>
+              </summary>
+              <div id="categorie-drawer" class="menu-drawer motion-reduce" tabindex="-1">
+                <div class="menu-drawer__inner-container">
+                  <div class="menu-drawer__navigation-container component-scrollbar">
+                    <nav class="menu-drawer__navigation">
+                      <ul class="menu-drawer__menu list-menu" role="list">
+                        {%- for link in section.settings.categorie_link_list.links -%}
+                          <li>
+                            {%- if link.links != blank -%}
+                              <details>
+                                <summary class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.child_active %} menu-drawer__menu-item--active{% endif %}">
+                                  {{ link.title | escape }}
+                                  {% render 'icon-arrow' %}
+                                  {% render 'icon-caret' %}
+                                </summary>
+                                <div id="link-{{ link.title | escape }}" class="menu-drawer__submenu motion-reduce" tabindex="-1">
+                                  <div class="menu-drawer__inner-submenu">
+                                    <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                                      {% render 'icon-arrow' %}
+                                      {{ link.title | escape }}
+                                    </button>
+                                    <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                      {%- for childlink in link.links -%}
+                                        <li>
+                                          {%- if childlink.links == blank -%}
+                                            <a href="{{ childlink.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>
+                                              {{ childlink.title | escape }}
+                                            </a>
+                                          {%- else -%}
+                                            <details>
+                                              <summary class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                                {{ childlink.title | escape }}
+                                                {% render 'icon-arrow' %}
+                                                {% render 'icon-caret' %}
+                                              </summary>
+                                              <div id="childlink-{{ childlink.title | escape }}" class="menu-drawer__submenu motion-reduce">
+                                                <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                                                  {% render 'icon-arrow' %}
+                                                  {{ childlink.title | escape }}
+                                                </button>
+                                                <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                                  {%- for grandchildlink in childlink.links -%}
+                                                    <li>
+                                                      <a href="{{ grandchildlink.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"{% if grandchildlink.current %} aria-current="page"{% endif %}>
+                                                        {{ grandchildlink.title | escape }}
+                                                      </a>
+                                                    </li>
+                                                  {%- endfor -%}
+                                                </ul>
+                                              </div>
+                                            </details>
+                                          {%- endif -%}
+                                        </li>
+                                      {%- endfor -%}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </details>
+                            {%- else -%}
+                              <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+                                {{ link.title | escape }}
+                              </a>
+                            {%- endif -%}
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </header-drawer>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="navigation-header d-none d-lg-block" {% if section.settings.header_sticky %}data-sticky='{"stickTo": "body", "stickyClass": "sticky", "responsive": {"991": {"disable": true}}}'{% endif %}>
+  <div class="container">
+    <div class="navigation-header-content">
+      {%- if section.settings.header_categorie -%}
+        <div class="navigation-header__categorie">
+          <div class="header__categorie-content menu__dropdown">
+            <a href="{{ section.settings.categorie_link }}" class="header__categorie-title dropdown-toggle">
+              {{ section.settings.categorie_title }}
+              {% render 'icon-hamburger' %}
+            </a>
+            {%- if section.settings.categorie_link_list != blank -%}
+              <div class="dropdown-menu header__categorie-dropdown">
+                {%- render 'theme-header-categorie', config: section.settings, blocks: section.blocks, menu: linklists[section.settings.categorie_link_list] -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+      {%- if section.settings.link_list != blank -%}
+        <div class="navigation-header__menu">
+          {%- render 'theme-header-menu', config: section.settings, blocks: section.blocks, menu: linklists[section.settings.link_list] -%}
+        </div>
+      {%- endif -%}
+      <div class="navigation-header__icon" id="navigation-header-icon">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {% if section.settings.logo %}
+      {% assign image_size = section.settings.logo.width | append: 'x' %}
+      "logo": {{ section.settings.logo | img_url: image_size | prepend: "https:" | json }},
+    {% endif %}
+    "sameAs": [
+      {{ settings.social_twitter_link | json }},
+      {{ settings.social_facebook_link | json }},
+      {{ settings.social_pinterest_link | json }},
+      {{ settings.social_instagram_link | json }},
+      {{ settings.social_tumblr_link | json }},
+      {{ settings.social_snapchat_link | json }},
+      {{ settings.social_youtube_link | json }},
+      {{ settings.social_vimeo_link | json }}
+    ],
+    "url": {{ shop.url | append: page.url | json }}
+  }
+</script>
+
+{%- if request.page_type == 'index' -%}
+  {% assign potential_action_target = shop.url | append: routes.search_url | append: "?q={search_term_string}" %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ shop.url | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo Shop"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+	{
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "default": 200,
+      "unit": "px",
+      "label": "Custom logo width"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_mobile",
+      "label": "Mobile logo image"
+    },
+	{
+      "type": "range",
+      "id": "logo_mobile_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "default": 150,
+      "unit": "px",
+      "label": "Custom logo mobile width"
+    },
+    {
+      "type": "header",
+      "content": "Welcome setting"
+    },
+    {
+      "type": "textarea",
+      "id": "header_welcome",
+      "label": "Welcome"
+    },
+	{
+      "type": "header",
+      "content": "Top Header"
+    },
+	{
+      "type": "checkbox",
+      "id": "top_enable",
+      "label": "Set active this block"
+    },
+	{
+      "type": "link_list",
+      "id": "nav_linklist",
+      "label": "Menu Link",
+	  "info": "Displays only top-level menu items."
+    },
+    {
+      "type": "header",
+      "content": "Contact Us"
+    },
+    {
+      "type": "checkbox",
+      "id": "contact_enable",
+      "label": "Set active this block"
+    },
+    {
+      "type": "text",
+      "id": "contact_title",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Phone"
+    },
+	{
+      "type": "header",
+      "content": "Country/region Selector",
+      "info": "To add a country/region, go to your [payment settings.](/admin/settings/payments)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_currency_selector",
+      "label": "Show country/region selector",
+      "default": true
+    },
+	{
+      "type": "header",
+      "content": "Search Setting"
+    },
+    {
+      "type": "checkbox",
+      "id": "search_type",
+      "label": "Show product types",
+	  "info": "Filter search results with product type",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "search_auto",
+      "label": "Active search autocomplete",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Categories Setting"
+    },
+	{
+      "type": "checkbox",
+      "id": "header_categorie",
+      "label": "Enable Categories header",
+      "default": true
+    },
+	{
+      "type": "text",
+      "id": "categorie_title",
+      "label": "Heading",
+	  "info": "Set icon in 'Add Content' with type 'Icon Category'"
+    },
+    {
+      "type": "url",
+      "id": "categorie_link",
+      "label": "Link title"
+    },
+    {
+      "type": "link_list",
+      "id": "categorie_link_list",
+      "label": "Categories link"
+    },
+    {
+      "type": "header",
+      "content": "Menu Setting"
+    },
+    {
+      "type": "link_list",
+      "id": "link_list",
+      "label": "Main Menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_sticky",
+      "label": "Enable sticky header",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Sub Menu",
+      "type": "sub_menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Target",
+          "info": "The name of a menu in the first level of main menu"
+        },
+        {
+          "type": "image_picker",
+          "id": "bkg",
+          "label": "Background"
+        },
+		{
+          "type": "header",
+          "content": "1st Column Setting"
+        },
+		{
+          "type": "checkbox",
+          "id": "col1_enable",
+          "label": "1st Column: Enable",
+          "default": true
+        },
+		{
+          "type": "select",
+          "id": "col1_column",
+          "label": "1st Column: Width",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            }
+          ],
+          "default": "4"
+        },		
+		{
+          "type": "text",
+          "id": "col1_link_title",
+          "label": "1st Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col1_link_list",
+          "label": "1st Column: Menu links"
+        },
+		{
+          "type": "text",
+          "id": "col1_product_title",
+          "label": "1st Column: Product heading"
+        },	
+        {
+          "type": "product",
+          "id": "col1_product",
+          "label": "1st Column: Product"
+        },	
+        {
+          "type": "article",
+          "id": "col1_article",
+          "label": "1st Column: Article"
+        },
+        {
+          "type": "html",
+          "id": "col1_html",
+          "label": "1st Column: HTML Block"
+        },
+		{
+          "type": "header",
+          "content": "2st Column Setting"
+        },
+		{
+          "type": "checkbox",
+          "id": "col2_enable",
+          "label": "2nd Column: Enable",
+          "default": true
+        },
+		{
+          "type": "select",
+          "id": "col2_column",
+          "label": "2nd Column: Width",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            }
+          ],
+          "default": "4"
+        },		
+		{
+          "type": "text",
+          "id": "col2_link_title",
+          "label": "2nd Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col2_link_list",
+          "label": "2nd Column: Menu links"
+        },
+		{
+          "type": "text",
+          "id": "col2_product_title",
+          "label": "2nd Column: Product heading"
+        },	
+        {
+          "type": "product",
+          "id": "col2_product",
+          "label": "2nd Column: Product"
+        },	
+        {
+          "type": "article",
+          "id": "col2_article",
+          "label": "2nd Column: Article"
+        },
+        {
+          "type": "html",
+          "id": "col2_html",
+          "label": "2nd Column: HTML Block"
+        },
+		{
+          "type": "header",
+          "content": "3rd Column Setting"
+        },
+		{
+          "type": "checkbox",
+          "id": "col3_enable",
+          "label": "3rd Column: Enable",
+          "default": true
+        },
+		{
+          "type": "select",
+          "id": "col3_column",
+          "label": "3rd Column: Width",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            }
+          ],
+          "default": "4"
+        },		
+		{
+          "type": "text",
+          "id": "col3_link_title",
+          "label": "3rd Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col3_link_list",
+          "label": "3rd Column: Menu links"
+        },
+		{
+          "type": "text",
+          "id": "col3_product_title",
+          "label": "3rd Column: Product heading"
+        },	
+        {
+          "type": "product",
+          "id": "col3_product",
+          "label": "3rd Column: Product"
+        },	
+        {
+          "type": "article",
+          "id": "col3_article",
+          "label": "3rd Column: Article"
+        },
+        {
+          "type": "html",
+          "id": "col3_html",
+          "label": "3rd Column: HTML Block"
+        },
+		{
+          "type": "header",
+          "content": "4th Column Setting"
+        },
+		{
+          "type": "checkbox",
+          "id": "col4_enable",
+          "label": "4th Column: Enable",
+          "default": true
+        },
+		{
+          "type": "select",
+          "id": "col4_column",
+          "label": "4th Column: Width",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            }
+          ],
+          "default": "4"
+        },		
+		{
+          "type": "text",
+          "id": "col4_link_title",
+          "label": "4th Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col4_link_list",
+          "label": "4th Column: Menu links"
+        },
+		{
+          "type": "text",
+          "id": "col4_product_title",
+          "label": "4th Column: Product heading"
+        },	
+        {
+          "type": "product",
+          "id": "col4_product",
+          "label": "4th Column: Product"
+        },	
+        {
+          "type": "article",
+          "id": "col4_article",
+          "label": "4th Column: Article"
+        },
+        {
+          "type": "html",
+          "id": "col4_html",
+          "label": "4th Column: HTML Block"
+        },
+		{
+          "type": "header",
+          "content": "5th Column Setting"
+        },
+		{
+          "type": "checkbox",
+          "id": "col5_enable",
+          "label": "5th Column: Enable",
+          "default": true
+        },
+		{
+          "type": "select",
+          "id": "col5_column",
+          "label": "5th Column: Width",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            }
+          ],
+          "default": "4"
+        },		
+		{
+          "type": "text",
+          "id": "col5_link_title",
+          "label": "5th Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col5_link_list",
+          "label": "5th Column: Menu links"
+        },
+		{
+          "type": "text",
+          "id": "col5_product_title",
+          "label": "5th Column: Product heading"
+        },	
+        {
+          "type": "product",
+          "id": "col5_product",
+          "label": "5th Column: Product"
+        },	
+        {
+          "type": "article",
+          "id": "col5_article",
+          "label": "5th Column: Article"
+        },
+        {
+          "type": "html",
+          "id": "col5_html",
+          "label": "5th Column: HTML Block"
+        },
+		{
+          "type": "header",
+          "content": "6th Column Setting"
+        },
+		{
+          "type": "checkbox",
+          "id": "col6_enable",
+          "label": "6th Column: Enable",
+          "default": true
+        },
+		{
+          "type": "select",
+          "id": "col6_column",
+          "label": "6th Column: Width",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            }
+          ],
+          "default": "4"
+        },		
+		{
+          "type": "text",
+          "id": "col6_link_title",
+          "label": "6th Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col6_link_list",
+          "label": "6th Column: Menu links"
+        },
+		{
+          "type": "text",
+          "id": "col6_product_title",
+          "label": "6th Column: Product heading"
+        },	
+        {
+          "type": "product",
+          "id": "col6_product",
+          "label": "6th Column: Product"
+        },	
+        {
+          "type": "article",
+          "id": "col6_article",
+          "label": "6th Column: Article"
+        },
+        {
+          "type": "html",
+          "id": "col6_html",
+          "label": "6th Column: HTML Block"
+        }
+      ]
+    },
+	{
+      "name": "Icon Category",
+      "type": "icon_categories",
+	  "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_1",
+          "label": "Icon 1: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_1_hover",
+          "label": "Icon 1: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_2",
+          "label": "Icon 2: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_2_hover",
+          "label": "Icon 2: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_3",
+          "label": "Icon 3: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_3_hover",
+          "label": "Icon 3: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_4",
+          "label": "Icon 4: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_4_hover",
+          "label": "Icon 4: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_5",
+          "label": "Icon 5: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_5_hover",
+          "label": "Icon 5: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_6",
+          "label": "Icon 6: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_6_hover",
+          "label": "Icon 6: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_7",
+          "label": "Icon 7: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_7_hover",
+          "label": "Icon 7: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_8",
+          "label": "Icon 8: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_8_hover",
+          "label": "Icon 8: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_9",
+          "label": "Icon 9: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_9_hover",
+          "label": "Icon 9: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_10",
+          "label": "Icon 10: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_10_hover",
+          "label": "Icon 10: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_11",
+          "label": "Icon 11: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_11_hover",
+          "label": "Icon 11: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_12",
+          "label": "Icon 12: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_12_hover",
+          "label": "Icon 12: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_13",
+          "label": "Icon 13: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_13_hover",
+          "label": "Icon 13: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_14",
+          "label": "Icon 14: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_14_hover",
+          "label": "Icon 14: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_15",
+          "label": "Icon 15: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_15_hover",
+          "label": "Icon 15: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_16",
+          "label": "Icon 16: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_16_hover",
+          "label": "Icon 16: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_17",
+          "label": "Icon 17: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_17_hover",
+          "label": "Icon 17: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_18",
+          "label": "Icon 18: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_18_hover",
+          "label": "Icon 18: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_19",
+          "label": "Icon 19: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_19_hover",
+          "label": "Icon 19: Image hover"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_20",
+          "label": "Icon 20: Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "categorie_icon_20_hover",
+          "label": "Icon 20: Image hover"
+        }
+	  ]
+	},
+    {
+      "name": "Sub Category",
+      "type": "sub_category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Target",
+          "info": "The name of a menu in the first level of list categories"
+        },
+		{
+          "type": "select",
+          "id": "column",
+          "label": "Number of column",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            }
+          ],
+          "default": "3"
+        },		
+		{
+          "type": "text",
+          "id": "col1_title",
+          "label": "1st Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col1_linklist",
+          "label": "1st Column: Menu links"
+        },		
+		{
+          "type": "text",
+          "id": "col2_title",
+          "label": "2nd Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col2_linklist",
+          "label": "2nd Column: Menu links"
+        },		
+		{
+          "type": "text",
+          "id": "col3_title",
+          "label": "3rd Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col3_linklist",
+          "label": "3rd Column: Menu links"
+        },		
+		{
+          "type": "text",
+          "id": "col4_title",
+          "label": "4th Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col4_linklist",
+          "label": "4th Column: Menu links"
+        },		
+		{
+          "type": "text",
+          "id": "col5_title",
+          "label": "5th Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col5_linklist",
+          "label": "5th Column: Menu links"
+        },		
+		{
+          "type": "text",
+          "id": "col6_title",
+          "label": "6th Column: Menu heading"
+        },
+        {
+          "type": "link_list",
+          "id": "col6_linklist",
+          "label": "6th Column: Menu links"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

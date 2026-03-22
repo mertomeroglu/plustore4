@@ -1,0 +1,18 @@
+{%- if settings.newsletter_popup -%}
+  {%- section 'newsletter-popup' -%}
+{%- endif -%}
+{%- if settings.cookies_bar and template == 'index'  -%}
+  {%- section 'cookies-bar' -%}
+{%- endif -%}
+{%- if settings.ajax_active -%}
+  {%- section 'cart-modal' -%}
+{%- endif -%}
+{%- if settings.ajax_notification -%}
+  {%- section 'ajax-notification' -%}
+{%- endif -%}
+{%- if settings.product_quickview -%}
+  {%- render 'product-quickview' -%}
+{%- endif -%}
+{%- if settings.general_gototop -%}
+  {%- render 'scroll-top' -%}
+{%- endif -%}

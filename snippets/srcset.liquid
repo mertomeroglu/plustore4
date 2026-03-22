@@ -1,0 +1,1 @@
+{% if image != blank %}{%- capture img_url -%}{{ image.width }}x{%- endcapture -%}{{ image | img_url: img_url }}{% endif %}

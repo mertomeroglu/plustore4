@@ -1,0 +1,405 @@
+<!-- /sections/cart-modal.liquid -->
+<cart-modal class="modal__layout" id="cart-modal">
+  <div class="modal__close" data-modal-close></div>
+  <div class="modal__content">
+    <div class="modal__header">
+      <div class="modal__title cart-modal__title">
+        <p class="cart-modal__title-added">{{ 'general.cart.item_added' | t }}</p>
+        <p class="cart-modal__title-error">{{ 'general.cart.error' | t }}</p>
+      </div>
+      <a class="modal__close-icon" data-modal-close><span class="cs-icon icon-close"></span></a>
+    </div>
+    <div class="modal__body">
+      <div class="cart-modal__content">
+        <p class="cart-modal__title-error-message"></p>
+        <div class="cart-modal__content-left">
+          <div class="cart-modal__product-content" data-cart-modal-product>
+          </div>
+        </div>
+        <div class="cart-modal__content-right">
+          <div class="cart-modal__content-count" id="cart-modal-count" data-cart-modal-count></div>
+          <div class="cart-modal__content-total" id="cart-modal-total" data-cart-modal-total></div>
+          <div class="cart-modal__content-buttons">
+            <a href="{{ routes.cart_url }}" class="button button--secondary">
+              {{ 'general.cart.view' | t }}
+            </a>
+            <a href="{{ routes.all_products_collection_url }}" class="button button--secondary">
+              {{ 'general.continue_shopping' | t }}
+            </a>
+          </div>
+          <div class="cart-modal__content-countdown" id="cart-modal-countdown" data-cart-modal-countdown="{{ section.settings.timeout }}">
+          	{{ 'general.cart.count_down_html' | t: timer: section.settings.timeout }}
+          </div>
+        </div>
+      </div>
+      {%- if section.settings.upsell -%}
+        <div class="cart-modal__upsell d-none d-md-block">
+          {%- if section.settings.upsell_title != blank -%}
+            <h4 class="cart-modal__upsell-title">{{ section.settings.upsell_title }}</h4>
+          {%- endif -%}
+          <slider-component>
+            <div class="carousel" data-carousel-param='{"loop": "true", "effect": "{{ section.settings.effect }}", "autoplay": "{{ section.settings.autoplay }}", "autoplaySpeed": "{{ section.settings.autoplay_speed }}", "space": "{{ section.settings.space }}", "col": "{{ section.settings.col }}", "col_sm": "{{ section.settings.col_sm }}", "col_md": "{{ section.settings.col_md }}", "col_lg": "{{ section.settings.col_lg }}", "col_xl": "{{ section.settings.col_xl }}", "col_xxl": "{{ section.settings.col_xxl }}", "row": "{{ section.settings.row }}"}' data-carousel>
+              <div class="carousel-wrapper">
+                <div class="swiper-container" data-carousel-container>
+                  <div class="swiper-wrapper row row-cols-{{ section.settings.col }} row-cols-sm-{{ section.settings.col_sm }} row-cols-md-{{ section.settings.col_md }} row-cols-lg-{{ section.settings.col_lg }} row-cols-xl-{{ section.settings.col_xl }} row-cols-xxl-{{ section.settings.col_xxl }}">
+                    {%- for product in collections[section.settings.collection].products limit: section.settings.limit -%}
+                      <div class="swiper-slide col product-item__content" data-carousel-item>
+                        {%- render 'index-product-item', product: product -%}
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                {%- if section.settings.navigation -%}
+                <div class="carousel-navigation carousel-nav-prev" data-carousel-nav-prev><i class="cs-icon icon-ios-arrow-left"></i></div>
+                <div class="carousel-navigation carousel-nav-next" data-carousel-nav-next><i class="cs-icon icon-ios-arrow-right"></i></div>
+                {%- endif -%}
+              </div>
+              {%- if section.settings.pagination -%}
+              <div class="carousel-pagination" data-carousel-pagination></div>
+              {%- endif -%}
+            </div>
+          </slider-component>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</cart-modal>
+{% schema %}
+{
+  "name": "Cart modal",
+  "class": "cart-modal",
+  "tag": "section",
+  "settings": [
+	{
+      "type": "paragraph",
+      "content": "Config enable/disable on Theme settings > Genel Ayarlar > Ajax cart Modal"
+    },
+    {
+      "type": "range",
+      "id": "timeout",
+      "min": 5,
+      "max": 100,
+      "step": 1,
+      "unit": "s",
+      "label": "Set time out, auto close",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Upsell products"
+    },
+    {
+      "type": "checkbox",
+      "id": "upsell",
+      "label": "Enable upsell"
+    },
+	{
+      "type": "text",
+      "id": "upsell_title",
+      "label": "Heading",
+      "default": "other customers also bought"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "limit",
+      "label": "Limit products show",
+      "default":"8"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-play slides",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Change slides every",
+      "options": [
+        {
+          "value": "3000",
+          "label": "3 seconds"
+        },
+        {
+          "value": "4000",
+          "label": "4 seconds"
+        },
+        {
+          "value": "5000",
+          "label": "5 seconds"
+        },
+        {
+          "value": "6000",
+          "label": "6 seconds"
+        },
+        {
+          "value": "7000",
+          "label": "7 seconds"
+        },
+        {
+          "value": "8000",
+          "label": "8 seconds"
+        },
+        {
+          "value": "9000",
+          "label": "9 seconds"
+        },
+        {
+          "value": "10000",
+          "label": "10 seconds"
+        }
+      ],
+      "default": "5000"
+    },
+    {
+      "type": "select",
+      "id": "effect",
+      "label": "Slide effect",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Sliding"
+        },
+        {
+          "value": "fade",
+          "label": "Fading"
+        },
+        {
+          "value": "cube",
+          "label": "Cube"
+        },
+        {
+          "value": "flip",
+          "label": "Flipping"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "number",
+      "id": "space",
+      "label": "Space between images",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Responsive columns"
+    },
+    {
+      "type": "select",
+      "id": "col",
+      "label": "Width",
+      "info": "For small screen (0px - 575px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "col_sm",
+      "label": "Width",
+      "info": "For medium screen (576px - 767px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "col_md",
+      "label": "Width",
+      "info": "For large screen (768px - 991px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "5"
+    },
+    {
+      "type": "select",
+      "id": "col_lg",
+      "label": "Width",
+      "info": "For xlarge screen (992px - 1199px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "5"
+    },
+    {
+      "type": "select",
+      "id": "col_xl",
+      "label": "Width",
+      "info": "For xxlarge screen (1200px - 1399px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "5"
+    },
+    {
+      "type": "select",
+      "id": "col_xxl",
+      "label": "Width",
+      "info": "For xxxlarge screen (1400px - infinity)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "5"
+    },
+    {
+      "type": "checkbox",
+      "id": "navigation",
+      "label": "Enable navigaiton",
+      "default": true
+    },    
+    {
+      "type": "checkbox",
+      "id": "pagination",
+      "label": "Enable pagination",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

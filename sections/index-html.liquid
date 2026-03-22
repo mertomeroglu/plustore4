@@ -1,0 +1,64 @@
+<div data-section-type="html-section" class="spaced-section {{ section.settings.display }}" data-section-name="html-section">
+  <div class="{{ section.settings.layout }}">
+    <div class="html__container row">
+      {{ section.settings.content }}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Custom HTML",
+  "tag": "section",
+  "class": "index-html",
+  "settings": [
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display on",
+      "options": [
+        {
+          "value": "",
+          "label": "Desktop & Mobile"
+        },
+        {
+          "value": "d-none d-md-block",
+          "label": "Desktop only"
+        },
+        {
+          "value": "d-block d-md-none",
+          "label": "Mobile only"
+        }
+      ],
+      "default": ""
+    },
+	{
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "container-fluid",
+          "label": "Full width"
+        }
+      ],
+      "default": "container"
+    },
+	{
+      "type": "liquid",
+      "id": "content",
+      "label": "Custom HTML Content",
+	  "info":"Please take care your HTML content, it can make the site broken layout when your code missing close tags."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom HTML",
+      "category": "Advanced"
+    }
+  ]
+}
+{% endschema %}

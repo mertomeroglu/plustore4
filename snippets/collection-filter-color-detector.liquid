@@ -1,0 +1,5 @@
+{%- assign _colors = settings.product_color_mapping | downcase | split: '|' -%}
+{%- assign tmp_tag = tag | downcase -%}
+{%- for _color in _colors -%}
+  {%- if _color contains tmp_tag -%}{{ _color | split: ':' | last | strip }}{%- break -%}{%- endif -%}
+{%- endfor -%}

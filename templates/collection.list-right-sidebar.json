@@ -1,0 +1,119 @@
+{
+  "sections": {
+    "main-collection": {
+      "type": "main-collection",
+      "blocks": {
+        "68a28fe5-c7df-4631-85e3-e15a6859c9f8": {
+          "type": "slider-images",
+          "settings": {
+            "display": "",
+            "autoplay": true,
+            "autoplay_speed": "5000",
+            "effect": "slide",
+            "navigation": true,
+            "pagination": true,
+            "collection_1_title": "Women Fashion",
+            "collection_1_image_1": "shopify:\/\/shop_images\/4548484_2c089b64-8554-4406-a080-1cd63109b69f.jpg",
+            "collection_1_image_2": "shopify:\/\/shop_images\/4548523_35f8972b-cc14-4ce0-83e3-8fc2419b8120.jpg",
+            "collection_1_image_3": "shopify:\/\/shop_images\/4702130_419612e8-0815-4021-aa59-6d7cfbb00c52.jpg",
+            "collection_2_title": "Products",
+            "collection_2_image_1": "shopify:\/\/shop_images\/all-4.png",
+            "collection_2_image_2": "shopify:\/\/shop_images\/4548484_2c089b64-8554-4406-a080-1cd63109b69f.jpg",
+            "collection_2_image_3": "shopify:\/\/shop_images\/4548523_35f8972b-cc14-4ce0-83e3-8fc2419b8120.jpg",
+            "collection_2_image_4": "shopify:\/\/shop_images\/4702130_419612e8-0815-4021-aa59-6d7cfbb00c52.jpg",
+            "collection_3_title": "Shop List Right Sidebar",
+            "collection_3_image_1": "shopify:\/\/shop_images\/4702130_419612e8-0815-4021-aa59-6d7cfbb00c52.jpg",
+            "collection_3_image_2": "shopify:\/\/shop_images\/4548523_35f8972b-cc14-4ce0-83e3-8fc2419b8120.jpg",
+            "collection_3_image_3": "shopify:\/\/shop_images\/4548484_2c089b64-8554-4406-a080-1cd63109b69f.jpg",
+            "collection_4_title": "",
+            "collection_5_title": "",
+            "collection_6_title": "",
+            "collection_7_title": "",
+            "collection_8_title": "",
+            "collection_9_title": "",
+            "collection_10_title": ""
+          }
+        },
+        "b1dff8f9-5b80-47d7-a401-b355f63072ef": {
+          "type": "product-listing",
+          "settings": {
+            "title": "Categories",
+            "position": "right_sidebar",
+            "display": "",
+            "listing_linklist": "category"
+          }
+        },
+        "6e6961f2-d527-4721-b0ca-75522059c7a1": {
+          "type": "collection-filters",
+          "settings": {
+            "position": "right_sidebar",
+            "display": ""
+          }
+        },
+        "57196a96-5532-4741-8c4f-e492aef8d2f0": {
+          "type": "product-collection",
+          "settings": {
+            "title": "Best Sale",
+            "position": "right_sidebar",
+            "display": "",
+            "collection": "beauty-cosmetics",
+            "limit": "3",
+            "slidable": false,
+            "autoplay": true,
+            "autoplay_speed": "5000",
+            "effect": "slide",
+            "space": 15,
+            "col": "1",
+            "col_sm": "1",
+            "col_md": "1",
+            "col_lg": "1",
+            "col_xl": "1",
+            "col_xxl": "1",
+            "row": 1,
+            "navigation": true,
+            "pagination": true
+          }
+        },
+        "7163c714-93f7-4219-ad71-3689bb92e91b": {
+          "type": "product-banner",
+          "settings": {
+            "title": "",
+            "position": "right_sidebar",
+            "display": "d-none d-md-block",
+            "image": "shopify:\/\/shop_images\/Categories_d1cd0d9d-e9c3-45c0-a225-4d487de84efe.png",
+            "link": "shopify:\/\/collections\/all"
+          }
+        }
+      },
+      "block_order": [
+        "68a28fe5-c7df-4631-85e3-e15a6859c9f8",
+        "b1dff8f9-5b80-47d7-a401-b355f63072ef",
+        "6e6961f2-d527-4721-b0ca-75522059c7a1",
+        "57196a96-5532-4741-8c4f-e492aef8d2f0",
+        "7163c714-93f7-4219-ad71-3689bb92e91b"
+      ],
+      "settings": {
+        "collection_title": true,
+        "collection_image": true,
+        "collection_image_banner": "shopify:\/\/shop_images\/banner_a603f010-061e-46e3-afcb-4bbaf8e8b177.png",
+        "collection_image_slider": true,
+        "collection_description": false,
+        "collection_sub": true,
+        "collection_grid_list": true,
+        "layout": "list",
+        "collection_result": true,
+        "collection_col": "2",
+        "collection_col_sm": "2",
+        "collection_col_md": "4",
+        "collection_col_lg": "4",
+        "collection_col_xl": "4",
+        "collection_col_xxl": "4",
+        "pagination_limit": 28,
+        "collection_sorting": true
+      }
+    }
+  },
+  "order": [
+    "main-collection"
+  ]
+}

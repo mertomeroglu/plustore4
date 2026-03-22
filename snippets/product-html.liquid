@@ -1,0 +1,40 @@
+{%- liquid 
+  assign classContent = 'collection-sidebar'
+  assign classAccordion = 'accordion'
+  if block.settings.position == 'bottom_content'
+    assign classContent = 'product-html'
+    assign classAccordion = 'product-html'
+  endif
+ -%}
+<div class="{{ block.settings.display }} {{ classContent }}__item accordion {{ classContent }}__html is-active open" {% if block.settings.review %}id="product-detail-review"{% endif %}>
+  {%- if block.settings.title != blank -%}
+    {%- if classAccordion == 'product-html' -%}
+      <div class="box-divider title-html_{{ block.id }}">
+        {%- if block.settings.icon != blank -%}              
+        <div class="group-icon">              
+        {%- endif -%}              
+          {%- if block.settings.icon != blank -%}
+          <img class="box-icon"
+               srcset="{% render 'bgset', image: block.settings.icon %}"
+               src="{% render 'srcset', image: block.settings.icon %}"
+               alt="{{ block.settings.icon.alt | escape }}"
+               loading="lazy"
+               width="{{ block.settings.icon.width }}"
+               height="{{ block.settings.icon.height }}"
+               >
+          {%- endif -%}
+          <h4 class="box-title">{{ block.settings.title }}</h4>
+        {%- if block.settings.icon != blank -%}                           
+        </div>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <h4 class="accordion__title">
+        <span>{{ block.settings.title }}</span>
+      </h4>
+    {%- endif -%}
+  {%- endif -%}
+  <div class="{{ classAccordion }}__content {{ classContent }}__html-content">
+    {{ block.settings.html }}
+  </div>
+</div>

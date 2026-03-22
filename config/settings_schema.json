@@ -1,0 +1,898 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Maxmin",
+    "theme_version": "5.0.3",
+    "theme_author": "Kalathemes",
+    "theme_documentation_url": "https:\/\/themeforshop.github.io\/maxmin-userguide",
+    "theme_support_url": "https:\/\/kalathemes.zendesk.com\/"
+  },
+  {
+    "name": "Renkler",
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Color",
+        "default": "#8ed7ee"
+      },
+      {
+        "type": "color",
+        "id": "color_body",
+        "label": "Body ",
+        "default": "#343434"
+      },
+      {
+        "type": "color",
+        "id": "color_heading",
+        "label": "Heading",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "color_line",
+        "label": "Line",
+        "default": "#e8e8e8"
+      },
+      {
+        "type": "color",
+        "id": "color_body_bg",
+        "label": "Background Of Body",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "color_content_bg",
+        "label": "Background Of Content",
+        "default": "#fff"
+      },
+      {
+        "type": "header",
+        "content": "Button general"
+      },
+      {
+        "type": "color",
+        "id": "color_button_text",
+        "label": "Text Of Button",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "color_button_border",
+        "label": "Border Of Button",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "color_button_bg",
+        "label": "Background Of Button",
+        "default": "#222222"
+      },
+      {
+        "type": "header",
+        "content": "Button general hover"
+      },
+      {
+        "type": "color",
+        "id": "color_btn_text1",
+        "label": "Text Button Hover",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "color_btn_border1",
+        "label": "Border Of Button Hover",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "color_btn_bg1",
+        "label": "Background Button Hover",
+        "default": "#222222"
+      },
+      {
+        "type": "header",
+        "content": "Top Header"
+      },
+      {
+        "type": "color",
+        "id": "color_topheader_text",
+        "label": "Text Of Top Header",
+        "default": "#232323"
+      },
+      {
+        "type": "color",
+        "id": "color_topheader_border",
+        "label": "Border Of Top Header",
+        "default": "#eeeeee"
+      },
+      {
+        "type": "color",
+        "id": "color_topheader_bg",
+        "label": "Background Of Top Header",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Main Header"
+      },
+      {
+        "type": "color",
+        "id": "color_header_text",
+        "label": "Text Of Header",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "color_header_border",
+        "label": "Border Of Header",
+        "default": "#d4d4d4"
+      },
+      {
+        "type": "color",
+        "id": "color_header_bg",
+        "label": "Background Of Header",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Navigation"
+      },
+      {
+        "type": "color",
+        "id": "color_navigation_text",
+        "label": "Text Of Navigation",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_navigation_text_hover",
+        "label": "Text Of Navigation Hover",
+        "default": "#8ed7ee"
+      },
+      {
+        "type": "color",
+        "id": "color_navigation_bg",
+        "label": "Background Of Navigation ",
+        "default": "#1e1e1e"
+      },
+      {
+        "type": "header",
+        "content": "Product"
+      },
+      {
+        "type": "color",
+        "id": "color_product_title_text",
+        "label": "Title Of Product",
+        "default": "#343434"
+      },
+      {
+        "type": "color",
+        "id": "color_price_text",
+        "label": "Price",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "color_price_compare_text",
+        "label": "Price & Compare ",
+        "default": "#b0b0b0"
+      },
+      {
+        "type": "color",
+        "id": "color_rating_text",
+        "label": "Rating",
+        "default": "#ffbf14"
+      },
+      {
+        "type": "color",
+        "id": "color_price_text_detail",
+        "label": "Price Sale Detail Product",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "color_price_compare_text_detail",
+        "label": "Price Compare Detail Product",
+        "default": "#b0b0b0"
+      },
+      {
+        "type": "header",
+        "content": "Top Of Footer"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_title_text",
+        "label": "Title Of Footer",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_text",
+        "label": "Text Of Footer",
+        "default": "#b0b0b0"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_border",
+        "label": "Border Of Footer",
+        "default": "#b0b0b0"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_bg",
+        "label": "Background Of Footer",
+        "default": "#343434"
+      },
+      {
+        "type": "header",
+        "content": "Main Of Footer"
+      },
+      {
+        "type": "color",
+        "id": "color_copyright_border",
+        "label": "Border Of Copyright",
+        "default": "#a6a6a6"
+      },
+      {
+        "type": "color",
+        "id": "color_copyright_text",
+        "label": "Text Of Copyright",
+        "default": "#b0b0b0"
+      },
+      {
+        "type": "color",
+        "id": "color_copyright_text_hover",
+        "label": "Text Copyright Hover",
+        "default": "#8ed7ee"
+      },
+      {
+        "type": "color",
+        "id": "color_copyright_link",
+        "label": "Link Of Copyright",
+        "default": "#b0b0b0"
+      },
+      {
+        "type": "color",
+        "id": "color_copyright_bg",
+        "label": "Background Of Copyright",
+        "default": "#0b0b0b"
+      }
+    ]
+  },
+  {
+    "name": "Tipografi ( Yazı Stili )",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Body"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "sans-serif",
+        "label": "Font",
+        "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https:\/\/help.shopify.com\/en\/manual\/online-store\/os\/store-speed\/improving-speed#fonts)"
+      },
+      {
+        "type": "header",
+        "content": "Headings"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "label": "Font",
+        "default": "sans-serif",
+        "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https:\/\/help.shopify.com\/en\/manual\/online-store\/os\/store-speed\/improving-speed#fonts)"
+      }
+    ]
+  },
+  {
+    "name": "Genel Ayarlar",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Breadcrumbs"
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs",
+        "label": "Enable Breadcrumb",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Scroll to Top"
+      },
+      {
+        "type": "checkbox",
+        "id": "general_gototop",
+        "label": "Active Scroll to Top",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Ajax cart Modal"
+      },
+      {
+        "type": "checkbox",
+        "id": "ajax_active",
+        "label": "Enable Ajax cart",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Notification products"
+      },
+      {
+        "type": "checkbox",
+        "id": "ajax_notification",
+        "label": "Enable Notification products",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Newsletter popup"
+      },
+      {
+        "type": "checkbox",
+        "id": "newsletter_popup",
+        "label": "Enable Newsletter popup",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Cookies bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "cookies_bar",
+        "label": "Enable Cookies bar",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Ürün Öğesi",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "product_wishlist",
+        "label": "Enable wishlist",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_compare",
+        "label": "Enable Compare",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_quickview",
+        "label": "Enable Quickview",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_addtocart",
+        "label": "Enable add to cart",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_rating",
+        "label": "Enable rating star",
+        "default": true,
+        "info": "You need install the Shopify App for Review"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_hover_image",
+        "label": "Hover to reveal second image",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "product_title",
+        "label": "Title position",
+        "default": "top",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "product_image_size",
+        "label": "Image size",
+        "default": "natural",
+        "options": [
+          {
+            "value": "natural",
+            "label": "Natural"
+          },
+          {
+            "value": "square",
+            "label": "Square (1:1)"
+          },
+          {
+            "value": "landscape",
+            "label": "Landscape (4:3)"
+          },
+          {
+            "value": "portrait",
+            "label": "Portrait (2:3)"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "product_unit_price",
+        "label": "Enable unit price",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Product label"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_label",
+        "label": "Enable labels",
+        "default": true,
+        "info": "Other labels added by Metafields"
+      },
+      {
+        "type": "paragraph",
+        "content": "Promotion label"
+      },
+      {
+        "type": "text",
+        "id": "product_label_sale",
+        "label": "Promotion label text",
+        "default": "-[percent]%",
+        "info": "Auto set when a product has special price. Leave the \"Promotion label text\" empty to disable this label"
+      },
+      {
+        "type": "color",
+        "id": "product_label_sale_color",
+        "label": "Promotion label color",
+        "default": "#a0f68a"
+      }
+    ]
+  },
+  {
+    "name": "Hızlı Görünüm Ayarları",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Ürün Görsel Ayarları"
+      },
+      {
+        "type": "select",
+        "id": "quick_image_position",
+        "label": "Images position",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "left"
+      },
+      {
+        "type": "select",
+        "id": "quick_width_content",
+        "label": "Width Content",
+        "options": [
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "large"
+      },
+      {
+        "type": "select",
+        "id": "quick_image_size",
+        "label": "Image size",
+        "default": "natural",
+        "options": [
+          {
+            "value": "natural",
+            "label": "Natural"
+          },
+          {
+            "value": "square",
+            "label": "Square (1:1)"
+          },
+          {
+            "value": "landscape",
+            "label": "Landscape (4:3)"
+          },
+          {
+            "value": "portrait",
+            "label": "Portrait (2:3)"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "quick_thumbnail_position",
+        "label": "Thumbnail position",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottm"
+          }
+        ],
+        "default": "left"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_enable_video_looping",
+        "label": "Enable video looping",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_navigation",
+        "label": "Enable navigaiton",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_pagination",
+        "label": "Enable pagination",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Rating star"
+      },
+      {
+        "type": "liquid",
+        "id": "quick_rating_star",
+        "label": "Code rating star",
+        "default": "<span class='shopify-product-reviews-badge' data-id='{{ product.id }}'><\/span>"
+      },
+      {
+        "type": "header",
+        "content": "Details area"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_show_details",
+        "label": "Show details",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "quick_detail_title",
+        "label": "Detail heading",
+        "default": "Details"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_show_sku",
+        "label": "Show SKU",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_show_vendor",
+        "label": "Show product vendor",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_show_type",
+        "label": "Show product type",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_show_inventory",
+        "label": "Show inventory management",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Decription area"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_show_description",
+        "label": "Show product decription",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "quick_desc_title",
+        "label": "Description heading",
+        "default": "Description"
+      },
+      {
+        "type": "header",
+        "content": "Bundle products"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_show_bundle",
+        "label": "Show bundle",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "quick_bundle_title",
+        "label": "Bundle title",
+        "default": "Buy Together"
+      },
+      {
+        "type": "header",
+        "content": "Other information"
+      },
+      {
+        "type": "image_picker",
+        "id": "quick_customimage",
+        "label": "Payment security image"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_show_share_buttons",
+        "label": "Show social sharing buttons",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Ürün Seçenekleri - Filtreler",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product detail options"
+      },
+      {
+        "type": "textarea",
+        "id": "product_option",
+        "label": "Options mapping",
+        "info": "Available type: image, color, size, dropdown, radio",
+        "default": "Image:image | Color:color | Size:size | Dropdown:dropdown | Material:radio"
+      },
+      {
+        "type": "header",
+        "content": "Product filter options"
+      },
+      {
+        "type": "textarea",
+        "id": "product_color_check",
+        "label": "Title variant show Colors",
+        "info": "Your variant Title 1 | Title 2 | ... | Title n",
+        "default": "color | Color"
+      },
+      {
+        "type": "textarea",
+        "id": "product_color_mapping",
+        "label": "Colors mapping",
+        "info": "Your color name 1:Color code 1 | Your color name 2:Color code 2 | ... | Your color name n:Color code n",
+        "default": "Red:#f44336 | Pink:#e91e63 | Purple:#9c27b0 | Deep purple:#673ab7 | Indigo:#3f51b5 | Blue:#2196f3 | Light blue:#03a9f4 | Cyan:#00bcd4 | Teal:#009688 | Green:#4caf50 | Light green:#8bc34a | Lime:#cddc39 | Yellow:#ffeb3b | Amber:#ffc107 | Orange:#ff9800 | Deep orange:#ff5722 | Brown:#795548 | Gray:#9e9e9e | Blue gray:#607d8b | Black:#000000 | White:#ffffff"
+      }
+    ]
+  },
+  {
+    "name": "Makale Öğesi",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "article_author",
+        "label": "Enable author",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "article_date",
+        "label": "Enable date",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "article_image_size",
+        "label": "Image size",
+        "default": "natural",
+        "options": [
+          {
+            "value": "natural",
+            "label": "Natural"
+          },
+          {
+            "value": "square",
+            "label": "Square (1:1)"
+          },
+          {
+            "value": "landscape",
+            "label": "Landscape (4:3)"
+          },
+          {
+            "value": "portrait",
+            "label": "Portrait (2:3)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Hesabım Sayfası",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "account_banner_1",
+        "label": "Upload banner 1"
+      },
+      {
+        "type": "url",
+        "id": "account_banner_1_link",
+        "label": "Select link banner 1"
+      },
+      {
+        "type": "image_picker",
+        "id": "account_banner_2",
+        "label": "Upload banner 2"
+      },
+      {
+        "type": "url",
+        "id": "account_banner_2_link",
+        "label": "Select link banner 2"
+      }
+    ]
+  },
+  {
+    "name": "Sosyal Medya",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social sharing options"
+      },
+      {
+        "type": "checkbox",
+        "id": "share_facebook",
+        "label": "Share on Facebook",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "share_twitter",
+        "label": "Tweet on Twitter",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "share_pinterest",
+        "label": "Pin on Pinterest",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Social accounts"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter",
+        "info": "https:\/\/twitter.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook",
+        "info": "https:\/\/facebook.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest",
+        "info": "https:\/\/pinterest.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "http:\/\/instagram.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok",
+        "info": "https:\/\/tiktok.com\/@shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": "Tumblr",
+        "info": "https:\/\/shopify.tumblr.com"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": "Snapchat",
+        "info": "https:\/\/www.snapchat.com\/add\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube",
+        "info": "https:\/\/www.youtube.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_link",
+        "label": "Vimeo",
+        "info": "https:\/\/vimeo.com\/shopify"
+      }
+    ]
+  },
+  {
+    "name": "Favicon ( Site İkonu )",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "Will be scaled down to 32 x 32px"
+      }
+    ]
+  },
+  {
+    "name": "Para Birimi Formatı",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Currency codes"
+      },
+      {
+        "type": "paragraph",
+        "content": "Cart and checkout prices always show currency codes. Example: $1.00 USD."
+      },
+      {
+        "type": "checkbox",
+        "id": "currency_code_enabled",
+        "label": "Show currency codes",
+        "default": true
+      }
+    ]
+  }
+]

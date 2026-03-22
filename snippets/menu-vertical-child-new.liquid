@@ -1,0 +1,21 @@
+{%- for link in child_links.links -%}
+  {% if link.links != blank %}
+    {%- assign child_links = link.links -%}
+    <li class="header__mega-root-child col">
+      <div class="header__submenu-child">
+        <div class="linklist-title">{{ link.title }}</div>
+        <ul>
+          {% for link in child_links %}
+          <li class="level1-menu {% if link.active %}active{% endif %}">
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </li>
+  {% else %}
+    <li class="level1-menu {% if link.active %}active{% endif %}">
+      <a href="{{ link.url }}">{{ link.title }}</a>
+    </li>
+  {% endif %}
+{%- endfor -%}

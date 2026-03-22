@@ -1,0 +1,258 @@
+<!-- /sections/index-blog.liquid -->
+<div data-section-type="blog-section" class="spaced-section {{ section.settings.display }}" data-section-name="blog-section">
+  <div class="container">
+    <div class="blog__container">
+      {%- if section.settings.title != blank -%}
+        <div class="box-divider title-{{ section.id }}">
+          {%- if section.settings.icon != blank -%}
+          <div class="group-icon">   
+            <img class="box-icon"
+                 srcset="{% render 'bgset', image: section.settings.icon %}"
+                 src="{% render 'srcset', image: section.settings.icon %}"
+                 alt="{{ section.settings.icon.alt | escape }}"
+                 loading="lazy"
+                 width="{{ section.settings.icon.width }}"
+                 height="{{ section.settings.icon.height }}"
+                 >
+          {%- endif -%}
+          <h2 class="box-title">{{ section.settings.title }}</h2>
+          {%- if section.settings.icon != blank -%}         
+          </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="blog__content row row-cols-{{ section.settings.col }} row-cols-sm-{{ section.settings.col_sm }} row-cols-md-{{ section.settings.col_md }} row-cols-lg-{{ section.settings.col_lg }} row-cols-xl-{{ section.settings.col_xl }} row-cols-xxl-{{ section.settings.col_xxl }}">
+        {%- for article in blogs[section.settings.select_blog].articles limit: section.settings.limit -%}
+          <div class="article-item__content col">
+            {%- include 'index-article-item', article: article -%}
+          </div>
+        {%- else -%}
+          {%- for i in (1..section.settings.limit) -%}
+        	{%- include 'index-article-item-sample' -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% style %}
+  .title-{{ section.id }}:after{
+    background-color: {{ section.settings.color }};
+  }
+{% endstyle %}
+{% schema %}
+{
+  "name": "List Blogs",
+  "class": "index-blog",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display on",
+      "options": [
+        {
+          "value": "",
+          "label": "Desktop & Mobile"
+        },
+        {
+          "value": "d-none d-md-block",
+          "label": "Desktop only"
+        },
+        {
+          "value": "d-block d-md-none",
+          "label": "Mobile only"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+	{
+      "type": "image_picker",
+      "id": "icon",
+      "label": "Upload icon"
+    },
+	{
+      "type": "color",
+      "id": "color",
+      "label": "Color border",
+	  "default": "#1462c9"
+    },
+	{
+      "type": "blog",
+      "id": "select_blog",
+      "label": "Select blog"
+    },
+    {
+      "type": "text",
+      "id": "limit",
+      "label": "Limit article show",
+      "default": "4"
+    },
+	{
+      "type": "header",
+      "content": "Responsive width"
+    },
+    {
+      "type": "select",
+      "id": "col",
+      "label": "Width",
+      "info": "For small screen (0px - 575px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "col_sm",
+      "label": "Width",
+      "info": "For medium screen (576px - 767px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "col_md",
+      "label": "Width",
+      "info": "For large screen (768px - 991px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "col_lg",
+      "label": "Width",
+      "info": "For xlarge screen (992px - 1199px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "col_xl",
+      "label": "Width",
+      "info": "For xxlarge screen (1200px - 1399px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "col_xxl",
+      "label": "Width",
+      "info": "For xxxlarge screen (1400px - infinity)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "List Blogs",
+      "category": "List Blogs"
+    }
+  ]
+}
+{% endschema %}

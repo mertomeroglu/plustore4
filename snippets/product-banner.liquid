@@ -1,0 +1,46 @@
+{%- liquid 
+  assign classContent = 'collection-sidebar'
+  assign classAccordion = 'accordion'
+  if block.settings.position == 'bottom_content'
+    assign classContent = 'product-banner'
+    assign classAccordion = 'product-banner'
+  endif
+-%}
+<div class="{{ block.settings.display }} {{ classContent }}__item accordion {{ classContent }}__banner is-active open">
+  {%- if block.settings.title != blank -%}
+    {%- if classAccordion == 'product-banner' -%}
+      <div class="box-divider title-banner_{{ block.id }}">
+        {%- if block.settings.icon != blank -%}              
+        <div class="group-icon">              
+        {%- endif -%}              
+          {%- if block.settings.icon != blank -%}
+          <img class="box-icon"
+               srcset="{% render 'bgset', image: block.settings.icon %}"
+               src="{% render 'srcset', image: block.settings.icon %}"
+               alt="{{ block.settings.icon.alt | escape }}"
+               loading="lazy"
+               width="{{ block.settings.icon.width }}"
+               height="{{ block.settings.icon.height }}"
+               >
+          {%- endif -%}
+          <h4 class="box-title">{{ block.settings.title }}</h4>
+        {%- if block.settings.icon != blank -%}                           
+        </div>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <h4 class="accordion__title">
+        <span>{{ block.settings.title }}</span>
+      </h4>
+    {%- endif -%}
+  {%- endif -%}
+  <div class="{{ classAccordion }}__content {{ classContent }}__banner-content">
+    <a href="{{ block.settings.link }}">
+      {%- assign preview_img = block.settings.image -%}
+      <div class="lazy-bg about-info__image" style="padding-bottom: {{ 100 | divided_by: preview_img.aspect_ratio }}%;">
+        <img {% render 'lazyload', preview_img: preview_img  %} />
+        <span class="data-lazy-loading"></span>
+      </div>
+    </a>
+  </div>
+</div>

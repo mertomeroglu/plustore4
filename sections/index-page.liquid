@@ -1,0 +1,106 @@
+<div data-section-type="page-section" class="spaced-section {{ section.settings.display }}" data-section-name="page-section">
+  <div class="{{ section.settings.layout }}">
+    <div class="page__container row">
+      {%- if section.settings.title != blank -%}
+        <div class="box-divider title-{{ section.id }}">
+          {%- if section.settings.icon != blank -%}
+          <div class="group-icon">
+            <img class="box-icon"
+                 srcset="{% render 'bgset', image: section.settings.icon %}"
+                 src="{% render 'srcset', image: section.settings.icon %}"
+                 alt="{{ section.settings.icon.alt | escape }}"
+                 loading="lazy"
+                 width="{{ section.settings.icon.width }}"
+                 height="{{ section.settings.icon.height }}"
+                 >
+          {%- endif -%}
+          <h2 class="box-title">{{ section.settings.title }}</h2>
+          {%- if section.settings.icon != blank -%}         
+          </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="page__content">
+        {%- if section.settings.page.content != blank -%}
+          {{ section.settings.page.content }}
+        {%- else -%}
+          <div class='page-placeholder-wrapper placeholder'>
+            {{ 'page' | placeholder_svg_tag: 'page-placeholder' }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Page",
+  "tag": "section",
+  "class": "index-page",
+  "settings": [
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display on",
+      "options": [
+        {
+          "value": "",
+          "label": "Desktop & Mobile"
+        },
+        {
+          "value": "d-none d-md-block",
+          "label": "Desktop only"
+        },
+        {
+          "value": "d-block d-md-none",
+          "label": "Mobile only"
+        }
+      ],
+      "default": ""
+    },
+	{
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "container-fluid",
+          "label": "Full width"
+        }
+      ],
+      "default": "container"
+    },
+	{
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+	{
+      "type": "image_picker",
+      "id": "icon",
+      "label": "Upload icon"
+    },
+	{
+      "type": "color",
+      "id": "color",
+      "label": "Color border",
+	  "default": "#1462c9"
+    },
+	{
+      "type": "page",
+      "id": "page",
+      "label": "Select page"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page",
+      "category": "Advanced"
+    }
+  ]
+}
+{% endschema %}

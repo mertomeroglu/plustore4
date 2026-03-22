@@ -1,0 +1,115 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product-box",
+      "blocks": {
+        "7aa82db0-f575-4bc3-895f-20ab8a8f0d4d": {
+          "type": "product-recommendations",
+          "settings": {
+            "title": "YOU MAY ALSO LIKE",
+            "position": "bottom_content",
+            "display": "",
+            "limit": "8",
+            "slidable": true,
+            "autoplay": true,
+            "autoplay_speed": "5000",
+            "effect": "slide",
+            "space": 15,
+            "col": "2",
+            "col_sm": "3",
+            "col_md": "4",
+            "col_lg": "4",
+            "col_xl": "4",
+            "col_xxl": "4",
+            "row": 1,
+            "navigation": true,
+            "pagination": true
+          }
+        },
+        "a12903b4-ca72-4e56-b509-2f90b84760c5": {
+          "type": "product-recently",
+          "settings": {
+            "title": "RECENTLY VIEWED PRODUCTS",
+            "position": "bottom_content",
+            "display": "",
+            "limit": "8",
+            "slidable": true,
+            "autoplay": true,
+            "autoplay_speed": "5000",
+            "effect": "slide",
+            "space": 15,
+            "col": "2",
+            "col_sm": "3",
+            "col_md": "4",
+            "col_lg": "4",
+            "col_xl": "4",
+            "col_xxl": "4",
+            "row": 1,
+            "navigation": true,
+            "pagination": true
+          }
+        },
+        "ce1c34fd-8c61-4aeb-ac21-10180d369a1d": {
+          "type": "product-html",
+          "settings": {
+            "title": "CUSTOMER REVIEWS",
+            "review": true,
+            "position": "bottom_content",
+            "display": "",
+            "html": "<div id=\"shopify-product-reviews\" data-id=\"{{product.id}}\">{{ product.metafields.spr.reviews }}<\/div>"
+          }
+        }
+      },
+      "block_order": [
+        "7aa82db0-f575-4bc3-895f-20ab8a8f0d4d",
+        "a12903b4-ca72-4e56-b509-2f90b84760c5",
+        "ce1c34fd-8c61-4aeb-ac21-10180d369a1d"
+      ],
+      "settings": {
+        "image_position": "left",
+        "width_content": "large",
+        "image_size": "natural",
+        "thumbnail_position": "right",
+        "enable_zoom": true,
+        "enable_video_looping": true,
+        "navigation": true,
+        "pagination": true,
+        "rating_star": "<span class='shopify-product-reviews-badge' data-id='{{ product.id }}'><\/span>",
+        "show_write_review": true,
+        "show_earnpoints": true,
+        "earnpoints_content": "<p><b>Here is only a suggestion: Reward Points function (demo function). To use real Reward Points, you need a 3rd party Shopify App.<\/b><\/p><p>\nYour items may arrive sooner than the estimated delivery date. Ralph Lauren reserves the right to send packages via other shipping methods based on the shipping destination as long as orders will still arrive within the arrival times outlined on RalphLauren.com.<\/p> \n<p>\nWhen you choose the Economy delivery option, packages are delivered Monday through Saturday 8 AM to 4:30 PM. Orders sent by Fast, 2-Business-Day or Next-Day shipping methods are delivered Monday through Friday from 8 AM to 4:30 PM.<\/p> \n<p>\nWe recommend choosing Fast or Next-Day delivery if you are shipping your package to a business address. You will be asked to provide a telephone number on the shipping page of checkout, which is important in the event the courier needs to arrange a delivery time with you.<\/p>\n<p>\n You will also be asked to provide an email address, to which we will send confirmation that your order was placed.<\/p>",
+        "show_sizechart": true,
+        "sizechart_check": "size | Size",
+        "sizechart_image": "shopify:\/\/shop_images\/size-chart_6c7300f2-8846-4f58-b7ff-21ab87b18289.jpg",
+        "sizechart_text": "View Size Chart",
+        "sizechart_url": "",
+        "show_dynamic_checkout": true,
+        "show_wishlist_button": true,
+        "show_terms": true,
+        "show_terms_title": "I agree with the",
+        "show_terms_action": "Terms & conditions",
+        "show_terms_content": "terms-conditions",
+        "show_shipping": true,
+        "shippingdate": 5,
+        "ct_timer": "2021\/12\/06 16:25:00",
+        "show_faqs": true,
+        "faqs_title": "Ask us any Question",
+        "show_details": true,
+        "detail_title": "Details",
+        "show_sku": true,
+        "show_vendor": true,
+        "show_type": true,
+        "show_inventory": true,
+        "show_description": true,
+        "desc_title": "Description",
+        "show_bundle": true,
+        "bundle_title": "Buy Together",
+        "customimage": "shopify:\/\/shop_images\/payment.png",
+        "show_share_buttons": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,418 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | img_url: '32x32' }}">
+    {%- endif -%}
+
+    {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+
+    {%- capture seo_title -%}
+      {{ page_title }}
+      {%- if current_tags -%}
+        {%- assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+      {%- endif -%}
+      {%- if current_page != 1 -%}
+        &ndash; {{ 'general.meta.page' | t: page: current_page }}
+      {%- endif -%}
+      {%- if template contains 'password' -%}
+        {{ 'general.password_page.opening_soon' | t }}
+      {%- endif -%}
+      {%- unless page_title contains shop.name -%}
+        &ndash; {{ shop.name }}
+      {%- endunless -%}
+    {%- endcapture -%}
+    <title>{{ seo_title }}</title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {% render 'meta-tags' %}
+
+    <script src="{{ 'jquery.min.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'swiper.min.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'pure-dom.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'lazysizes.min.js' | asset_url }}" defer="defer"></script>
+    {%- if request.page_type == 'collection' or request.page_type == 'product' or request.page_type == 'blog' or request.page_type == 'article' -%}
+    <script src="{{ 'sticky-sidebar.min.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'slideshow.js' | asset_url }}" defer="defer"></script>
+    
+    <script>
+      {%- if request.page_type == 'collection' -%}
+        {%- if current_tags -%}
+          {%- capture tag_handles -%}
+              {%- for tag in current_tags -%}
+                {{- tag | handle | append: '|' -}}
+              {%- endfor -%}
+          {%- endcapture -%}
+        {%- endif -%}
+        window.breadcrumbs = {
+          collection: {
+            title: {{ collection.title | json }},
+            link: "{{ shop.url }}{{ collection.url }}{%- if current_tags -%}/{{- tag_handles | split: '|' | join: '+' -}}{%- endif -%}"
+          }
+        };
+        sessionStorage.setItem("breadcrumb", JSON.stringify(window.breadcrumbs.collection));
+      {%- elsif request.page_type != 'product' -%}
+        if (sessionStorage.getItem("breadcrumb")) {
+          sessionStorage.removeItem("breadcrumb")
+        }
+      {%- endif -%}
+    </script>
+    
+    {{ content_for_header }}
+    {% render 'css-variables' %}
+    <link rel="stylesheet" href="{{ 'cs-font-icon.css' | asset_url }}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ 'swiper-bundle.css' | asset_url }}" media="print" onload="this.media='all'">
+    {{ 'vendor.css' | asset_url | stylesheet_tag }}
+    {{ 'home-section.css' | asset_url | stylesheet_tag }}
+    
+	{{ 'component-product-grid.css' | asset_url | stylesheet_tag }}
+    {{ 'component-slider.css' | asset_url | stylesheet_tag }}
+    <link rel="stylesheet" href="{{ 'component-modal.css' | asset_url }}" media="print" onload="this.media='all'">
+    
+    {%- if request.page_type == 'policy' -%}
+    {{ 'legal-pages.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
+
+    {%- unless settings.type_body_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+    {%- unless settings.type_header_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+<style>
+/* =========================
+   MOBİL ÜST BAR + MARQUEE
+   ========================= */
+
+/* Keyframes global */
+@keyframes marqueeMove{
+  0%   { transform: translate3d(0,0,0); }
+  100% { transform: translate3d(-50%,0,0); } /* 2 kopya için */
+}
+
+/* SADECE MOBİL */
+@media (max-width: 768px){
+
+  /* Üst menü tek satır */
+  .top-header__content{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:8px !important;
+  }
+
+  .top-header__menu{
+    order:1 !important;
+    width:100% !important;
+    overflow:hidden !important;
+  }
+
+  .top-header__menu-content{
+    display:flex !important;
+    justify-content:space-between !important;
+    flex-wrap:nowrap !important;
+    white-space:nowrap !important;
+    gap:6px !important;
+    width:100% !important;
+  }
+
+  .top-header__menu-content a{
+    font-size:11.5px !important;
+    padding:6px 0 !important;
+    line-height:1 !important;
+  }
+
+  /* Kayan yazı menünün altına */
+  .top-header__welcome{
+    order:2 !important;
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  .marquee-wrap{
+    overflow:hidden !important;
+    white-space:nowrap !important;
+    width:100% !important;
+
+    /* mobilde mask animasyonu bozabiliyor */
+    -webkit-mask-image:none !important;
+    mask-image:none !important;
+  }
+
+  .marquee-track{
+    display:inline-flex !important;
+    align-items:center !important;
+    gap:40px !important;
+    width:max-content !important;
+    will-change:transform !important;
+
+    animation: marqueeMove 14s linear infinite !important; /* hız */
+    animation-play-state: running !important;
+  }
+
+  .marquee-text{ display:inline-block !important; }
+}
+
+/* Reduced motion olsa bile çalışsın */
+@media (prefers-reduced-motion: reduce){
+  .marquee-track{
+    animation: marqueeMove 14s linear infinite !important;
+    animation-play-state: running !important;
+  }
+}
+</style>
+
+<script>
+/**
+ * Mobilde bazı temalar header'ı yeniden render ediyor (sticky/clone) ve animasyonu öldürüyor.
+ * Bu script:
+ * 1) CSS animasyonu her render sonrası tekrar zorlar
+ * 2) Eğer transform ilerlemiyorsa requestAnimationFrame ile manuel kaydırmaya geçer (fallback)
+ */
+(function(){
+  const SPEED_PX = 0.6;   // manuel mod hız (0.4 yavaş / 0.6 ideal / 1.0 hızlı)
+  const CSS_DUR  = 14;    // CSS anim süre (sn)
+
+  let rafId = null;
+  let manualRunning = false;
+
+  function isMobile(){
+    return window.matchMedia('(max-width: 768px)').matches;
+  }
+
+  function getTrack(){
+    return document.querySelector('.marquee-track');
+  }
+
+  function restartCss(track){
+    // CSS animasyonu yeniden başlat
+    track.style.animation = 'none';
+    track.style.transform = 'translate3d(0,0,0)';
+    void track.offsetHeight; // reflow
+    track.style.animation = `marqueeMove ${CSS_DUR}s linear infinite`;
+    track.style.animationPlayState = 'running';
+    track.style.willChange = 'transform';
+    track.style.display = 'inline-flex';
+    track.style.width = 'max-content';
+  }
+
+  function startManual(track){
+    if (manualRunning) return;
+    manualRunning = true;
+
+    let pos = 0;
+    function tick(){
+      if (!isMobile() || !document.body.contains(track)){
+        manualRunning = false;
+        rafId && cancelAnimationFrame(rafId);
+        rafId = null;
+        return;
+      }
+
+      pos -= SPEED_PX;
+      const half = track.scrollWidth / 2; // 2 kopya varsayımı
+      if (half > 0 && Math.abs(pos) >= half) pos = 0;
+
+      track.style.transform = `translate3d(${pos}px,0,0)`;
+      rafId = requestAnimationFrame(tick);
+    }
+
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function stopManual(){
+    manualRunning = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  // CSS animasyon gerçekten ilerliyor mu kontrol (1sn sonra transform değişti mi?)
+  function cssWorks(track){
+    const before = getComputedStyle(track).transform;
+    return new Promise((resolve)=>{
+      setTimeout(()=>{
+        const after = getComputedStyle(track).transform;
+        resolve(before !== after);
+      }, 900);
+    });
+  }
+
+  async function apply(){
+    if (!isMobile()) { stopManual(); return; }
+
+    const track = getTrack();
+    if (!track) return;
+
+    // önce CSS ile dene
+    restartCss(track);
+
+    // CSS çalışmıyorsa manuel moda geç
+    const ok = await cssWorks(track);
+    if (!ok){
+      // CSS animasyonu kapatıp manuel başlat
+      track.style.animation = 'none';
+      startManual(track);
+    } else {
+      stopManual();
+    }
+  }
+
+  // Header re-render olursa otomatik tekrar uygula
+  let obs = null;
+  function watch(){
+    if (obs) obs.disconnect();
+    obs = new MutationObserver(function(){
+      // debounce
+      clearTimeout(watch._t);
+      watch._t = setTimeout(apply, 150);
+    });
+    obs.observe(document.documentElement, { childList:true, subtree:true });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    apply();
+    watch();
+    setTimeout(apply, 500);
+    setTimeout(apply, 1500);
+    setTimeout(apply, 3000);
+  });
+
+  window.addEventListener('resize', function(){
+    setTimeout(apply, 200);
+  });
+})();
+</script>
+{{ 'custom.css' | asset_url | stylesheet_tag }}
+  </head>
+
+  <body class="template-{{ request.page_type }} maxmin-02 v5.0.3">    
+    <header class="layout-header">   
+      {% section 'theme-header' %}
+    </header>
+
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {% if settings.breadcrumbs and request.page_type != 'index' %}
+        {% include 'breadcrumbs' %}
+      {% endif %}
+      {{ content_for_layout }}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      {% section 'theme-footer-top' %} 
+      {% section 'theme-footer-bottom' %} 
+    </footer>
+    {%- include 'theme-extension' -%}
+
+    <script>
+      window.theme = window.theme || {};
+      {%- if settings.currency_code_enabled -%}
+        const moneyFormat = {{ shop.money_with_currency_format | json }};
+      {%- else -%}
+        const moneyFormat = {{ shop.money_format | json }};
+      {%- endif -%}
+      window.moneyFormat = moneyFormat;
+      window.moneyFormatWithCurrency = {{ shop.money_with_currency_format | json }};
+      window.routes = {
+        cart_url: '{{ routes.cart_url }}',
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_clear_url: '{{ routes.cart_clear_url }}',
+      };
+      window.cartAjax = {{ settings.ajax_active }};
+
+      window.cartStrings = {
+        error: `{{ 'sections.cart.cart_error' | t }}`,
+        quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t }}`
+      };
+
+      window.variantStrings = {
+        addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+        preOrder: `{{ 'products.product.pre_order' | t }}`,
+        soldOut: `{{ 'products.product.sold_out' | t }}`,
+        unavailable: `{{ 'products.product.unavailable' | t }}`,
+      };
+    </script>
+</script>   
+<style>
+/* MOBİLDE MARQUEE ZORLA ÇALIŞTIR */
+@media (max-width:768px){
+
+  /* bazı mobil tarayıcılarda mask animasyonu bozabiliyor */
+  .marquee-wrap{
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+
+  /* animasyonu kesin zorla */
+  .marquee-track{
+    display:inline-flex !important;
+    width:max-content !important;
+    will-change: transform !important;
+
+    animation-name: marqueeMove !important;
+    animation-duration: 14s !important; /* hız burada */
+    animation-timing-function: linear !important;
+    animation-iteration-count: infinite !important;
+    animation-play-state: running !important;
+
+    transform: translate3d(0,0,0) !important;
+  }
+}
+
+/* Bazı cihazlarda “reduced motion” animasyonu kapatıyor; bunu da ez */
+@media (prefers-reduced-motion: reduce){
+  .marquee-track{
+    animation-name: marqueeMove !important;
+    animation-duration: 14s !important;
+    animation-timing-function: linear !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const items = document.querySelectorAll(".top-header__menu-content li");
+
+  items.forEach(function(item){
+
+    if(item.innerText.includes("Takip")){
+
+      const link = item.querySelector("a");
+
+      if(link){
+
+        link.addEventListener("click", function(e){
+          e.preventDefault(); // sayfanın açılmasını engeller
+          window.open("https://instagram.com/plusstore7","_blank");
+        });
+
+      }
+
+    }
+
+  });
+
+});
+</script>
+</body>
+</html>

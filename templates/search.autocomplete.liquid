@@ -1,0 +1,46 @@
+  {%- liquid 
+    layout none
+      assign searchUrl = search.terms | split:'product_type:'
+      assign searchTerms = searchUrl[0] | strip
+      assign searchType = searchUrl[1] | strip
+  -%}
+<div class="search-results__layout">
+  <div class="search-results__content">
+    {%- if search.performed -%}
+      <p class="search-results__performed" role="status">
+        {%- if search.results_count == 0 -%}
+        {{ 'templates.search.no_results' | t: terms: searchTerms }}
+        {%- else -%}
+        {{ 'templates.search.results_with_count' | t: terms: searchTerms, count: search.results_count }}
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+    {%- if search.performed and search.results.size > 0 -%}
+      <div class="search-results__product">
+        <slider-component class="collection-tab__slider">
+          <div class="carousel" data-carousel-param='{"loop": "false", "effect": "slide", "autoplay": "true", "autoplaySpeed": "5000", "space": "15", "col": "2", "col_sm": "2", "col_md": "2", "col_lg": "2", "col_xl": "3", "col_xxl": "4", "row": "1"}' data-carousel>
+            <div class="carousel-wrapper">
+              <div class="swiper-container" data-carousel-container>
+                <div class="swiper-wrapper row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-5">
+                  {%- for item in search.results -%}
+                    {%- case item.object_type -%}
+                      {%- when 'product' -%}
+                      <div class="swiper-slide col product-item__content" data-carousel-item>
+                        {%- render 'index-product-item', product: item -%}
+                      </div>
+                    {%- endcase -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+              <div class="carousel-navigation carousel-nav-prev" data-carousel-nav-prev><i class="cs-icon icon-ios-arrow-left"></i></div>
+              <div class="carousel-navigation carousel-nav-next" data-carousel-nav-next><i class="cs-icon icon-ios-arrow-right"></i></div>
+            </div>
+          </div>
+        </slider-component>
+      </div>
+    {%- endif -%}
+    <a href="#" class="button button--primary search-results__action">
+      {{ 'templates.search.action' | t }}
+    </a>
+  </div>
+</div>

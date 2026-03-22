@@ -1,0 +1,171 @@
+{{ 'main-faqs.css' | asset_url | stylesheet_tag }}
+
+<div class="main-faqs__layout">
+  <div class="container">
+    <div class="main-faqs__container">
+      {%- if section.settings.active_questions -%}
+        <div class="faqs-questions__content">
+          {%- if section.settings.title != blank -%}
+            <h2 class="main-faqs__title">
+              {{ section.settings.title }}
+            </h2>
+          {%- endif -%}
+          {%- if section.blocks.size > 0 -%}
+            <div class="faqs-questions__list">
+              <accordion-component data-accordion-parent="false">
+                {%- for block in section.blocks -%}
+                  <div class="faqs-questions__item accordion {% if forloop.first %}is-active open{% endif %}">
+                    <h4 class="accordion__title">
+                      <span>{{ block.settings.title }}</span>
+                    </h4>
+                    <div class="accordion__content">
+                      {{ block.settings.content }}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </accordion-component>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.active_contact -%}
+        <div class="faqs-contact__content">
+          {%- if section.settings.title_contact != blank -%}
+            <h2 class="main-faqs__title">
+              {{ section.settings.title_contact }}
+            </h2>
+          {%- endif -%}
+          <div class="faqs-contact__form">
+            {%- form 'contact', id: 'ContactForm' -%}
+              {%- if form.posted_successfully? -%}
+                <div class="form-status form-status-list form__message" tabindex="-1" autofocus>{% render 'icon-success' %} {{ 'templates.contact.form.post_success' | t }}</div>
+              {%- elsif form.errors -%}
+                <div class="form__message">
+                  <h2 class="form-status caption-large" role="alert" tabindex="-1" autofocus>{% render 'icon-error' %} {{ 'templates.contact.form.error_heading' | t }}</h2>
+                </div>
+                <ul class="form-status-list caption-large" role="list">
+                  <li>
+                    <a href="#ContactForm-email" class="link">
+                      {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+                    </a>
+                  </li>
+                </ul>
+              {%- endif -%}
+              <div class="contact__fields row">
+                <div class="col-12 col-sm-6">
+                  <div class="field">
+                    <input class="field__input" autocomplete="name" type="text" id="ContactForm-name" name="contact[{{ 'templates.contact.form.name' | t }}]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" placeholder="{{ 'templates.contact.form.name' | t }}">
+                    <label class="field__label" for="ContactForm-name">{{ 'templates.contact.form.name' | t }}</label>
+                  </div>
+                  <div class="field field--with-error">
+                    <input
+                           autocomplete="email"
+                           type="email"
+                           id="ContactForm-email"
+                           class="field__input"
+                           name="contact[email]"
+                           spellcheck="false"
+                           autocapitalize="off"
+                           value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                           aria-required="true"
+                           {% if form.errors contains 'email' %}
+                           aria-invalid="true"
+                           aria-describedby="ContactForm-email-error"
+                           {% endif %}
+                           placeholder="{{ 'templates.contact.form.email' | t }}"
+                           >
+                    <label class="field__label" for="ContactForm-email">{{ 'templates.contact.form.email' | t }} <span aria-hidden="true">*</span></label>
+                    {%- if form.errors contains 'email' -%}
+                    <small class="contact__field-error" id="ContactForm-email-error">
+                      <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                      <span class="form__message">{% render 'icon-error' %}{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</span>
+                    </small>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <div class="field">
+                    <textarea
+                              rows="10"
+                              id="ContactForm-body"
+                              class="text-area field__input"
+                              name="contact[{{ 'templates.contact.form.comment' | t }}]"
+                              placeholder="{{ 'templates.contact.form.comment' | t }}"
+                              >
+                      {{- form.body -}}
+                    </textarea>
+                    <label class="form__label field__label" for="ContactForm-body">{{ 'templates.contact.form.comment' | t }}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="contact__button">
+                <button type="submit" class="button">
+                  {{ 'templates.contact.form.send' | t }}
+                </button>
+              </div>
+            {%- endform -%}	
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "FAQs",
+  "class": "main-faqs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Questions"
+    },
+	{
+      "type": "checkbox",
+      "id": "active_questions",
+      "label": "Set active this block",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Prequently asked questions"
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "checkbox",
+      "id": "active_contact",
+      "label": "Set active this block",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title_contact",
+      "label": "Heading",
+      "default": "Still have questions? Contact us leave a comment"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "html",
+          "id": "content",
+          "label": "Content",
+          "default": "Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio. Sed non mauris vitae erat consequat auctor eu in elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

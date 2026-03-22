@@ -1,0 +1,26 @@
+<details class="mobile-facets__details js-filter" data-index="mobile-listing">
+  <summary class="mobile-facets__summary focus-inset">
+    <div>
+      <span>{{ block.settings.title }}</span>                        
+      <span class="mobile-facets__arrow no-js-hidden">{% render 'icon-arrow' %}</span>
+      <noscript>{% render 'icon-caret' %}</noscript>
+    </div>
+  </summary>
+  <div class="mobile-facets__submenu">
+    <button class="mobile-facets__close-button link link--text focus-inset" aria-expanded="true" type="button">
+      {% render 'icon-arrow' %}
+      {{ block.settings.title }}
+    </button>
+    {%- if block.settings.listing_linklist != blank -%}
+      <ul class="collection-sidebar__listing-content list-unstyled" role="list">
+        {%- for link in block.settings.listing_linklist.links -%}
+        <li>
+          <a href="{{ link.url }}" class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}">
+            {{ link.title }}
+          </a>
+        </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</details>

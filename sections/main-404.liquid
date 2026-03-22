@@ -1,0 +1,47 @@
+{{ 'section-404.css' | asset_url | stylesheet_tag }}
+<div class="template-404__layout" {% if section.settings.background %}style="background-image:url({{ section.settings.background | img_url: 'master'}})"{% endif %}>
+  <div class="container">
+    <div class="template-404__content">
+      {%- if section.settings.sub_title != blank -%}
+        <p class="template-404__sub-title">{{ section.settings.sub_title }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h1 class="template-404__title">{{ section.settings.title }}</h1>
+      {%- endif -%}
+      {%- if section.settings.caption != blank -%}
+        <a class="template-404__caption" href="{{ routes.root_url }}">{{ section.settings.caption }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "404 template",
+  "class": "template-404",
+  "settings": [
+	{
+      "type": "image_picker",
+      "id": "background",
+      "label": "Upload background"
+    },
+	{
+      "type": "text",
+      "id": "sub_title",
+      "label": "Subheading",
+      "default": "Oops!"
+    },
+	{
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Page not found!"
+    },
+	{
+      "type": "textarea",
+      "id": "caption",
+      "label": "Caption",
+	  "default": "Please go back to <strong>homepage</strong>"
+    }
+  ]
+}
+{% endschema %}

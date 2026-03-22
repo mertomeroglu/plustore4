@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "layout": "list",
+        "limit": 6,
+        "sidebar": true,
+        "col": "1",
+        "col_sm": "1",
+        "col_md": "1",
+        "col_lg": "1",
+        "col_xl": "1",
+        "col_xxl": "1"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

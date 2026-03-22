@@ -1,0 +1,176 @@
+{{ 'section-main-wish-list.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'page-wishlist.js' | asset_url }}" defer="defer"></script>
+
+<div class="wish-list-template__layout">
+  <div class="container">
+    <div class="wish-list-template__container">
+      <h1 class="hidden">
+        {{ page.title | escape }}
+      </h1>
+      <div class="main-page-content">
+        <page-wishlist>
+          <div class="wishlist-empty">{{ 'wishlist.empty' | t }}</div>
+          <div class="wish-list-template__content row row-cols-{{ section.settings.col }} row-cols-sm-{{ section.settings.col_sm }} row-cols-md-{{ section.settings.col_md }} row-cols-lg-{{ section.settings.col_lg }} row-cols-xl-{{ section.settings.col_xl }} row-cols-xxl-{{ section.settings.col_xxl }}" page-wishlist-product data-remove="{{ 'wishlist.remove' | t }}"></div>
+        </page-wishlist>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Page",
+  "class": "wish-list-template",
+  "settings": [
+    {
+      "type": "select",
+      "id": "col",
+      "label": "Width",
+      "info": "For small screen (0px - 575px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "col_sm",
+      "label": "Width",
+      "info": "For medium screen (576px - 767px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_md",
+      "label": "Width",
+      "info": "For large screen (768px - 991px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_lg",
+      "label": "Width",
+      "info": "For xlarge screen (992px - 1199px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_xl",
+      "label": "Width",
+      "info": "For xxlarge screen (1200px - 1399px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_xxl",
+      "label": "Width",
+      "info": "For xxxlarge screen (1400px - infinity)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1/1"
+        },
+        {
+          "value": "2",
+          "label": "1/2"
+        },
+        {
+          "value": "3",
+          "label": "1/3"
+        },
+        {
+          "value": "4",
+          "label": "1/4"
+        }
+      ],
+      "default": "4"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,8 @@
+{%- assign _sizechart = section.settings.sizechart_check | downcase | split: '|' -%}
+{%- assign tmp_option = option_name | downcase -%}
+{%- for _checksize in _sizechart -%}
+  {%- if _checksize contains tmp_option -%}
+    {%- assign _showsizechart = 1 -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}

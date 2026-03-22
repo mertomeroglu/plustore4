@@ -1,0 +1,58 @@
+<!-- /sections/ajax-notification.liquid -->
+<script src="{{ 'notification-component.js' | asset_url }}" defer="defer"></script>
+<notification-component class="ajax-notification__layout hide-popup" data-handle="{{ section.settings.collection }}" data-limit="{{ section.settings.limit }}" data-timeout="{{ section.settings.timeout }}">
+  <div class="ajax-notification__content">
+    <div class="ajax-notification__image">
+    </div>
+    <div class="ajax-notification__info">
+      <p class="ajax-notification__title">{{ section.settings.title }}</p>
+      <div class="ajax-notification__product">
+        <div class="ajax-notification__product-title"></div>
+        <div class="ajax-notification__product-price"></div>
+      </div>
+    </div>
+    <a class="ajax-notification__close" data-close>
+      <span class="cs-icon icon-close"></span>
+    </a>
+  </div>
+</notification-component>
+{% schema %}
+{
+  "name": "Notification products",
+  "class": "ajax-notification",
+  "tag": "section",
+  "settings": [
+	{
+      "type": "paragraph",
+      "content": "Config enable/disable on Theme settings > Genel Ayarlar > Notification products"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Other customer are viewing"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "limit",
+      "label": "Limit products show",
+      "default":"8"
+    },
+	{
+      "type": "range",
+      "id": "timeout",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "unit": "s",
+      "label": "Set time out",
+      "default": 8
+    }
+  ]
+}
+{% endschema %}

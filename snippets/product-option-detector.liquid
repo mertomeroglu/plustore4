@@ -1,0 +1,5 @@
+{%- assign _options = settings.product_option | downcase | split: '|' -%}
+{%- assign tmp_option = option_name | downcase -%}
+{%- for _option in _options -%}
+  {%- if _option contains tmp_option -%}{{ _option | split: ':' | last }}{%- break -%}{%- endif -%}
+{%- endfor -%}

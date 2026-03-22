@@ -1,0 +1,573 @@
+{{ 'main-about.css' | asset_url | stylesheet_tag }}
+
+<div class="main-about__layout">
+  <div class="container">
+    <div class="main-about__container">
+      {%- if section.settings.quote_enable -%}
+        <div class="about-quote__content">
+          {%- if section.settings.quote_title != blank -%}
+            <p class="about-quote__title">{{ section.settings.quote_title }}</p>
+          {%- endif -%}
+          {%- if section.settings.quote_name != blank -%}
+            <div class="about-quote__name">{{ section.settings.quote_name }}</div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.our_enable or section.settings.info_enable -%}
+        <div class="about-info__content">
+          <div class="row">
+            <div class="about-info__left col-12 col-md-6">
+              {%- if section.settings.info_image -%}
+              <div class="lazy-bg about-info__image" style="padding-bottom: {{ 100 | divided_by: section.settings.info_image.aspect_ratio }}%;">
+                {%- assign preview_img = section.settings.info_image -%}
+                <img {% render 'lazyload', preview_img: preview_img  %} />
+                <span class="data-lazy-loading"></span>
+              </div>
+              {%- endif -%}
+              {%- if section.settings.info_enable -%}
+              <div class="about-info__group">
+                <div class="about-info__contact">
+                  <div class="about-info__item">
+                    {%- if section.settings.address_title != blank -%}
+                    <span class="about-info__title">{{ section.settings.address_title }}</span>
+                    {%- endif -%}
+                    {%- if section.settings.address_caption != blank -%}
+                    <address>{{ section.settings.address_caption }}</address>
+                    {%- endif -%}
+                  </div>
+                  <div class="about-info__item">
+                    {%- if section.settings.phone_title != blank -%}
+                    <span class="about-info__title">{{ section.settings.phone_title }}</span>
+                    {%- endif -%}
+                    {%- if section.settings.phone_caption != blank -%}
+                    <div>{{ section.settings.phone_caption }}</div>
+                    {%- endif -%}
+                  </div>
+                  <div class="about-info__item">
+                    {%- if section.settings.email_title != blank -%}
+                    <span class="about-info__title">{{ section.settings.email_title }}</span>
+                    {%- endif -%}
+                    {%- if section.settings.email_caption != blank -%}
+                    <a href="mailto:{{ section.settings.email_caption }}">{{ section.settings.email_caption }}</a>
+                    {%- endif -%}
+                  </div>
+                </div>
+                <div class="about-info__social">
+                  {%- if section.settings.social_title != blank -%}
+                  <span class="about-info__title">{{ section.settings.social_title }}</span>
+                  {%- endif -%}
+                  <div class="about-social-content">
+                    {%- include 'social' -%}
+                  </div>
+                </div>
+              </div>              
+              {%- endif -%}
+            </div>
+            <div class="about-info__right col-12 col-md-6">
+              {%- if section.settings.our_image -%}
+              <div class="lazy-bg about-info__image" style="padding-bottom: {{ 100 | divided_by: section.settings.our_image.aspect_ratio }}%;">
+                {%- assign preview_img = section.settings.our_image -%}
+                <img {% render 'lazyload', preview_img: preview_img  %} />
+                <span class="data-lazy-loading"></span>
+              </div>
+              {%- endif -%}
+              {% if section.settings.our_enable %}
+              <div class="about-info__our">
+                {%- if section.settings.our_title != blank -%}
+                <h2 class="about-our__title">{{ section.settings.our_title }}</h2>
+                {%- endif -%}
+                {%- if section.settings.our_subtext != blank -%}
+                <div class="about-our__caption">{{ section.settings.our_subtext }}</div>
+                {%- endif -%}
+              </div>
+              {% endif %}
+            </div>
+          </div>          
+        </div>
+      {%- endif -%}
+      {%- if section.settings.team_enable -%}
+        <div class="about-team__content">
+          {%- if section.settings.team_title != blank -%}
+            <h2 class="about-team__title">
+              {{ section.settings.team_title }}
+            </h2> 
+          {%- endif -%}
+          {%- if section.blocks.size > 0 -%}
+            <div class="about-team__list">
+              <slider-component class="about-team__slider">
+                <div class="carousel" data-carousel-param='{"loop": "true", "effect": "{{ section.settings.effect }}", "autoplay": "{{ section.settings.autoplay }}", "autoplaySpeed": "{{ section.settings.autoplay_speed }}", "space": "{{ section.settings.space }}", "col": "{{ section.settings.col }}", "col_sm": "{{ section.settings.col_sm }}", "col_md": "{{ section.settings.col_md }}", "col_lg": "{{ section.settings.col_lg }}", "col_xl": "{{ section.settings.col_xl }}", "col_xxl": "{{ section.settings.col_xxl }}", "row": "1"}' data-carousel>
+                  <div class="carousel-wrapper carousel-{{ section.settings.navigation_position }}">
+                    <div class="swiper-container" data-carousel-container>
+                      <div class="swiper-wrapper row row-cols-{{ section.settings.col }} row-cols-sm-{{ section.settings.col_sm }} row-cols-md-{{ section.settings.col_md }} row-cols-lg-{{ section.settings.col_lg }} row-cols-xl-{{ section.settings.col_xl }} row-cols-xxl-{{ section.settings.col_xxl }}">
+                        {%- for block in section.blocks -%}
+                          <div class="swiper-slide col about-team__item" data-carousel-item>
+                            <div class="about-team__avatar">
+                              <div class="lazy-bg categories__image" style="padding-bottom: {{ 100 | divided_by: block.settings.image.aspect_ratio }}%;">
+                                {%- assign preview_img = block.settings.image -%}
+                                <img {% render 'lazyload', preview_img: preview_img  %} />
+                                <span class="data-lazy-loading"></span>
+                              </div>
+                            </div>
+                            {%- if block.settings.name != blank -%}
+                              <p class="about-team__name">
+                                {{ block.settings.name }}
+                              </p>
+                            {%- endif -%}
+                            {%- if block.settings.position != blank -%}
+                              <p class="about-team__position">
+                                {{ block.settings.position }}
+                              </p>
+                            {%- endif -%}
+                          </div>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                    {%- if section.settings.navigation -%}
+                    <div class="carousel-navigation carousel-nav-prev" data-carousel-nav-prev><i class="cs-icon icon-ios-arrow-left"></i></div>
+                    <div class="carousel-navigation carousel-nav-next" data-carousel-nav-next><i class="cs-icon icon-ios-arrow-right"></i></div>
+                    {%- endif -%}
+                  </div>
+                  {%- if section.settings.pagination -%}
+                  <div class="carousel-pagination" data-carousel-pagination></div>
+                  {%- endif -%}
+                </div>
+              </slider-component>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "About",
+  "class": "main-about",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Quote Store"
+    },
+    {
+      "type": "checkbox",
+      "id": "quote_enable",
+      "label": "Set active this block",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "quote_title",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "quote_name",
+      "label": "Name & Position"
+    },
+	{
+      "type": "header",
+      "content": "Our Story"
+    },
+    {
+      "type": "checkbox",
+      "id": "our_enable",
+      "label": "Set active this block",
+      "default": true
+    },
+	{
+      "type": "text",
+      "id": "our_title",
+      "label": "Heading",
+      "default": "Our Story"
+    },
+	{
+      "type": "textarea",
+      "id": "our_subtext",
+      "label": "Subtext"
+    },
+	{
+      "type": "image_picker",
+      "id": "our_image",
+      "label": "Upload banner"
+    },
+	{
+      "type": "header",
+      "content": "Information Store"
+    },
+    {
+      "type": "checkbox",
+      "id": "info_enable",
+      "label": "Set active this block",
+      "default": true
+    },
+	{
+      "type": "image_picker",
+      "id": "info_image",
+      "label": "Upload banner"
+    },
+	{
+      "type": "text",
+      "id": "address_title",
+      "label": "Address: Title"
+    },
+	{
+      "type": "text",
+      "id": "address_caption",
+      "label": "Address: Caption"
+    },
+	{
+      "type": "text",
+      "id": "phone_title",
+      "label": "Phone: Title"
+    },
+	{
+      "type": "textarea",
+      "id": "phone_caption",
+      "label": "Phone: Caption"
+    },
+	{
+      "type": "text",
+      "id": "email_title",
+      "label": "Email: Title"
+    },
+	{
+      "type": "text",
+      "id": "email_caption",
+      "label": "Email: Caption"
+    },
+	{
+      "type": "text",
+      "id": "social_title",
+      "label": "Social: Title"
+    },
+    {
+      "type": "header",
+      "content": "Our team"
+    },
+    {
+      "type": "checkbox",
+      "id": "team_enable",
+      "label": "Set active this block",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "team_title",
+      "label": "Heading"
+    },
+	{
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-play slides",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Change slides every",
+      "options": [
+        {
+          "value": "3000",
+          "label": "3 seconds"
+        },
+        {
+          "value": "4000",
+          "label": "4 seconds"
+        },
+        {
+          "value": "5000",
+          "label": "5 seconds"
+        },
+        {
+          "value": "6000",
+          "label": "6 seconds"
+        },
+        {
+          "value": "7000",
+          "label": "7 seconds"
+        },
+        {
+          "value": "8000",
+          "label": "8 seconds"
+        },
+        {
+          "value": "9000",
+          "label": "9 seconds"
+        },
+        {
+          "value": "10000",
+          "label": "10 seconds"
+        }
+      ],
+      "default": "5000"
+    },
+    {
+      "type": "select",
+      "id": "effect",
+      "label": "Slide effect",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Sliding"
+        },
+        {
+          "value": "fade",
+          "label": "Fading"
+        },
+        {
+          "value": "cube",
+          "label": "Cube"
+        },
+        {
+          "value": "flip",
+          "label": "Flipping"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "number",
+      "id": "space",
+      "label": "Space between images",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Responsive columns"
+    },
+    {
+      "type": "select",
+      "id": "col",
+      "label": "Width",
+      "info": "For small screen (0px - 575px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "col_sm",
+      "label": "Width",
+      "info": "For medium screen (576px - 767px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "col_md",
+      "label": "Width",
+      "info": "For large screen (768px - 991px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_lg",
+      "label": "Width",
+      "info": "For xlarge screen (992px - 1199px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_xl",
+      "label": "Width",
+      "info": "For xxlarge screen (1200px - 1399px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "col_xxl",
+      "label": "Width",
+      "info": "For xxxlarge screen (1400px - infinity)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "checkbox",
+      "id": "navigation",
+      "label": "Enable navigaiton",
+      "default": true
+    },    
+    {
+      "type": "checkbox",
+      "id": "pagination",
+      "label": "Enable pagination",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "staff",
+      "name": "Staff",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Avatar"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "position",
+          "label": "Position"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,33 @@
+.content-for-layout{
+  margin-bottom: 60px;
+}
+.main-lookbook__item{  
+  margin-top: 30px;
+}
+.lookbook-item__image{
+  overflow: hidden;
+  position: relative;
+}
+
+.lookbook-item__image-zoom:before{
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,.5);
+  transition: all .5s ease;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 1;
+}
+.lookbook-item__image:focus .lookbook-item__image-zoom:before, 
+.lookbook-item__image:hover .lookbook-item__image-zoom:before {
+    visibility: visible;
+    opacity: 1;
+}
+
+.lookbook-item__image-zoom{
+  cursor: pointer;
+}

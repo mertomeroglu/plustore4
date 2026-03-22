@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "settings": {
+        "sidebar": true,
+        "article_blog": true,
+        "article_author": true,
+        "article_date": true,
+        "article_image_size": "natural",
+        "article_share": true,
+        "article_tags": true,
+        "article_related": true,
+        "article_related_title": "YOU MAY ALSO LIKE",
+        "autoplay": true,
+        "autoplay_speed": "5000",
+        "effect": "slide",
+        "space": 15,
+        "col": "1",
+        "col_sm": "2",
+        "col_md": "2",
+        "col_lg": "3",
+        "col_xl": "3",
+        "col_xxl": "3",
+        "navigation": true,
+        "pagination": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

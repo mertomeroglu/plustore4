@@ -1,0 +1,100 @@
+<!-- /sections/cookies-bar.liquid -->
+{{ 'cookies-bar.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cookies-bar.js' | asset_url }}" defer="defer"></script>
+
+<cookies-bar class="cookies-bar__layout" data-section="{{ section.id }}" data-timer="{{ 'now' | date: "%m/%d/%Y %T" }}" data-delay="{{ section.settings.popup_seconds }}" data-frequency="{{ section.settings.popup_days }}">
+  <div class="cookies-bar__content">
+    <div class="cookies-bar__caption">
+      {%- if section.settings.title != blank -%}
+        <span class="cookies-bar__title">
+          {{ section.settings.title }}
+        </span>
+      {%- endif -%}
+      {%- if section.settings.action_text_1 != blank -%}
+        <a class="action-text" target="_blank" rel="noopener" href="{{ section.settings.action_link_1 }}">{{ section.settings.action_text_1 }}</a>
+      {%- endif -%}
+    </div>
+    {%- if section.settings.action_text_2 != blank -%}
+      <a class="button cookies-bar__action" data-cookies-bar-close>{{ section.settings.action_text_2 }}</a>
+    {%- endif -%}
+  </div>
+</cookies-bar>
+{% style %}
+  .cookies-bar__layout{
+    background-color: {{ section.settings.color_background }};
+  }
+  .cookies-bar__layout *{
+    color: {{ section.settings.color_title }};
+  }
+{% endstyle %}
+{% schema %}
+{
+  "name": "Cookies bar",
+  "class": "cookies-bar",
+  "tag": "section",
+  "settings": [
+	{
+      "type": "paragraph",
+      "content": "Config enable/disable on Theme settings > Genel Ayarlar > Cookies bar"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "This website uses cookies to ensure you get the best experience on our website."
+    },
+    {
+      "type": "text",
+      "id": "action_text_1",
+      "label": "Action text 1",
+      "default": "Learn more"
+    },
+    {
+      "type": "text",
+      "id": "action_link_1",
+      "label": "Action link 1",
+      "default": "https:\/\/cookiesandyou.com"
+    },
+    {
+      "type": "text",
+      "id": "action_text_2",
+      "label": "Action text 2",
+      "default": "GOT IT!"
+    },
+    {
+      "type": "range",
+      "id": "popup_seconds",
+      "label": "Delay",
+      "info": "Delay is disabled in theme editor for visibility",
+      "default": 0,
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "sec"
+    },
+    {
+      "type": "range",
+      "id": "popup_days",
+      "label": "Frequency",
+      "default": 5,
+      "info": "Number of days before a dismissed popup reappears",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "unit": "day"
+    },
+    {
+      "type": "color",
+      "id": "color_background",
+      "label": "Background Color",
+      "default": "#1c80fb"
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Text Color",
+      "default": "#ffffff"
+    }
+  ]
+}
+{% endschema %}

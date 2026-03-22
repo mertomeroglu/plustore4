@@ -1,0 +1,16 @@
+<div class="blog-sidebar__item accordion blog-sidebar__banner is-active open">
+  {%- if block.settings.title != blank -%}
+    <h4 class="accordion__title">
+      <span>{{ block.settings.title }}</span>
+    </h4>
+  {%- endif -%}
+  <div class="accordion__content">
+    <a href="{{ block.settings.link }}" class="blog-sidebar__banner-link">
+      <div class="lazy-bg blog-sidebar__banner-image" style="padding-bottom: {{ 100 | divided_by: block.settings.image.aspect_ratio }}%;">
+        {%- assign preview_img = block.settings.image -%}
+        <img {% render 'lazyload', preview_img: preview_img  %} />
+        <span class="data-lazy-loading"></span>
+      </div>
+    </a>
+  </div>
+</div>

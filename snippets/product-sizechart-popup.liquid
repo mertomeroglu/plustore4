@@ -1,0 +1,18 @@
+<div class="modal__layout" id="product-template-sizechart">
+  <div class="modal__close" data-modal-close></div>
+  <div class="modal__content">
+    <div class="modal__header">
+      <a class="modal__close-icon" aria-label="Close" data-modal-close><span class="cs-icon icon-close"></span></a>
+    </div>
+    <div class="modal__body">
+      <a href="{{ url }}">
+        <img class="product-sizechart__image"
+             srcset="{{ image | img_url: 'master' }}"
+             src="{{ image | img_url: 'master' }}"
+             alt="{{ image.alt | escape }}"
+             loading="lazy"
+             >
+      </a>
+    </div>
+  </div>
+</div>

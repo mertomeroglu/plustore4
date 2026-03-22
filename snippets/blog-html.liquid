@@ -1,0 +1,10 @@
+<div class="blog-sidebar__item accordion blog-sidebar__html is-active open">
+  {%- if block.settings.title != blank -%}
+    <h4 class="accordion__title">
+      <span>{{ block.settings.title }}</span>
+    </h4>
+  {%- endif -%}
+  <div class="accordion__content">
+    {{ block.settings.html }}
+  </div>
+</div>

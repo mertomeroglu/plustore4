@@ -1,0 +1,21 @@
+{%- for childlink in link.links -%}
+  <li class="header__menu-root {% if childlink.current %}header__menu-active{% endif %} {% unless childlink.links == blank %}menu__dropdown{% endunless %}">
+    <a href="{{ childlink.url }}" class="header__menu-item list-menu__item {% unless childlink.links == blank %}dropdown-toggle{% endunless %}"{% if childlink.current %} aria-current="page"{% endif %}>
+      {{ childlink.title | escape }}
+      {% unless childlink.links == blank %}
+        <i class="cs-icon icon-ion-ios-arrow-down"></i>
+      {% endunless %}
+    </a>
+    {% unless childlink.links == blank %}
+      <ul class="header__submenu list-menu list-menu--disclosure dropdown-menu" role="list" tabindex="-1">
+        {%- for grandchildlink in childlink.links -%}
+          <li class="header__menu-root menu__dropdown {% if grandchildlink.current %}header__menu-active{% endif %}">
+            <a href="{{ grandchildlink.url }}" class="header__menu-item list-menu__item "{% if grandchildlinkgrandchildlink.current %} aria-current="page"{% endif %}>
+              {{ grandchildlink.title | escape }}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {% endunless %}
+  </li>
+{%- endfor -%}

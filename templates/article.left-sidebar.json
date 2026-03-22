@@ -1,0 +1,66 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "blocks": {
+        "0fed2cab-ab9a-43e2-8654-85dc2c6f7a42": {
+          "type": "blog-link-list",
+          "settings": {
+            "title": "Category",
+            "position": "left_sidebar",
+            "link_list": "shop-by-blog"
+          }
+        },
+        "af9982ef-88ac-434c-b9e4-d6e80b04dfda": {
+          "type": "blog-article",
+          "settings": {
+            "title": "Recent Posts",
+            "position": "left_sidebar",
+            "blog": "news",
+            "limit": 3
+          }
+        },
+        "d3a7cb60-4426-4173-add4-862a33d18cf9": {
+          "type": "blog-banner",
+          "settings": {
+            "title": "",
+            "position": "left_sidebar",
+            "image": "shopify:\/\/shop_images\/Categories_d1cd0d9d-e9c3-45c0-a225-4d487de84efe.png",
+            "link": "shopify:\/\/blogs\/news"
+          }
+        }
+      },
+      "block_order": [
+        "0fed2cab-ab9a-43e2-8654-85dc2c6f7a42",
+        "af9982ef-88ac-434c-b9e4-d6e80b04dfda",
+        "d3a7cb60-4426-4173-add4-862a33d18cf9"
+      ],
+      "settings": {
+        "sidebar": true,
+        "article_blog": true,
+        "article_author": true,
+        "article_date": true,
+        "article_image_size": "natural",
+        "article_share": true,
+        "article_tags": true,
+        "article_related": true,
+        "article_related_title": "YOU MAY ALSO LIKE",
+        "autoplay": true,
+        "autoplay_speed": "5000",
+        "effect": "slide",
+        "space": 15,
+        "col": "1",
+        "col_sm": "2",
+        "col_md": "2",
+        "col_lg": "3",
+        "col_xl": "3",
+        "col_xxl": "3",
+        "navigation": true,
+        "pagination": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

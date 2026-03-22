@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product-quick-view",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

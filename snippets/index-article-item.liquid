@@ -1,0 +1,37 @@
+{%- liquid
+  assign fixed_aspect_ratio = false
+  unless settings.article_image_size == 'natural'
+    assign fixed_aspect_ratio = true
+  endunless
+-%}
+<div class="article-item__grid">
+  <div class="article-item__left">
+    <a href="{{ article.url }}" class="article-item__link">
+      <div class="lazy-bg article-item__image {% if fixed_aspect_ratio %}image-ratio--{{ settings.article_image_size }}{% endif %}" {% unless fixed_aspect_ratio %}style="padding-bottom: {{ 100 | divided_by: article.image.aspect_ratio }}%;"{% endunless %}>
+        {%- assign preview_img = article.image -%}
+        <img {% render 'lazyload', preview_img: preview_img  %} />
+        <span class="data-lazy-loading"></span>
+      </div>
+    </a>
+  </div>
+  <div class="article-item__right">
+    {%- if settings.article_author  or settings.article_date -%}
+      <ul class="article-item__info no-bullet">
+        {%- if settings.article_author -%}
+          <li class="article-item__author">
+            {{ 'blogs.article.by' |t }}
+            <span class="article-item__author-user">{{ article.author }}</span>
+          </li>
+        {%- endif -%}
+        {%- if settings.article_date -%}
+          <li class="article-item__date">
+            {{ article.published_at | date: '%b %d, %Y' }}
+          </li>
+        {%- endif -%}
+      </ul>
+    {%- endif -%}
+    <a href="{{ article.url }}" class="article-item__title h3">
+      {{ article.title }}
+    </a>
+  </div>
+</div>

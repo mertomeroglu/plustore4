@@ -1,0 +1,29 @@
+<div class="collection-item__grid">
+  <a href="{{ collection.url }}" class="collection-item__link">
+    {% if collection.image %}
+      {%- assign img = collection.image -%}
+    {% else %}
+      {%- assign img = collection.products.first.featured_image -%}
+    {% endif %}
+    {%- assign img_url = img | img_url: 'master' -%}
+    <div class="lazy-bg product-item__image lazyload {% if fixed_aspect_ratio %}image-ratio--{{ section.settings.collection_image_size }}{% endif %}" {% unless fixed_aspect_ratio %}style="height: 0; padding-bottom: {{ 100 | divided_by: img.aspect_ratio }}%;"{% endunless %}
+         data-bgset="{{ img_url }}"
+         srcset="{% render 'bgset', image: img %}"
+         src="{% render 'srcset', image: img %}"
+         data-sizes="auto"
+         data-aspectratio="{{ img.aspect_ratio }}"
+         data-parent-fit="cover">
+    </div>
+  </a>
+  <div class="collection-item__hover">
+    <a href="{{ collection.url }}" class="collection-item__info">
+      <h4 class="collection-item__title">#{{ collection.title }}</h4>
+      {%- if section.settings.count -%}
+        <p class="collection-item__count">{{ 'sections.collection_template.product_count_simple' | t: count: collection.products_count }}</p>
+      {%- endif -%}
+      {%- if section.settings.action != blank -%}
+        <p class="action collection-item__action">{{ section.settings.action }}</p>
+      {%- endif -%}
+    </a>
+  </div>
+</div>

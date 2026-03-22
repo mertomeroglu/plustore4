@@ -1,0 +1,46 @@
+.totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+.totals > * {
+  font-size: 16px;
+  margin: 0;  
+}
+
+.totals * {
+  line-height: 1;
+}
+
+.totals > * + * {
+  margin-left: 2rem;
+}
+.totals__subtotal{
+  color: var(--color_heading);
+}
+.totals__subtotal-value .money{      
+  font-size: 24px;    
+  font-weight: 700;
+  color: var(--color_heading);
+}
+.cart__ctas + .totals {
+  margin-top: 2rem;
+}
+.totals__subtotal{
+  text-align: left;
+  font-size: 16px;  
+  font-weight: 700;
+  padding-left: 0;
+}
+@media all and (min-width: 768px) {
+  .totals {
+      justify-content: space-between;
+  }
+}
+@media screen and (max-width: 575px){
+  .totals__subtotal-value .money{
+    font-size: 16px;
+  }
+}

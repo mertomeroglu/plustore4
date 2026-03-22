@@ -1,0 +1,18 @@
+<div class="product-template__thumbnail-item {% unless media.media_type == 'image' %}product-template__thumbnail-icon{% endunless %}">
+  <img class="product-item__image"
+       srcset="{% render 'bgset', image: media.preview_image %}"
+       src="{% render 'srcset', image: media.preview_image %}"
+       alt="{{ media.preview_image.alt | escape }}"
+       />
+  {%- unless media.media_type == 'image' -%}
+    <span class="deferred-media__poster-button motion-reduce">
+      {%- if media.media_type == 'model' -%}
+      <span class="visually-hidden">{{ 'products.product.media.play_model' | t }}</span>
+      {%- render 'icon-3d-model' -%}
+      {%- else -%}
+      <span class="visually-hidden">{{ 'products.product.media.play_video' | t }}</span>
+      {%- render 'icon-play' -%}
+      {%- endif -%}
+    </span>
+  {%- endunless -%}
+</div>
