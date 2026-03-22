@@ -16,33 +16,40 @@
         "title": "Modern, sade ve premium bir alisveris deneyimi",
         "description": "Sizin icin secilen urunleri temiz bir arayuzle ve hizli akisla kesfedin.",
         "primary_label": "Koleksiyonu kesfet",
+        "primary_link": "/collections/all",
         "secondary_label": "Cok satanlar",
+        "secondary_link": "/collections/all",
         "products_title": "One cikan urunler",
+        "featured_collection": "all",
         "products_limit": 8
       },
       "blocks": {
         "card1": {
           "type": "collection_card",
           "settings": {
-            "title": "Seyahat"
+            "title": "Deniz & Plaj",
+            "collection": "deniz-plaj-malzemeleri"
           }
         },
         "card2": {
           "type": "collection_card",
           "settings": {
-            "title": "Giyim"
+            "title": "Giyim",
+            "collection": "giyim"
           }
         },
         "card3": {
           "type": "collection_card",
           "settings": {
-            "title": "Spor"
+            "title": "Spor & Egzersiz",
+            "collection": "spor-egzersiz"
           }
         },
         "card4": {
           "type": "collection_card",
           "settings": {
-            "title": "Canta"
+            "title": "Canta",
+            "collection": "canta"
           }
         }
       },

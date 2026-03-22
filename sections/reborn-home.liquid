@@ -20,7 +20,14 @@
             loading="eager"
           >
         {%- else -%}
-          <div class="reborn-placeholder">Hero gorseli ekleyin</div>
+          <div class="reborn-placeholder-hero">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="2" fill="none" opacity="0.2"/>
+              <path d="M32 20V44M20 32H44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h3>Gorsel ekleyin</h3>
+            <p>Hero banneri tamamlamak icin bir gorsel yukleyin</p>
+          </div>
         {%- endif -%}
       </div>
     </div>
@@ -28,7 +35,11 @@
     <div class="reborn-collections">
       {%- for block in section.blocks -%}
         {%- assign c = collections[block.settings.collection] -%}
-        <a class="reborn-collection-card" href="{{ c.url | default: '#' }}" {{ block.shopify_attributes }}>
+        {%- assign card_url = c.url | default: '#' -%}
+        {%- if card_url == '#' and block.settings.collection != blank -%}
+          {%- assign card_url = '/collections/' | append: block.settings.collection -%}
+        {%- endif -%}
+        <a class="reborn-collection-card" href="{{ card_url }}" {{ block.shopify_attributes }}>
           {%- if block.settings.image != blank -%}
             <img
               src="{{ block.settings.image | image_url: width: 600 }}"
@@ -45,6 +56,8 @@
               height="400"
               loading="lazy"
             >
+          {%- else -%}
+            <div class="reborn-collection-card__placeholder"></div>
           {%- endif -%}
           <span>{{ block.settings.title | default: c.title }}</span>
         </a>
