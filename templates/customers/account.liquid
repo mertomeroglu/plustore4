@@ -7,6 +7,7 @@
         <a href="#account-profile">Profil</a>
         <a href="#account-orders">Siparisler</a>
         <a href="#account-favorites">Favorilerim</a>
+        <a href="#account-help">Yardim</a>
         <a href="#account-notifications">Bildirimler</a>
         <a href="#account-campaigns">Kampanyalar</a>
         <a href="#account-coupons">Kuponlar</a>
@@ -84,8 +85,18 @@
 
       <section id="account-favorites" class="account-hub__card">
         <h2>Favorilerim</h2>
-        <p>Favori listenize ulasmak icin asagidaki butonu kullanabilirsiniz.</p>
-        <a class="button" href="/pages/wish-list">Favori Listeme Git</a>
+        <p>Favori urunlerinizi hesap panelinden yonetebilirsiniz.</p>
+        <a class="button" href="{{ routes.account_url }}#account-favorites">Favori Alanina Git</a>
+      </section>
+
+      <section id="account-help" class="account-hub__card">
+        <h2>Yardim</h2>
+        <p>Siparis, iade ve teslimat konularinda destek almak icin bizimle iletisime gecebilirsiniz.</p>
+        {%- if shop.email != blank -%}
+          <a class="button" href="mailto:{{ shop.email }}">Destek Ekibine Yaz</a>
+        {%- else -%}
+          <a class="button" href="{{ routes.root_url }}">Ana Sayfaya Don</a>
+        {%- endif -%}
       </section>
 
       <section id="account-notifications" class="account-hub__card">
