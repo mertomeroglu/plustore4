@@ -139,22 +139,35 @@ body.reborn-theme .btn-secondary {
 .reborn-actions {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .reborn-actions a {
   text-decoration: none;
-  color: #334155;
-  font-size: 12px;
-  font-weight: 700;
-  border: 1px solid #dde5ef;
-  border-radius: 10px;
-  padding: 9px 11px;
-  background: #fff;
+  color: #2f2f2f;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 12px;
+  line-height: 1;
+  border-right: 1px solid #d7d7d7;
 }
 
 .reborn-actions a strong {
-  color: var(--brand);
+  color: #e56a1d;
+  font-weight: 600;
+}
+
+.reborn-actions a:last-of-type {
+  border-right: 0;
+  padding-right: 0;
+}
+
+.reborn-actions__or {
+  color: #7c7c7c;
+  font-size: 13px;
+  padding: 0 8px;
 }
 
 .reborn-nav-wrap {
@@ -492,6 +505,7 @@ body.reborn-theme .btn-secondary {
   .reborn-actions {
     grid-column: 1 / -1;
     justify-content: flex-end;
+    gap: 6px 0;
   }
 
   .reborn-hero {
@@ -534,6 +548,15 @@ body.reborn-theme .btn-secondary {
   .reborn-nav ul {
     min-height: 48px;
     gap: 14px;
+  }
+
+  .reborn-actions {
+    justify-content: flex-start;
+  }
+
+  .reborn-actions a {
+    font-size: 12px;
+    padding: 0 8px;
   }
 
   .reborn-home {

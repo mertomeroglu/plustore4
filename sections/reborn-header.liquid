@@ -32,10 +32,17 @@
       </search-form>
 
       <div class="reborn-actions">
-        <a href="{{ routes.account_url }}">Hesap</a>
-        <a href="{{ routes.cart_url }}">Sepet <strong>{{ cart.item_count }}</strong></a>
-        {%- if section.settings.phone != blank -%}
-          <a href="tel:{{ section.settings.phone | replace: ' ', '' }}">{{ section.settings.phone }}</a>
+        <a href="/pages/kuponlar">Kuponlar</a>
+        <a href="/pages/siparis-takibi">Siparis Takibi</a>
+        <a href="/pages/wish-list">Favorilerim</a>
+        <a href="/pages/yardim">Yardim</a>
+        <a href="#" aria-label="Para birimi">TRY <span aria-hidden="true">&#9662;</span></a>
+        <a href="{{ routes.account_url }}">Hesabim</a>
+        {%- if customer -%}
+          <span class="reborn-actions__or">veya</span>
+          <a href="{{ routes.account_logout_url }}"><strong>Cikis yap</strong></a>
+        {%- else -%}
+          <a href="{{ routes.account_login_url }}"><strong>Giris yap</strong></a>
         {%- endif -%}
       </div>
     </div>
