@@ -29,6 +29,18 @@
                         endif
                       -%}
               </a>
+              {%- if customer -%}
+              <ul class="header__menu-login no-bullet dropdown-menu">
+                <li><a href="{{ routes.account_url }}#account-profile" class="top-header__menu-item">Profil</a></li>
+                <li><a href="{{ routes.account_url }}#account-orders" class="top-header__menu-item">Siparisler</a></li>
+                <li><a href="/pages/wish-list" class="top-header__menu-item">Favorilerim</a></li>
+                <li><a href="{{ routes.account_url }}#account-notifications" class="top-header__menu-item">Bildirimler</a></li>
+                <li><a href="{{ routes.account_url }}#account-campaigns" class="top-header__menu-item">Kampanyalar</a></li>
+                <li><a href="{{ routes.account_url }}#account-coupons" class="top-header__menu-item">Kuponlar</a></li>
+                <li><a href="{{ routes.account_addresses_url }}" class="top-header__menu-item">Adreslerim</a></li>
+                <li><a href="{{ routes.account_logout_url }}" class="top-header__menu-item">Cikis Yap</a></li>
+              </ul>
+              {%- endif -%}
               {%- unless customer -%}
               <ul class="header__menu-login no-bullet dropdown-menu">
                 <li class="header__menu-login-content">

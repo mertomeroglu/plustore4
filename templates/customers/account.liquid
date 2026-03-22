@@ -2,69 +2,50 @@
 
 <div class="account-layout">
   <div class="container">
-    <div class="account-content">
-      <div class="account-content__info row">
-        <div class="account-content__details col-sm-6">
-          <h3 class="account-details__title">{{ 'customer.account.details' | t }}</h3>
-          <div class="account-details__content">
-            <div class="account-details__item">
-              <span class="details-item__title">{{'customer.account.name'|t}}:</span>
-              <span class="details-item__content">{{ customer.name }}</span>
-            </div>
-            <div class="account-details__item">
-              <span class="details-item__title">{{'customer.account.email'|t}}:</span>
-              <a class="details-item__content" href="{{ customer.email }}">{{ customer.email }}</a>
-            </div>
-            <div class="account-details__item">
-              <span class="details-item__title">{{'customer.account.address'|t}}:</span>
-              <address class="details-item__content">{{ customer.default_address.address1 }}, {{ customer.default_address.city}}, {{customer.default_address.country}}</address>
-            </div>
-            <div class="account-details__item">
-              <span class="details-item__title">{{'customer.account.phone'|t}}:</span>
-              <a class="details-item__content" href="tel:{{customer.default_address.phone}}">{{customer.default_address.phone}}</a>
-            </div>
+    <div class="account-content account-hub">
+      <nav class="account-hub__tabs" aria-label="Hesap navigasyonu">
+        <a href="#account-profile">Profil</a>
+        <a href="#account-orders">Siparisler</a>
+        <a href="#account-favorites">Favorilerim</a>
+        <a href="#account-notifications">Bildirimler</a>
+        <a href="#account-campaigns">Kampanyalar</a>
+        <a href="#account-coupons">Kuponlar</a>
+      </nav>
+
+      <section id="account-profile" class="account-hub__card">
+        <h2>Profil</h2>
+        <div class="account-hub__grid">
+          <div class="account-hub__info-item">
+            <span class="account-hub__label">Ad Soyad</span>
+            <span>{{ customer.name | default: '-' }}</span>
+          </div>
+          <div class="account-hub__info-item">
+            <span class="account-hub__label">E-Posta</span>
+            <span>{{ customer.email | default: '-' }}</span>
+          </div>
+          <div class="account-hub__info-item">
+            <span class="account-hub__label">Telefon</span>
+            <span>{{ customer.default_address.phone | default: '-' }}</span>
+          </div>
+          <div class="account-hub__info-item">
+            <span class="account-hub__label">Varsayilan Adres</span>
+            <span>
+              {%- if customer.default_address -%}
+                {{ customer.default_address.address1 }}, {{ customer.default_address.city }}, {{ customer.default_address.country }}
+              {%- else -%}
+                -
+              {%- endif -%}
+            </span>
           </div>
         </div>
-        <div class="account-content__link col-sm-6">
-          <h3 class="account-link__title">{{'customer.account.title'|t}}</h3>
-          <div class="account-link__content">
-            <ul class="account-link__list">
-              <li class="account-link__item">
-                <a href="{{ routes.account_logout_url }}">{{ 'customer.log_out' | t }}</a>
-              </li>
-              <li class="account-link__item">
-                <a href="{{ routes.account_addresses_url }}">{{ 'customer.account.view_addresses' |t }}</a>
-              </li>
-              <li class="account-link__item">
-                <a href="/pages/wish-list">{{ 'customer.account.view_wishlist' |t }}</a>
-              </li>
-            </ul>
-          </div>                
+        <div class="account-hub__actions">
+          <a class="button" href="{{ routes.account_addresses_url }}">Adreslerimi Yonet</a>
+          <a class="button button--secondary" href="{{ routes.account_logout_url }}">Cikis Yap</a>
         </div>
-        {%- if settings.account_banner_1 -%}
-          <div class="account-content__banner col-sm-6">
-            <a href="{{ settings.account_banner_1_link }}">
-              {%- assign preview_img = settings.account_banner_1 -%}
-              <div class="lazy-bg" style="padding-bottom: {{ 100 | divided_by: preview_img.aspect_ratio }}%;">
-                <img {% render 'lazyload', preview_img: preview_img  %} />
-                <span class="data-lazy-loading"></span>
-              </div>
-            </a>
-          </div>
-        {%- endif -%}
-        {%- if settings.account_banner_2 -%}
-          <div class="account-content__banner col-sm-6">
-            <a href="{{ settings.account_banner_2_link }}">
-              {%- assign preview_img = settings.account_banner_2 -%}
-              <div class="lazy-bg" style="padding-bottom: {{ 100 | divided_by: preview_img.aspect_ratio }}%;">
-                <img {% render 'lazyload', preview_img: preview_img  %} />
-                <span class="data-lazy-loading"></span>
-              </div>
-            </a>
-          </div>
-        {%- endif -%}
-      </div>
-      <div class="account-content__orders">
+      </section>
+
+      <section id="account-orders" class="account-hub__card">
+        <h2>Siparisler</h2>
         <div class="account-orders__content">
           {% paginate customer.orders by 20 %}
             {% if customer.orders.size != 0 %}
@@ -91,12 +72,37 @@
                 </tbody>
               </table>
             {% else %}
-              <p>{{ 'customer.orders.none' | t }}</p>
+              <div class="account-hub__empty">
+                <p>Henuz siparisiniz bulunmuyor.</p>
+                <a class="button" href="/collections/all">Magazaya Git</a>
+              </div>
             {% endif %}
             {% include 'pagination' %}
           {% endpaginate %}
-        </div>  
-      </div>   
+        </div>
+      </section>
+
+      <section id="account-favorites" class="account-hub__card">
+        <h2>Favorilerim</h2>
+        <p>Favori listenize ulasmak icin asagidaki butonu kullanabilirsiniz.</p>
+        <a class="button" href="/pages/wish-list">Favori Listeme Git</a>
+      </section>
+
+      <section id="account-notifications" class="account-hub__card">
+        <h2>Bildirimler</h2>
+        <p>Yeni bir bildiriminiz bulunmuyor. Kampanya ve siparis durum guncellemeleri burada listelenir.</p>
+      </section>
+
+      <section id="account-campaigns" class="account-hub__card">
+        <h2>Kampanyalar</h2>
+        <p>Guncel kampanyalari incelemek icin asagidaki alana gidebilirsiniz.</p>
+        <a class="button" href="/collections/all">Kampanyalari Incele</a>
+      </section>
+
+      <section id="account-coupons" class="account-hub__card">
+        <h2>Kuponlar</h2>
+        <p>Aktif tanimli kuponunuz bulunmuyor. Yeni kuponlar bu alanda gorunecek.</p>
+      </section>
     </div>
   </div>
 </div>
