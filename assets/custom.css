@@ -1099,3 +1099,123 @@ body.reborn-theme .btn-secondary {
     border-bottom: 0;
   }
 }
+
+/* Quality pass: final visual polish */
+body.reborn-theme {
+  background: #f3f4f7;
+}
+
+.reborn-header {
+  backdrop-filter: none;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.reborn-announcement {
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.reborn-top__inner {
+  min-height: 72px;
+}
+
+.reborn-search form {
+  border-color: #d7dde6;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.07);
+}
+
+.reborn-nav-wrap {
+  background: #fff;
+  border-top: 1px solid #eceff3;
+  border-bottom: 1px solid #eceff3;
+}
+
+.reborn-nav__links a {
+  font-size: 12px;
+  color: #1f2937;
+}
+
+.reborn-nav__links a:hover,
+.reborn-nav__links a[aria-current="page"] {
+  color: #e57f3a;
+}
+
+.reborn-categories__trigger {
+  background: #e57f3a;
+  border: 1px solid #c96c2f;
+}
+
+.reborn-categories__panel {
+  border-color: #d9dee7;
+  max-height: 560px;
+  overflow: auto;
+}
+
+.reborn-categories__panel a {
+  font-size: 13px;
+  color: #25364d;
+}
+
+.reborn-theme .product-item__grid,
+.reborn-theme .product-item__grid--premium {
+  border-color: #dbe1ea;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.reborn-theme .product-item__title {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.reborn-theme .product-item__cta {
+  font-size: 13px;
+  border-radius: 999px;
+  padding: 10px 8px;
+}
+
+.reborn-theme .product-item__cta--solid {
+  border-color: #e57f3a;
+  background: #e57f3a;
+}
+
+.reborn-footer {
+  margin-top: 30px;
+  background: #e4e7ec;
+  color: #24364c;
+}
+
+.reborn-footer__payments {
+  padding-top: 18px;
+}
+
+.reborn-footer__stripe {
+  background: #e57f3a;
+}
+
+.reborn-footer__trust-item {
+  background: transparent;
+}
+
+.reborn-footer__trust-item h4,
+.reborn-footer__grid-v2 h4,
+.reborn-footer__grid-v2 h5 {
+  color: #2a3a50;
+}
+
+.reborn-footer__grid-v2 a,
+.reborn-footer__grid-v2 p,
+.reborn-footer__bottom-v2 a {
+  color: #2f3f55;
+}
+
+.reborn-footer__grid-v2 a:hover,
+.reborn-footer__bottom-v2 a:hover {
+  color: #e57f3a;
+}
+
+.reborn-footer__to-top {
+  width: 42px;
+  height: 42px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+}
