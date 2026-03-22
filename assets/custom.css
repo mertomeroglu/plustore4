@@ -1,418 +1,577 @@
 :root {
-  --pv-bg: #f3f4f6;
-  --pv-surface: #ffffff;
-  --pv-surface-2: #f8fafc;
-  --pv-text: #0f172a;
-  --pv-muted: #64748b;
-  --pv-line: #dbe2ea;
-  --pv-primary: #0b1220;
-  --pv-accent: #ff6b00;
-  --pv-accent-2: #14b8a6;
-  --pv-radius: 16px;
-  --pv-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --ink: #111827;
+  --muted: #667085;
+  --line: #d8e0eb;
+  --brand: #f97316;
+  --brand-2: #fb923c;
+  --deep: #0f172a;
+  --radius-lg: 24px;
+  --radius-md: 14px;
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.14);
 }
 
-body.revamp-theme {
-  background: radial-gradient(circle at 10% 0%, #ffffff 0%, var(--pv-bg) 50%, #e9eef5 100%);
-  color: var(--pv-text);
+* {
+  box-sizing: border-box;
 }
 
-body.revamp-theme .container {
-  max-width: 1320px;
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
-body.revamp-theme .spaced-section {
-  margin-top: 0;
-  padding-top: 22px;
-  padding-bottom: 10px;
+body.reborn-theme {
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 520px at 100% 0%, rgba(249, 115, 22, 0.14), transparent 58%),
+    radial-gradient(900px 420px at 0% 0%, rgba(15, 23, 42, 0.08), transparent 62%),
+    var(--bg);
+  min-height: 100vh;
 }
 
-body.revamp-theme .layout-header {
+body.reborn-theme h1,
+body.reborn-theme h2,
+body.reborn-theme h3,
+body.reborn-theme h4,
+body.reborn-theme .reborn-nav a,
+body.reborn-theme .btn-primary,
+body.reborn-theme .btn-secondary {
+  font-family: "Sora", "Segoe UI", sans-serif;
+}
+
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+}
+
+.container {
+  width: min(1320px, 92vw);
+  margin-inline: auto;
+}
+
+.reborn-header {
   position: sticky;
   top: 0;
-  z-index: 40;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--pv-line);
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
 }
 
-body.revamp-theme .top-header__content {
-  min-height: 44px;
+.reborn-announcement {
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.reborn-announcement p {
+  margin: 0;
+  min-height: 34px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  border-bottom: 1px solid var(--pv-line);
+  justify-content: center;
 }
 
-body.revamp-theme .top-header__welcome {
-  color: var(--pv-muted);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+.reborn-top {
+  border-bottom: 1px solid #e7edf5;
 }
 
-body.revamp-theme .top-header__menu-item,
-body.revamp-theme .top-header__menu-content a {
-  color: #334155;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: none;
-}
-
-body.revamp-theme .main-header {
-  background: transparent;
-}
-
-body.revamp-theme .main-header-content {
-  align-items: center;
-  min-height: 92px;
-}
-
-body.revamp-theme .main-header__logo img {
-  max-height: 56px;
-  width: auto;
-}
-
-body.revamp-theme .main-header .search__form {
-  border: 1px solid var(--pv-line);
-  background: var(--pv-surface);
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: var(--pv-shadow);
-}
-
-body.revamp-theme .main-header .search_box,
-body.revamp-theme .main-header .search__form-collections select {
-  border: 0;
-  color: #0f172a;
-  height: 48px;
-  line-height: 48px;
-}
-
-body.revamp-theme .main-header .search__form-collections {
-  width: 190px;
-  border-left: 1px solid var(--pv-line);
-}
-
-body.revamp-theme .main-header .search_submit {
-  width: 54px;
-  height: 48px;
-  border: 0;
-  background: linear-gradient(135deg, var(--pv-primary), #1e293b);
-}
-
-body.revamp-theme .header__icon,
-body.revamp-theme .main-header__icon {
-  border: 1px solid var(--pv-line);
-  border-radius: 12px;
-  background: var(--pv-surface);
-}
-
-body.revamp-theme .navigation-header {
-  margin-top: 6px;
-  border-top: 1px solid var(--pv-line);
-}
-
-body.revamp-theme .navigation-header__content {
-  min-height: 56px;
-  align-items: center;
-}
-
-body.revamp-theme .header__categorie-title {
-  height: 44px;
-  border-radius: 12px;
-  color: #ffffff;
-  font-size: 12px;
-  text-transform: uppercase;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  background: linear-gradient(135deg, #111827, #1f2937);
-}
-
-body.revamp-theme .header__vertical-menu > ul {
-  border: 1px solid var(--pv-line);
-  border-radius: 14px;
-  background: var(--pv-surface);
-  box-shadow: var(--pv-shadow);
-}
-
-body.revamp-theme .header__vertical-menu > ul > li {
-  border-bottom: 1px solid #eef2f7;
-}
-
-body.revamp-theme .header__vertical-menu > ul > li:last-child {
-  border-bottom: 0;
-}
-
-body.revamp-theme .header__vertical-menu .header__vertical-item {
-  font-size: 14px;
-  color: #1f2937;
-  font-weight: 600;
-}
-
-body.revamp-theme .header__menu-item {
-  text-transform: none;
-  color: #0f172a;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-body.revamp-theme .header__inline-menu .header__menu-root:hover > .header__menu-item {
-  color: var(--pv-accent);
-}
-
-body.revamp-theme .index-slideshow-categories .slideshow-categories__content.row {
+.reborn-top__inner {
+  min-height: 88px;
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr) 300px;
+  grid-template-columns: 220px minmax(0, 1fr) auto;
+  align-items: center;
   gap: 18px;
 }
 
-body.revamp-theme .index-slideshow-categories .slideshow__categories-content,
-body.revamp-theme .index-slideshow-categories slideshow-component,
-body.revamp-theme .index-slideshow-categories .best-sellers__daily {
-  width: 100% !important;
-  border: 1px solid var(--pv-line);
-  border-radius: var(--pv-radius);
-  background: var(--pv-surface);
-  box-shadow: var(--pv-shadow);
-  overflow: hidden;
-}
-
-body.revamp-theme .index-slideshow-categories .best-sellers__daily {
-  padding: 14px;
-}
-
-body.revamp-theme .box-divider {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 14px;
-  border-bottom: 1px solid var(--pv-line);
-  padding-bottom: 10px;
-}
-
-body.revamp-theme .box-divider::after {
-  display: none;
-}
-
-body.revamp-theme .box-title {
-  font-size: 20px;
+.reborn-logo {
+  text-decoration: none;
+  color: var(--deep);
+  font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: var(--pv-primary);
-  margin: 0;
 }
 
-body.revamp-theme .collection-tab__container,
-body.revamp-theme .collection-slider__container,
-body.revamp-theme .banner-grid__container,
-body.revamp-theme .categories__container,
-body.revamp-theme .blog__container {
-  border: 1px solid var(--pv-line);
-  border-radius: var(--pv-radius);
-  background: var(--pv-surface);
-  box-shadow: var(--pv-shadow);
-  padding: 16px;
+.reborn-logo img {
+  width: auto;
+  max-height: 56px;
+  display: block;
 }
 
-body.revamp-theme .collection-tab__title {
+.reborn-search form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+.reborn-search__input {
+  border: 0;
+  background: transparent;
+  padding: 0 16px;
+  height: 50px;
+  color: var(--deep);
+  font-size: 14px;
+}
+
+.reborn-search__input:focus {
+  outline: none;
+}
+
+.reborn-search__button {
+  border: 0;
+  background: linear-gradient(140deg, var(--deep), #1e293b);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 0 20px;
+  cursor: pointer;
+}
+
+.reborn-actions {
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
 }
 
-body.revamp-theme .collection-tab__title .tabs-title {
-  border: 1px solid var(--pv-line);
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 700;
+.reborn-actions a {
+  text-decoration: none;
   color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid #dde5ef;
+  border-radius: 10px;
+  padding: 9px 11px;
   background: #fff;
 }
 
-body.revamp-theme .collection-tab__title .tabs-title.is-active,
-body.revamp-theme .collection-tab__title .tabs-title:hover {
-  background: var(--pv-primary);
-  color: #fff;
-  border-color: var(--pv-primary);
+.reborn-actions a strong {
+  color: var(--brand);
 }
 
-body.revamp-theme .product-item__grid,
-body.revamp-theme .product-item__grid--premium {
-  border: 1px solid var(--pv-line);
-  border-radius: 14px;
-  background: var(--pv-surface);
-  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+.reborn-nav-wrap {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
 }
 
-body.revamp-theme .product-item__grid:hover,
-body.revamp-theme .product-item__grid--premium:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 36px rgba(2, 6, 23, 0.12);
-}
-
-body.revamp-theme .product-item__top {
-  border-bottom: 1px solid #eef2f7;
-}
-
-body.revamp-theme .product-item__bottom {
-  padding: 14px;
-}
-
-body.revamp-theme .product-item__title {
-  font-size: 15px;
-  line-height: 1.45;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-body.revamp-theme .product-item__price {
-  margin-top: 8px;
-  margin-bottom: 10px;
-}
-
-body.revamp-theme .product-item__meta {
+.reborn-nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-height: 54px;
   display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+  align-items: center;
+  gap: 18px;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
-body.revamp-theme .product-item__meta-chip {
-  border: 1px solid #cbd5e1;
+.reborn-nav a {
+  text-decoration: none;
+  color: #1f2a3d;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 0;
+}
+
+.reborn-nav a[aria-current="page"],
+.reborn-nav a:hover {
+  color: var(--brand);
+}
+
+.reborn-home {
+  padding: 24px 0 10px;
+}
+
+.reborn-hero {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+  gap: 20px;
+  align-items: stretch;
+  margin-bottom: 24px;
+}
+
+.reborn-hero__copy {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(165deg, #ffffff 0%, #f7faff 100%);
+  padding: 36px 30px;
+  box-shadow: var(--shadow-lg);
+}
+
+.reborn-kicker {
+  margin: 0 0 12px;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.reborn-hero__copy h1 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1.05;
+  color: var(--deep);
+}
+
+.reborn-hero__copy p {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.reborn-hero__actions {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-primary,
+.btn-secondary {
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
   border-radius: 999px;
-  padding: 4px 9px;
-  font-size: 11px;
-  color: #334155;
+  padding: 12px 18px;
+}
+
+.btn-primary {
+  background: linear-gradient(130deg, var(--brand), var(--brand-2));
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(249, 115, 22, 0.28);
+}
+
+.btn-secondary {
+  color: #1f2a3d;
+  border: 1px solid #d8e0eb;
+  background: #fff;
+}
+
+.reborn-hero__media {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  min-height: 460px;
+}
+
+.reborn-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.reborn-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #94a3b8;
+  background: repeating-linear-gradient(
+    -45deg,
+    #f8fafc,
+    #f8fafc 16px,
+    #eef2f7 16px,
+    #eef2f7 32px
+  );
+}
+
+.reborn-collections {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.reborn-collection-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 140px;
+  border: 1px solid var(--line);
+  text-decoration: none;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.reborn-collection-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reborn-collection-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 20, 36, 0) 10%, rgba(10, 20, 36, 0.6) 100%);
+}
+
+.reborn-collection-card span {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 2;
+}
+
+.reborn-products {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  padding: 16px;
+}
+
+.reborn-products__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.reborn-products__head h2 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--deep);
+}
+
+.reborn-products__head a {
+  text-decoration: none;
+  color: var(--brand);
+  font-size: 13px;
   font-weight: 700;
 }
 
-body.revamp-theme .product-item__meta-chip--muted {
-  background: #f8fafc;
+.reborn-products__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
 }
 
-body.revamp-theme .product-item__cta-row {
+.reborn-product-empty {
+  border: 1px dashed #cdd7e3;
+  border-radius: 16px;
+  padding: 18px;
+  background: #f8fbff;
+}
+
+.reborn-product-empty div {
+  background: #e7edf5;
+  border-radius: 10px;
+  height: 170px;
+}
+
+.reborn-product-empty p {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #667085;
+}
+
+/* Existing product snippet premium tuning */
+.reborn-theme .product-item__grid,
+.reborn-theme .product-item__grid--premium {
+  border: 1px solid #dbe3ee;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(11, 22, 39, 0.08);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.reborn-theme .product-item__grid:hover,
+.reborn-theme .product-item__grid--premium:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 34px rgba(11, 22, 39, 0.14);
+}
+
+.reborn-theme .product-item__bottom {
+  padding: 12px;
+}
+
+.reborn-theme .product-item__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.reborn-theme .product-item__cta-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
 
-body.revamp-theme .product-item__cta {
+.reborn-theme .product-item__cta {
   text-align: center;
   border-radius: 10px;
   font-size: 12px;
   font-weight: 800;
-  padding: 10px 8px;
+  padding: 9px 6px;
 }
 
-body.revamp-theme .product-item__cta--ghost {
-  border: 1px solid var(--pv-line);
-  color: #0f172a;
+.reborn-theme .product-item__cta--ghost {
+  border: 1px solid #d7dfeb;
+  color: #1e293b;
   background: #fff;
 }
 
-body.revamp-theme .product-item__cta--solid {
-  border: 1px solid var(--pv-primary);
+.reborn-theme .product-item__cta--solid {
+  border: 1px solid var(--deep);
+  background: var(--deep);
   color: #fff;
-  background: var(--pv-primary);
 }
 
-body.revamp-theme .product-item__cta--solid:hover {
-  background: var(--pv-accent);
-  border-color: var(--pv-accent);
+.reborn-footer {
+  margin-top: 34px;
+  padding: 36px 0 18px;
+  color: #d7e1f0;
+  background:
+    radial-gradient(900px 300px at 0% 0%, rgba(249, 115, 22, 0.18), transparent 60%),
+    linear-gradient(180deg, #132039 0%, #0f172a 100%);
 }
 
-body.revamp-theme .top-footer--premium {
-  margin-top: 26px;
+.reborn-footer__grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 0.8fr;
+  gap: 24px;
 }
 
-body.revamp-theme .top-footer__item {
-  border: 1px solid var(--pv-line);
-  border-radius: 14px;
-  background: var(--pv-surface);
-  padding: 16px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+.reborn-footer h3,
+.reborn-footer h4 {
+  margin: 0 0 10px;
+  color: #fff;
 }
 
-body.revamp-theme .footer {
-  margin-top: 30px;
-  background: linear-gradient(180deg, #f8fafc 0%, #e9eef5 100%);
-  border-top: 1px solid var(--pv-line);
+.reborn-footer p,
+.reborn-footer a {
+  color: #d7e1f0;
+  font-size: 14px;
+  line-height: 1.7;
+  text-decoration: none;
 }
 
-body.revamp-theme .bottom-footer {
-  border-top: 1px solid var(--pv-line);
-  background: transparent;
+.reborn-footer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-body.revamp-theme .payment-list img {
-  filter: saturate(1.08) contrast(1.05);
+.reborn-footer li + li {
+  margin-top: 6px;
 }
 
-body.revamp-theme .section-contact-map iframe,
-body.revamp-theme .contact-map iframe {
-  border-radius: 14px;
-  border: 1px solid var(--pv-line);
+.reborn-footer__bottom {
+  margin-top: 20px;
+  border-top: 1px solid rgba(170, 187, 212, 0.24);
+  padding-top: 12px;
 }
 
-@media (max-width: 1199px) {
-  body.revamp-theme .index-slideshow-categories .slideshow-categories__content.row {
-    grid-template-columns: 260px minmax(0, 1fr);
+@media (max-width: 1100px) {
+  .reborn-top__inner {
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 12px;
   }
 
-  body.revamp-theme .index-slideshow-categories .best-sellers__daily {
+  .reborn-actions {
     grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+
+  .reborn-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .reborn-hero__media {
+    min-height: 360px;
+  }
+
+  .reborn-products__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .reborn-footer__grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-@media (max-width: 991px) {
-  body.revamp-theme .layout-header {
+@media (max-width: 768px) {
+  .reborn-header {
     position: static;
   }
 
-  body.revamp-theme .top-header__content {
-    flex-wrap: wrap;
-    min-height: auto;
-    padding-top: 8px;
-    padding-bottom: 8px;
+  .reborn-announcement p {
+    min-height: 32px;
+    font-size: 11px;
   }
 
-  body.revamp-theme .main-header-content {
+  .reborn-top__inner {
+    grid-template-columns: 1fr;
     min-height: auto;
+    padding: 12px 0;
+  }
+
+  .reborn-search form {
+    box-shadow: none;
+  }
+
+  .reborn-nav ul {
+    min-height: 48px;
+    gap: 14px;
+  }
+
+  .reborn-home {
+    padding-top: 16px;
+  }
+
+  .reborn-hero__copy {
+    padding: 24px 18px;
+  }
+
+  .reborn-hero__copy h1 {
+    font-size: 30px;
+  }
+
+  .reborn-collections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .reborn-products {
+    padding: 12px;
+  }
+
+  .reborn-products__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
 
-  body.revamp-theme .main-header .search__form-collections {
-    width: 130px;
-  }
-
-  body.revamp-theme .index-slideshow-categories .slideshow-categories__content.row {
-    display: block;
-  }
-
-  body.revamp-theme .index-slideshow-categories .slideshow__categories-content,
-  body.revamp-theme .index-slideshow-categories slideshow-component,
-  body.revamp-theme .index-slideshow-categories .best-sellers__daily {
-    margin-bottom: 12px;
-  }
-}
-
-@media (max-width: 767px) {
-  body.revamp-theme .box-title {
-    font-size: 17px;
-  }
-
-  body.revamp-theme .collection-tab__container,
-  body.revamp-theme .collection-slider__container,
-  body.revamp-theme .banner-grid__container,
-  body.revamp-theme .categories__container,
-  body.revamp-theme .blog__container {
-    padding: 12px;
-    border-radius: 12px;
-  }
-
-  body.revamp-theme .product-item__cta-row {
+  .reborn-theme .product-item__cta-row {
     grid-template-columns: 1fr;
+  }
+
+  .reborn-footer {
+    margin-top: 24px;
+    padding-top: 28px;
+  }
+
+  .reborn-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }

@@ -1,0 +1,84 @@
+<section class="reborn-footer">
+  <div class="container">
+    <div class="reborn-footer__grid">
+      <div>
+        <h3>{{ section.settings.brand_title }}</h3>
+        <p>{{ section.settings.brand_text }}</p>
+      </div>
+
+      <div>
+        <h4>{{ section.settings.menu_title }}</h4>
+        {%- assign footer_menu = linklists[section.settings.footer_menu] -%}
+        {%- if footer_menu == blank -%}
+          {%- assign footer_menu = linklists['main-menu'] -%}
+        {%- endif -%}
+        <ul>
+          {%- for link in footer_menu.links limit: 8 -%}
+            <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div>
+        <h4>{{ section.settings.contact_title }}</h4>
+        <p>{{ section.settings.contact_text }}</p>
+        {%- if section.settings.email != blank -%}
+          <a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="reborn-footer__bottom">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. Tum haklari saklidir.</p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Reborn Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_title",
+      "label": "Brand title",
+      "default": "PlusStore"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_text",
+      "label": "Brand text",
+      "default": "Gunluk hayati kolaylastiran pratik, premium ve secili urunler."
+    },
+    {
+      "type": "text",
+      "id": "menu_title",
+      "label": "Menu title",
+      "default": "Hizli erisim"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu",
+      "label": "Footer menu"
+    },
+    {
+      "type": "text",
+      "id": "contact_title",
+      "label": "Contact title",
+      "default": "Iletisim"
+    },
+    {
+      "type": "textarea",
+      "id": "contact_text",
+      "label": "Contact text",
+      "default": "Bize ulasin, size uygun cozumleri birlikte bulalim."
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "destek@plustore.com.tr"
+    }
+  ]
+}
+{% endschema %}

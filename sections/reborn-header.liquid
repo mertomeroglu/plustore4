@@ -1,0 +1,97 @@
+<section class="reborn-header">
+  <div class="reborn-announcement">
+    <div class="container">
+      <p>{{ section.settings.announcement_text }}</p>
+    </div>
+  </div>
+
+  <div class="reborn-top">
+    <div class="container reborn-top__inner">
+      <a class="reborn-logo" href="{{ routes.root_url }}">
+        {%- if section.settings.logo != blank -%}
+          <img
+            src="{{ section.settings.logo | image_url: width: 220 }}"
+            alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
+            width="220"
+            height="80"
+            loading="eager"
+          >
+        {%- else -%}
+          <span>{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+
+      <search-form class="reborn-search">
+        <form action="{{ routes.search_url }}" method="get" role="search">
+          <input type="hidden" name="type" value="product">
+          <input type="hidden" name="options[unavailable_products]" value="hide">
+          <input type="hidden" name="options[prefix]" value="last">
+          <input class="reborn-search__input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ section.settings.search_placeholder }}">
+          <button class="reborn-search__button" type="submit">Ara</button>
+        </form>
+      </search-form>
+
+      <div class="reborn-actions">
+        <a href="{{ routes.account_url }}">Hesap</a>
+        <a href="{{ routes.cart_url }}">Sepet <strong>{{ cart.item_count }}</strong></a>
+        {%- if section.settings.phone != blank -%}
+          <a href="tel:{{ section.settings.phone | replace: ' ', '' }}">{{ section.settings.phone }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="reborn-nav-wrap">
+    <div class="container">
+      {%- assign header_menu = linklists[section.settings.menu] -%}
+      {%- if header_menu == blank -%}
+        {%- assign header_menu = linklists['main-menu'] -%}
+      {%- endif -%}
+      <nav class="reborn-nav" aria-label="Ana menu">
+        <ul>
+          {%- for link in header_menu.links -%}
+            <li>
+              <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Reborn Header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "750 TL ve uzeri alisverislerde ucretsiz kargo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigation menu"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Urun, kategori veya marka ara"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "default": "+90 555 880 2818"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,195 @@
+<section class="reborn-home">
+  <div class="container">
+    <div class="reborn-hero">
+      <div class="reborn-hero__copy">
+        <p class="reborn-kicker">{{ section.settings.kicker }}</p>
+        <h1>{{ section.settings.title }}</h1>
+        <p>{{ section.settings.description }}</p>
+        <div class="reborn-hero__actions">
+          <a class="btn-primary" href="{{ section.settings.primary_link }}">{{ section.settings.primary_label }}</a>
+          <a class="btn-secondary" href="{{ section.settings.secondary_link }}">{{ section.settings.secondary_label }}</a>
+        </div>
+      </div>
+      <div class="reborn-hero__media">
+        {%- if section.settings.hero_image != blank -%}
+          <img
+            src="{{ section.settings.hero_image | image_url: width: 1200 }}"
+            alt="{{ section.settings.hero_image.alt | escape }}"
+            width="1200"
+            height="760"
+            loading="eager"
+          >
+        {%- else -%}
+          <div class="reborn-placeholder">Hero gorseli ekleyin</div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="reborn-collections">
+      {%- for block in section.blocks -%}
+        {%- assign c = collections[block.settings.collection] -%}
+        <a class="reborn-collection-card" href="{{ c.url | default: '#' }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <img
+              src="{{ block.settings.image | image_url: width: 600 }}"
+              alt="{{ block.settings.image.alt | escape }}"
+              width="600"
+              height="400"
+              loading="lazy"
+            >
+          {%- elsif c.image -%}
+            <img
+              src="{{ c.image | image_url: width: 600 }}"
+              alt="{{ c.title | escape }}"
+              width="600"
+              height="400"
+              loading="lazy"
+            >
+          {%- endif -%}
+          <span>{{ block.settings.title | default: c.title }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+
+    {%- assign featured_collection = collections[section.settings.featured_collection] -%}
+    <div class="reborn-products">
+      <div class="reborn-products__head">
+        <h2>{{ section.settings.products_title }}</h2>
+        {%- if featured_collection != blank -%}
+          <a href="{{ featured_collection.url }}">Tumunu gor</a>
+        {%- endif -%}
+      </div>
+
+      <div class="reborn-products__grid">
+        {%- if featured_collection != blank and featured_collection.products.size > 0 -%}
+          {%- for product in featured_collection.products limit: section.settings.products_limit -%}
+            {% render 'index-product-item', product: product %}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..section.settings.products_limit) -%}
+            <article class="reborn-product-empty">
+              <div></div>
+              <p>One cikan urun</p>
+            </article>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Reborn Home",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Yeni sezon seckisi"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Hero title",
+      "default": "Modern, sade ve premium bir alisveris deneyimi"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Hero description",
+      "default": "Sizin icin secilen urunleri temiz bir arayuzle ve hizli akisla kesfedin."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Koleksiyonu kesfet"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Cok satanlar"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "products_title",
+      "label": "Products title",
+      "default": "One cikan urunler"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Featured collection"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8,
+      "label": "Products count"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Reborn Home",
+      "blocks": [
+        {
+          "type": "collection_card"
+        },
+        {
+          "type": "collection_card"
+        },
+        {
+          "type": "collection_card"
+        },
+        {
+          "type": "collection_card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
