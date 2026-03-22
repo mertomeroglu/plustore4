@@ -51,14 +51,11 @@
   <div class="reborn-nav-wrap">
     <div class="container">
       {%- assign header_menu = linklists[section.settings.menu] -%}
-      {%- assign categories_menu = linklists[section.settings.categories_menu] -%}
       {%- if header_menu == blank -%}
         {%- assign header_menu = linklists['main-menu'] -%}
       {%- endif -%}
-      {%- if categories_menu == blank -%}
-        {%- assign categories_menu = linklists['main-menu'] -%}
-      {%- endif -%}
       {%- assign categories_label = section.settings.categories_title | default: 'KATEGORILER' -%}
+      {%- assign fixed_categories = 'Deniz & Plaj Malzemeleri|Giyim|Canta|Kartlik & Cuzdan|Spor & Egzersiz|Medikal Bandajlar|Masaj Aletleri|Outdoor Urunler|Oyun & Eglence|Tatil & Seyahat Urunleri|Pratik Organizer Urunler|Makyaj & Taki Organizeri|Mousepad|Telefon & Tablet Standi|Aksesuar|Pet Shop|Waterproof Urunler' | split: '|' -%}
       <nav class="reborn-nav" aria-label="Ana menu">
         <div class="reborn-nav__inner">
           <div class="reborn-categories">
@@ -68,10 +65,17 @@
             </button>
             <div class="reborn-categories__panel">
               <ul>
-                {%- for link in categories_menu.links limit: 16 -%}
+                {%- for category_title in fixed_categories -%}
+                  {%- assign category_handle = category_title | handleize -%}
+                  {%- assign category_collection = collections[category_handle] -%}
+                  {%- if category_collection != blank -%}
+                    {%- assign category_url = category_collection.url -%}
+                  {%- else -%}
+                    {%- assign category_url = routes.search_url | append: '?type=product&q=' | append: category_title | url_encode -%}
+                  {%- endif -%}
                   <li>
-                    <a href="{{ link.url }}">
-                      <span>{{ link.title | escape }}</span>
+                    <a href="{{ category_url }}">
+                      <span>{{ category_title | escape }}</span>
                       <span aria-hidden="true">&#8250;</span>
                     </a>
                   </li>
