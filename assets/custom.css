@@ -1,724 +1,1145 @@
-:root {
-  --bg: #f4f6fa;
-  --surface: #ffffff;
-  --ink: #111827;
-  --muted: #667085;
-  --line: #d8e0eb;
-  --brand: #f97316;
-  --brand-2: #fb923c;
-  --deep: #0f172a;
-  --radius-lg: 24px;
-  --radius-md: 14px;
-  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.14);
+/* ✅ Smooth marquee: end pause + invisible reset */
+.marquee-wrap{ overflow:hidden; }
+
+.marquee-track{
+  display:block !important;
+  white-space:nowrap;
 }
 
-* {
-  box-sizing: border-box;
+.marquee-text{
+  display:inline-block;
+  white-space:nowrap;
+  will-change:transform, opacity;
+  animation: plusMarqueeCycle 18s linear infinite;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
+/*
+  0%      : sağdan gir (görünür)
+  80%     : tamamen çıkar (görünür)
+  80-96%  : 3sn pause (görünmez, boş kalsın)
+  96-100% : reset anı (hala görünmez)
+*/
+@keyframes plusMarqueeCycle{
+  0%   { transform: translateX(100%); opacity:1; }
+  80%  { transform: translateX(calc(-100% - 100vw)); opacity:1; }
+
+  80.01% { opacity:0; } /* tam çıktığı an görünmez yap */
+  96%  { transform: translateX(calc(-100% - 100vw)); opacity:0; } /* bekleme */
+  100% { transform: translateX(100%); opacity:0; } /* reset görünmeden */
 }
 
-body.reborn-theme {
-  font-family: "Manrope", "Segoe UI", sans-serif;
-  color: var(--ink);
-  background:
-    radial-gradient(1200px 520px at 100% 0%, rgba(249, 115, 22, 0.14), transparent 58%),
-    radial-gradient(900px 420px at 0% 0%, rgba(15, 23, 42, 0.08), transparent 62%),
-    var(--bg);
-  min-height: 100vh;
+/* Döngü başında tekrar görünür olsun */
+.marquee-text{
+  animation-timing-function: linear;
+}
+/* ✅ Desktop only: top-header menüyü sağa al + ayırıcı çizgiler */
+@media (min-width: 990px){
+
+  .top-header__menu{
+    display:flex !important;
+    justify-content:flex-end !important;
+    align-items:center;
+    width:100% !important;
+  }
+
+  .top-header__menu-root{
+    margin-left:auto !important;
+  }
+
+  .top-header__menu-item{
+    position:relative;
+    padding:0 16px;
+    font-size:14px;
+  }
+
+  .top-header__menu-item:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    right:0;
+    top:50%;
+    transform:translateY(-50%);
+    width:1px;
+    height:14px;
+    background:#dcdcdc;
+  }
 }
 
-body.reborn-theme h1,
-body.reborn-theme h2,
-body.reborn-theme h3,
-body.reborn-theme h4,
-body.reborn-theme .reborn-nav a,
-body.reborn-theme .btn-primary,
-body.reborn-theme .btn-secondary {
-  font-family: "Sora", "Segoe UI", sans-serif;
+/* ✅ Mobile fix: hiçbir sağa itme/çizgi yok */
+@media (max-width: 989px){
+  .top-header__menu-root{
+    margin-left:0 !important;
+  }
+  .top-header__menu{
+    justify-content:flex-start !important;
+  }
+  .top-header__menu-item::after{
+    display:none !important;
+  }
+}
+}/* ===== Topbar unify (desktop only) ===== */
+@media (min-width: 992px){
+
+  /* 1) Topbar menü konteynerini tek stile zorla */
+  .top-header__menu,
+  .top-header__menu ul{
+    display:flex !important;
+    align-items:stretch !important;
+    justify-content:flex-end !important;
+    border-top:1px solid #e5e5e5 !important;
+    border-bottom:1px solid #e5e5e5 !important;
+    background:#f4f4f4 !important;   /* istersen #fff yaparız */
+  }
+
+  /* 2) Menü item'ları (LI) */
+  .top-header__menu-root,
+  .top-header__menu li{
+    display:flex !important;
+    align-items:stretch !important;
+    position:relative !important;
+  }
+
+  /* 3) Link görünümü + bar yüksekliği */
+  .top-header__menu-item,
+  .top-header__menu li > a{
+    display:flex !important;
+    align-items:center !important;
+    padding:10px 18px !important;
+    background:transparent !important;
+  }
+
+  /* 4) Dikey ayırıcılar (BORDER ile, en sağlam) */
+  .top-header__menu-root + .top-header__menu-root,
+  .top-header__menu li + li{
+    border-left:1px solid #e5e5e5 !important;
+  }
+
+  /* 5) Anasayfa (template-index) ekstra fix: theme override’larını ez */
+  body.template-index .top-header__menu,
+  body.template-index .top-header__menu ul{
+    border-top:1px solid #e5e5e5 !important;
+    border-bottom:1px solid #e5e5e5 !important;
+    background:#f4f4f4 !important;
+  }
+}
+@media (max-width: 991px){
+
+  /* Tek satır: asla kırılmasın */
+  .top-header__menu,
+  .top-header__menu ul{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    gap:0 !important;
+    padding:4px 6px !important;
+    white-space:nowrap !important;
+  }
+
+  /* Item spacing sıfır */
+  .top-header__menu-root{
+    position:relative !important;
+    margin:0 !important;
+    padding:0 !important;
+    flex:0 0 auto !important;
+  }
+
+  /* Link: küçült + sıkıştır */
+  .top-header__menu-item{
+    font-size:10px !important;
+    line-height:1 !important;
+    padding:0 4px !important;  /* minimum */
+    margin:0 !important;
+    white-space:nowrap !important;
+  }
+
+  /* ✅ Çizgi: boşluk yaratmadan (absolute) */
+  .top-header__menu-root + .top-header__menu-root::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:50%;
+    transform:translateY(-50%);
+    width:1px;
+    height:14px;
+    background:#d7d7d7;
+  }
+
+  /* çizgi boşluk yaratmasın diye linkin sol paddingini çok az arttır */
+  .top-header__menu-root + .top-header__menu-root > .top-header__menu-item{
+    padding-left:6px !important;
+  }
+
+  /* ✅ Mobilde SSS + TRY gibi sonları gizle (yer açmak için) */
+  .top-header__menu-root:nth-child(n+7){
+    display:none !important;
+  }
+}
+/* WhatsApp: tema stillerini ez */
+.main-header__contact .header__contact-content{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  white-space:nowrap !important;
 }
 
-.skip-to-content {
-  position: absolute;
-  left: -9999px;
+.main-header__contact .header__contact-icon--wa{
+  width:22px !important;
+  height:22px !important;
+  background:#25D366 !important;
+  border-radius:50% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 auto !important;
 }
 
-.container {
-  width: min(1320px, 92vw);
-  margin-inline: auto;
+.main-header__contact .header__contact-icon--wa svg{
+  width:14px !important;
+  height:14px !important;
+  display:block !important;
 }
 
-.reborn-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  backdrop-filter: blur(12px);
-  background: rgba(255, 255, 255, 0.9);
-  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+.main-header__contact .header__contact-caption{
+  display:flex !important;
+  flex-direction:column !important;
+  line-height:1.05 !important;
 }
 
-.reborn-announcement {
-  background: linear-gradient(90deg, var(--brand), var(--brand-2));
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+.main-header__contact .header__contact-caption p{
+  margin:0 !important;
+}
+/* Tema default contact yazısını gizle (çift basmayı bitirir) */
+.main-header__contact .header__contact-caption p{
+  display:none !important;
+}
+.main-header__contact .header__contact-content{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  white-space:nowrap !important;
 }
 
-.reborn-announcement p {
-  margin: 0;
-  min-height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.main-header__contact .header__contact-icon{
+  flex:0 0 auto !important;
 }
 
-.reborn-top {
-  border-bottom: 1px solid #e7edf5;
+.main-header__contact .header__contact-caption{
+  display:flex !important;
+  flex-direction:column !important;
+  line-height:1.05 !important;
 }
 
-.reborn-top__inner {
-  min-height: 88px;
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 18px;
+.main-header__contact .header__contact-caption a{
+  display:block !important;
+  margin:0 !important;
 }
-
-.reborn-logo {
-  text-decoration: none;
-  color: var(--deep);
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+.header__contact-icon--wa{
+  width:22px !important;
+  height:22px !important;
+  background:#25D366 !important;
+  border-radius:50% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
 }
-
-.reborn-logo img {
-  width: auto;
-  max-height: 56px;
-  display: block;
+.header__contact-icon--wa svg{
+  width:14px !important;
+  height:14px !important;
+  display:block !important;
 }
-
-.reborn-search form {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--surface);
-  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+/* WhatsApp bloğunu dikeyde yukarı taşı */
+.main-header__contact{
+  position: relative;
+  top: -8px;   /* yetmezse -10 / -12 yap */
 }
-
-.reborn-search__input {
-  border: 0;
-  background: transparent;
-  padding: 0 16px;
-  height: 50px;
-  color: var(--deep);
-  font-size: 14px;
+.main-header__contact .header__contact-content{
+  display:flex !important;
+  align-items:center !important;
 }
-
-.reborn-search__input:focus {
-  outline: none;
+.main-header__contact .header__contact-caption{
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
 }
-
-.reborn-search__button {
-  border: 0;
-  background: linear-gradient(140deg, var(--deep), #1e293b);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  padding: 0 20px;
-  cursor: pointer;
-}
-
-.reborn-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.reborn-actions a {
-  text-decoration: none;
-  color: #334155;
-  font-size: 12px;
-  font-weight: 700;
-  border: 1px solid #dde5ef;
-  border-radius: 10px;
-  padding: 9px 11px;
-  background: #fff;
-}
-
-.reborn-actions a strong {
-  color: var(--brand);
-}
-
-.reborn-nav-wrap {
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-}
-
-.reborn-nav ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  min-height: 54px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  overflow-x: auto;
+/* Cart alanını tek satırda tut */
+.main-header__cart{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:14px;
   white-space: nowrap;
 }
 
-.reborn-nav a {
-  text-decoration: none;
-  color: #1f2a3d;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 8px 0;
+/* WhatsApp: satır kırılmasın */
+.header-wa{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  line-height:1;
+  white-space: nowrap;
 }
 
-.reborn-nav a[aria-current="page"],
-.reborn-nav a:hover {
-  color: var(--brand);
+/* ikon boyutu */
+.header-wa__icon{
+  width:26px;
+  height:26px;
+  display:block;
 }
 
-.reborn-home {
-  padding: 24px 0 10px;
+/* Cart ikon linki (senin class) tek satırda ve ortalı */
+.main-header__cart .header__cart-icon{
+  display:inline-flex;
+  align-items:center;
+  line-height:1;
 }
 
-.reborn-hero {
-  display: grid;
-  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
-  gap: 20px;
-  align-items: stretch;
-  margin-bottom: 24px;
+/* Cart badge konumu bozulmasın */
+.main-header__cart .cart-count-bubble{
+  position:absolute; /* zaten öyle, garanti */
+}
+/* Mobil optimizasyon: header bozulmasın */
+@media (max-width: 991px){
+  /* WA yazısını kapat */
+  .header-wa__text{
+    display:none !important;
+  }
+
+  /* ikon biraz küçülsün */
+  .header-wa__icon{
+    width:22px !important;
+    height:22px !important;
+  }
+
+  /* WA ve cart aynı çizgide dursun */
+  .main-header__cart{
+    gap:10px !important;
+    white-space: nowrap !important;
+  }
+
+  .header-wa{
+    padding:0 !important;
+    margin:0 !important;
+    line-height:1 !important;
+  }
+}
+/* ===============================
+   DAILY DEALS ICON FIX
+   =============================== */
+
+.best-sellers__daily .box-divider{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 }
 
-.reborn-hero__copy {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(165deg, #ffffff 0%, #f7faff 100%);
-  padding: 36px 30px;
-  box-shadow: var(--shadow-lg);
+.best-sellers__daily .box-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0;
 }
 
-.reborn-kicker {
-  margin: 0 0 12px;
-  color: var(--brand);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+/* İkonu başlığın soluna ekle */
+.best-sellers__daily .box-title::before{
+  content:"";
+  width:22px;
+  height:22px;
+  display:inline-block;
+  background:url("https://cdn.shopify.com/s/files/1/0663/4962/9483/files/ico-deal_180x_22e24769-bd6b-466a-9ac5-153fff2495e9.png?v=1772371829") center / contain no-repeat;
+}
+
+/* Eğer tema ayrıca <img> ikon basıyorsa gizle */
+.best-sellers__daily .box-divider img{
+  display:none !important;
+}
+.marquee-wrap{
+background:#000 !important;
+color:#fff !important;
+padding:6px 0;
+}
+
+.marquee-wrap *{
+color:#fff !important;
+}.marquee-wrap{
+background:#000 !important;
+color:#fff !important;
+padding:6px 0;
+font-size:14px;
+font-weight:500;
+letter-spacing:0.5px;
+}
+
+.marquee-wrap a{
+color:#fff !important;
+}
+.top-header__menu-content{
+display:flex;
+align-items:center;
+justify-content:flex-end;
+gap:0;
+}
+
+/* Giriş Yap / Üye Ol */
+.top-header__menu-content li.header__menu-account{
+order:6;
+}
+
+/* TRY */
+.top-header__menu-content li.header__menu-currency{
+order:7;
+}
+
+/* Takip Et Kazan */
+.top-header__menu-content li:nth-child(3){
+order:1;
+}
+
+/* Kuponlar */
+.top-header__menu-content li:nth-child(4){
+order:2;
+}
+
+/* Sipariş Takip */
+.top-header__menu-content li:nth-child(5){
+order:3;
+}
+
+/* Favoriler */
+.top-header__menu-content li:nth-child(6){
+order:4;
+}
+
+/* Yardım */
+.top-header__menu-content li:nth-child(7){
+order:5;
+}
+.main-header__right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  padding-top: 24px !important;
+  padding-bottom: 24px !important;
+}
+
+.main-header__search {
+  order: 1 !important;
+  flex: 1 1 auto !important;
+  max-width: none !important;
+}
+
+.main-header__cart {
+  order: 3 !important;
+  padding-left: 0 !important;
+  gap: 14px !important;
+  white-space: nowrap;
+}
+
+.top-header__menu-content li > a,
+.top-header__menu-content .top-header__menu-item {
+  font-size: 12px !important;
+  letter-spacing: 0.03em;
+  color: #4b5563 !important;
+  padding: 8px 14px !important;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
-.reborn-hero__copy h1 {
-  margin: 0;
-  font-size: clamp(28px, 4vw, 48px);
-  line-height: 1.05;
-  color: var(--deep);
+.top-header__menu-content li > a:hover,
+.top-header__menu-content .top-header__menu-item:hover {
+  color: #111827 !important;
 }
 
-.reborn-hero__copy p {
-  margin: 14px 0 0;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.7;
+.top-header {
+  background: #f8f8f6 !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
 }
 
-.reborn-hero__actions {
-  margin-top: 24px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.main-header {
+  background: #ffffff !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
 }
 
-.btn-primary,
-.btn-secondary {
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 800;
-  border-radius: 999px;
-  padding: 12px 18px;
+.main-header__logo {
+  width: 24% !important;
 }
 
-.btn-primary {
-  background: linear-gradient(130deg, var(--brand), var(--brand-2));
-  color: #fff;
-  box-shadow: 0 12px 24px rgba(249, 115, 22, 0.28);
-}
-
-.btn-secondary {
-  color: #1f2a3d;
-  border: 1px solid #d8e0eb;
-  background: #fff;
-}
-
-.reborn-hero__media {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  min-height: 460px;
-}
-
-.reborn-hero__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.reborn-placeholder {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: #94a3b8;
-  background: repeating-linear-gradient(
-    -45deg,
-    #f8fafc,
-    #f8fafc 16px,
-    #eef2f7 16px,
-    #eef2f7 32px
-  );
-}
-
-.reborn-collections {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 26px;
-}
-
-.reborn-collection-card {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  min-height: 140px;
-  border: 1px solid var(--line);
-  text-decoration: none;
-  background: #fff;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
-}
-
-.reborn-collection-card img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.reborn-collection-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(10, 20, 36, 0) 10%, rgba(10, 20, 36, 0.6) 100%);
-}
-
-.reborn-collection-card span {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 10px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
-  z-index: 2;
-}
-
-.reborn-products {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-lg);
-  padding: 16px;
-}
-
-.reborn-products__head {
-  display: flex;
+.header__heading-link {
+  min-height: 84px;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
 }
 
-.reborn-products__head h2 {
-  margin: 0;
-  font-size: 22px;
-  color: var(--deep);
+.header__heading-logo {
+  max-height: 68px;
+  width: auto;
 }
 
-.reborn-products__head a {
-  text-decoration: none;
-  color: var(--brand);
-  font-size: 13px;
-  font-weight: 700;
+.main-header__search .search__form {
+  border: 1px solid rgba(17, 24, 39, 0.12) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
 }
 
-.reborn-products__grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+.main-header__search .search_box,
+.main-header__search .search__form-collections select {
+  border: 0 !important;
+  background: transparent !important;
+  color: #111827 !important;
+  font-size: 14px !important;
 }
 
-.reborn-product-empty {
-  border: 1px dashed #cdd7e3;
-  border-radius: 16px;
-  padding: 18px;
-  background: #f8fbff;
+.main-header__search .search_box::placeholder {
+  color: #9aa3b2 !important;
 }
 
-.reborn-product-empty div {
-  background: #e7edf5;
-  border-radius: 10px;
-  height: 170px;
+.main-header__search .search__form-collections {
+  border-left: 1px solid rgba(17, 24, 39, 0.08) !important;
+  min-width: 180px;
 }
 
-.reborn-product-empty p {
-  margin: 10px 0 0;
-  font-size: 13px;
-  color: #667085;
+.main-header__search .search_submit {
+  width: 52px !important;
+  height: 44px !important;
+  border: 0 !important;
+  background: #111827 !important;
 }
 
-/* Existing product snippet premium tuning */
-.reborn-theme .product-item__grid,
-.reborn-theme .product-item__grid--premium {
-  border: 1px solid #dbe3ee;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 10px 24px rgba(11, 22, 39, 0.08);
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
-}
-
-.reborn-theme .product-item__grid:hover,
-.reborn-theme .product-item__grid--premium:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 34px rgba(11, 22, 39, 0.14);
-}
-
-.reborn-theme .product-item__bottom {
-  padding: 12px;
-}
-
-.reborn-theme .product-item__title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #111827;
-}
-
-.reborn-theme .product-item__cta-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.reborn-theme .product-item__cta {
-  text-align: center;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 800;
-  padding: 9px 6px;
-}
-
-.reborn-theme .product-item__cta--ghost {
-  border: 1px solid #d7dfeb;
-  color: #1e293b;
-  background: #fff;
-}
-
-.reborn-theme .product-item__cta--solid {
-  border: 1px solid var(--deep);
-  background: var(--deep);
-  color: #fff;
-}
-
-.reborn-footer {
-  margin-top: 34px;
-  padding: 36px 0 18px;
-  color: #d7e1f0;
-  background:
-    radial-gradient(900px 300px at 0% 0%, rgba(249, 115, 22, 0.18), transparent 60%),
-    linear-gradient(180deg, #132039 0%, #0f172a 100%);
-}
-
-.reborn-footer__grid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr 0.8fr;
-  gap: 24px;
-}
-
-.reborn-footer h3,
-.reborn-footer h4 {
-  margin: 0 0 10px;
-  color: #fff;
-}
-
-.reborn-footer p,
-.reborn-footer a {
-  color: #d7e1f0;
-  font-size: 14px;
-  line-height: 1.7;
-  text-decoration: none;
-}
-
-.reborn-footer ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.reborn-footer li + li {
-  margin-top: 6px;
-}
-
-.reborn-footer__bottom {
-  margin-top: 20px;
-  border-top: 1px solid rgba(170, 187, 212, 0.24);
-  padding-top: 12px;
-}
-
-@media (max-width: 1100px) {
-  .reborn-top__inner {
-    grid-template-columns: 190px minmax(0, 1fr);
-    gap: 12px;
-  }
-
-  .reborn-actions {
-    grid-column: 1 / -1;
-    justify-content: flex-end;
-  }
-
-  .reborn-hero {
-    grid-template-columns: 1fr;
-  }
-
-  .reborn-hero__media {
-    min-height: 360px;
-  }
-
-  .reborn-products__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .reborn-footer__grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .reborn-header {
-    position: static;
-  }
-
-  .reborn-announcement p {
-    min-height: 32px;
-    font-size: 11px;
-  }
-
-  .reborn-top__inner {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    padding: 12px 0;
-  }
-
-  .reborn-search form {
-    box-shadow: none;
-  }
-
-  .reborn-nav ul {
-    min-height: 48px;
-    gap: 14px;
-  }
-
-  .reborn-home {
-    padding-top: 16px;
-  }
-
-  .reborn-hero__copy {
-    padding: 24px 18px;
-  }
-
-  .reborn-hero__copy h1 {
-    font-size: 30px;
-  }
-
-  .reborn-collections {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .reborn-products {
-    padding: 12px;
-  }
-
-  .reborn-products__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .reborn-theme .product-item__cta-row {
-    grid-template-columns: 1fr;
-  }
-
-  .reborn-footer {
-    margin-top: 24px;
-    padding-top: 28px;
-  }
-
-  .reborn-footer__grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-
-.reborn-collection {
-  padding: 24px 0 10px;
-}
-
-.reborn-collection__head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 16px;
-}
-
-.reborn-collection__kicker {
-  margin: 0 0 6px;
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--brand);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.reborn-collection__head h1 {
-  margin: 0;
-  color: var(--deep);
-  font-size: clamp(26px, 3.2vw, 40px);
-}
-
-.reborn-collection__description {
-  margin-top: 10px;
-  color: var(--muted);
-  line-height: 1.7;
-  max-width: 760px;
-}
-
-.reborn-collection__count {
-  margin: 8px 0 0;
-  color: #475467;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.reborn-collection__grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.reborn-product-card {
-  border: 1px solid #dbe3ee;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 10px 24px rgba(11, 22, 39, 0.08);
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
-}
-
-.reborn-product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 34px rgba(11, 22, 39, 0.14);
-}
-
-.reborn-product-card__image {
-  display: block;
-  background: #f8fbff;
-}
-
-.reborn-product-card__image img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-}
-
-.reborn-product-card__body {
-  padding: 12px;
-}
-
-.reborn-product-card__title {
-  text-decoration: none;
-  color: #111827;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.45;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.reborn-product-card__price {
-  margin-top: 8px;
-  color: #0f172a;
-  font-size: 15px;
-  font-weight: 800;
-}
-
-.reborn-product-card__actions {
-  margin-top: 10px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.reborn-pagination {
-  margin-top: 16px;
-  display: flex;
+.main-header__cart .header__cart-icon {
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  border-radius: 12px;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
 }
 
-.reborn-pagination a {
-  text-decoration: none;
-  color: var(--deep);
-  font-weight: 700;
+.main-header__cart .header__cart-icon:hover {
+  border-color: rgba(17, 24, 39, 0.3);
+  background: #f8fafc;
 }
 
-.reborn-empty {
-  border: 1px dashed #cbd5e1;
+.main-header__cart .icon-cs-cart:before {
+  font-size: 26px !important;
+}
+
+.navigation-header {
+  background: #ffffff !important;
+}
+
+.navigation-header-content {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.12) !important;
+  min-height: 54px;
+}
+
+.header__categorie-title {
+  background: #111827 !important;
+  border-radius: 10px 10px 0 0;
+  height: 40px;
+  line-height: 40px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.header__menu-item {
+  text-transform: none !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em;
+  color: #1f2937 !important;
+}
+
+.header__inline-menu .list-menu--inline > .header__menu-root {
+  margin-left: 24px !important;
+}
+
+.header__inline-menu .header__menu-root:hover .header__menu-item,
+.header__submenu .header__menu-item:hover {
+  color: #111827 !important;
+}
+
+@media (max-width: 991px) {
+  .main-header__right {
+    gap: 10px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  .main-header__logo {
+    width: 50% !important;
+    max-width: 180px !important;
+  }
+
+  .header__heading-link {
+    min-height: 60px;
+  }
+
+  .header__heading-logo {
+    max-height: 48px;
+  }
+
+  .main-header__cart .header__cart-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .top-header__menu-content li > a,
+  .top-header__menu-content .top-header__menu-item {
+    font-size: 11px !important;
+    padding: 6px 8px !important;
+  }
+
+  .navigation-header__menu {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .navigation-header__menu::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navigation-header__menu .list-menu--inline {
+    flex-wrap: nowrap !important;
+    min-width: max-content;
+    padding-bottom: 4px;
+  }
+
+  .navigation-header__menu .header__menu-root {
+    margin-left: 14px !important;
+  }
+
+  .navigation-header__menu .header__menu-root:first-child {
+    margin-left: 8px !important;
+  }
+
+  .header__menu-item {
+    font-size: 12px !important;
+    padding: 8px 0 !important;
+  }
+}
+/* Banner grid ana yapı */
+.banner-grid__container.row {
+  display: grid !important;
+  grid-template-columns: repeat(4, 270px);
+  grid-template-rows: 179.35px 179.35px;
+  gap: 11.47px;
+  justify-content: start;
+}
+
+/* Bootstrap col etkisini kapat */
+.banner-grid__container.row > div {
+  width: auto !important;
+  max-width: none !important;
+  flex: unset !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Genel banner item */
+.banner-grid__item {
+  width: 270px !important;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Link ve görsel alanı tam kaplasın */
+.banner-grid__item .banner-grid__link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.banner-grid__item .lazy-bg.product-item__image,
+.banner-grid__item .lazy-bg.product-item__image[style] {
+  width: 100% !important;
+  height: 100% !important;
+  padding-bottom: 0 !important;
+  overflow: hidden;
+}
+
+.banner-grid__item .lazy-bg.product-item__image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block;
+}
+
+/* 1. banner - büyük */
+.banner-grid__container.row > div:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+.banner-grid__container.row > div:nth-child(1) .banner-grid__item {
+  height: 370.17px !important;
+}
+
+/* 2. banner - sağ üst küçük */
+.banner-grid__container.row > div:nth-child(2) {
+  grid-column: 2;
+  grid-row: 1;
+}
+.banner-grid__container.row > div:nth-child(2) .banner-grid__item {
+  height: 179.35px !important;
+}
+
+/* 3. banner - ortadaki büyük */
+.banner-grid__container.row > div:nth-child(3) {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+}
+.banner-grid__container.row > div:nth-child(3) .banner-grid__item {
+  height: 370.17px !important;
+}
+
+/* 4. banner - en sağ üst küçük */
+.banner-grid__container.row > div:nth-child(4) {
+  grid-column: 4;
+  grid-row: 1;
+}
+.banner-grid__container.row > div:nth-child(4) .banner-grid__item {
+  height: 179.35px !important;
+}
+
+/* 5. banner - 2. sütun alt küçük */
+.banner-grid__container.row > div:nth-child(5) {
+  grid-column: 2;
+  grid-row: 2;
+}
+.banner-grid__container.row > div:nth-child(5) .banner-grid__item {
+  height: 179.35px !important;
+}
+
+/* 6. banner - 4. sütun alt küçük */
+.banner-grid__container.row > div:nth-child(6) {
+  grid-column: 4;
+  grid-row: 2;
+}
+.banner-grid__container.row > div:nth-child(6) .banner-grid__item {
+  height: 179.35px !important;
+}
+@media (max-width: 767px) {
+  .banner-grid__container.row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: 170px 170px 170px 170px !important;
+    gap: 12px !important;
+    justify-content: stretch !important;
+  }
+
+  .banner-grid__container.row > div {
+    width: auto !important;
+    max-width: none !important;
+    flex: unset !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
+
+  .banner-grid__item {
+    width: 100% !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  .banner-grid__item .banner-grid__link {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .banner-grid__item .lazy-bg.product-item__image,
+  .banner-grid__item .lazy-bg.product-item__image[style] {
+    width: 100% !important;
+    height: 100% !important;
+    padding-bottom: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .banner-grid__item .lazy-bg.product-item__image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  /* 1. grup */
+  .banner-grid__container.row > div:nth-child(1) {
+    grid-column: 1 !important;
+    grid-row: 1 / span 2 !important;
+  }
+  .banner-grid__container.row > div:nth-child(1) .banner-grid__item {
+    height: 352px !important;
+  }
+
+  .banner-grid__container.row > div:nth-child(2) {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+  }
+  .banner-grid__container.row > div:nth-child(2) .banner-grid__item {
+    height: 170px !important;
+  }
+
+  .banner-grid__container.row > div:nth-child(5) {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+  }
+  .banner-grid__container.row > div:nth-child(5) .banner-grid__item {
+    height: 170px !important;
+  }
+
+  /* 2. grup */
+  .banner-grid__container.row > div:nth-child(3) {
+    grid-column: 1 !important;
+    grid-row: 3 / span 2 !important;
+  }
+  .banner-grid__container.row > div:nth-child(3) .banner-grid__item {
+    height: 352px !important;
+  }
+
+  .banner-grid__container.row > div:nth-child(4) {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+  }
+  .banner-grid__container.row > div:nth-child(4) .banner-grid__item {
+    height: 170px !important;
+  }
+
+  .banner-grid__container.row > div:nth-child(6) {
+    grid-column: 2 !important;
+    grid-row: 4 !important;
+  }
+  .banner-grid__container.row > div:nth-child(6) .banner-grid__item {
+    height: 170px !important;
+  }
+}
+/* ===== V2 HERO + CATEGORY REBUILD ===== */
+.index-slideshow-categories .slideshow-categories__content.row {
+  display: grid !important;
+  grid-template-columns: 290px minmax(0, 1fr) 300px;
+  gap: 18px;
+  align-items: stretch !important;
+}
+
+.index-slideshow-categories .slideshow__categories-content,
+.index-slideshow-categories .best-sellers__daily,
+.index-slideshow-categories slideshow-component {
+  min-height: 100%;
+}
+
+/* Left category panel */
+.index-slideshow-categories .slideshow__categories-content {
+  width: 100% !important;
+  max-width: none !important;
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 16px;
-  padding: 22px;
-  background: #f8fbff;
-  color: #475467;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
 }
 
-@media (max-width: 1100px) {
-  .reborn-collection__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+.index-slideshow-categories .slideshow__categories-content .header__categorie-title {
+  height: 48px;
+  line-height: 48px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  border-radius: 0;
+  background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+}
+
+.index-slideshow-categories .slideshow__categories-content .header__vertical-menu > ul {
+  padding: 8px 12px 10px !important;
+  background: #ffffff !important;
+}
+
+.index-slideshow-categories .slideshow__categories-content .header__vertical-menu > ul > li {
+  padding: 0 !important;
+}
+
+.index-slideshow-categories .slideshow__categories-content .header__vertical-item {
+  min-height: 38px;
+  display: flex !important;
+  align-items: center !important;
+  font-size: 14px !important;
+  border-radius: 10px;
+  padding-left: 34px !important;
+  padding-right: 10px !important;
+  color: #1f2937 !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.index-slideshow-categories .slideshow__categories-content .header__vertical-item:hover,
+.index-slideshow-categories .slideshow__categories-content .header__vertical-active {
+  background: #f1f5f9;
+  color: #0f172a !important;
+}
+
+/* Center hero card */
+.index-slideshow-categories slideshow-component {
+  width: 100% !important;
+  max-width: none !important;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.14);
+  background: #ffffff;
+}
+
+.index-slideshow-categories .slideshow-container,
+.index-slideshow-categories .swiper-container,
+.index-slideshow-categories .swiper-container-horizontal,
+.index-slideshow-categories .swiper-slide,
+.index-slideshow-categories .swiper-slide[style] {
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+}
+
+.index-slideshow-categories .swiper-wrapper,
+.index-slideshow-categories .swiper-wrapper[style] {
+  height: auto !important;
+}
+
+.index-slideshow-categories .lazy-bg.index-slideshow__background,
+.index-slideshow-categories .lazy-bg.index-slideshow__background[style] {
+  position: relative !important;
+  height: 0 !important;
+  padding-bottom: 68% !important;
+  overflow: hidden !important;
+}
+
+.index-slideshow-categories .lazy-bg.index-slideshow__background img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.index-slideshow-categories .index-slideshow-navigation {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.82) !important;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+}
+
+/* Responsive */
+@media (max-width: 1199px) {
+  .index-slideshow-categories .slideshow-categories__content.row {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+
+  .index-slideshow-categories .best-sellers__daily {
+    grid-column: 1 / -1;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin-top: 0 !important;
   }
 }
 
-@media (max-width: 768px) {
-  .reborn-collection__head {
-    flex-direction: column;
+@media (max-width: 767px) {
+  .index-slideshow-categories .slideshow-categories__content.row {
+    display: block !important;
   }
 
-  .reborn-collection__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+  .index-slideshow-categories .slideshow__categories-content {
+    margin-bottom: 12px;
+    border-radius: 14px;
   }
 
-  .reborn-product-card__actions {
-    grid-template-columns: 1fr;
+  .index-slideshow-categories .slideshow__categories-content .header__vertical-menu > ul {
+    max-height: 320px;
+    overflow: auto;
   }
+
+  .index-slideshow-categories slideshow-component {
+    border-radius: 14px;
+    margin-bottom: 12px;
+  }
+
+  .index-slideshow-categories .lazy-bg.index-slideshow__background,
+  .index-slideshow-categories .lazy-bg.index-slideshow__background[style] {
+    padding-bottom: 64% !important;
+  }
+
+  .index-slideshow-categories .best-sellers__daily {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin-top: 0 !important;
+  }
+
+  .index-slideshow-categories .slideshow__categories-content .header__vertical-item {
+    min-height: 34px;
+    font-size: 13px !important;
+  }
+}
+/* Haftanın teklifi kartı */
+.best-sellers__daily{
+  flex: 0 0 300px !important;
+  width: 300px !important;
+  max-width: 300px !important;
+  height: 510.67px !important;
+}
+@media (max-width: 768px){
+
+  .slideshow-categories__content{
+    flex-direction: column !important;
+  }
+
+  .best-sellers__daily{
+    width:100% !important;
+    max-width:100% !important;
+    height:auto !important;
+    margin-top:20px;
+  }
+  /* Haftanın teklifi kartı - iç yapıyı dikey hizala */
+.best-sellers__daily .best-sellers__daily-product,
+.best-sellers__daily .product-item__grid {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Üst görsel alanı sabit, alt bilgi alanı esnek */
+.best-sellers__daily .product-item__top {
+  flex: 0 0 auto !important;
+}
+}
+/* ===== RIGHT DAILY DEAL CARD - REBUILD ===== */
+.best-sellers__daily{
+  width:300px !important;
+  min-width:300px !important;
+  max-width:300px !important;
+  height:510.67px !important;
+  background: linear-gradient(180deg, #ffffff, #f8fafc) !important;
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08) !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+/* üst başlık alanı */
+.best-sellers__daily > .box-divider{
+  flex:0 0 72px !important;
+  min-height:72px !important;
+  border-bottom:1px solid rgba(15, 23, 42, 0.08) !important;
+  background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+  color: #ffffff !important;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.best-sellers__daily > .box-divider .box-title {
+  color: #ffffff !important;
+  font-size: 15px !important;
+  letter-spacing: 0.02em;
+}
+
+/* ürün alanı */
+.best-sellers__daily > .best-sellers__daily-product{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+/* kart ana gövde */
+.best-sellers__daily .product-item__grid{
+  height:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  padding:8px 16px 18px !important;
+  box-sizing:border-box !important;
+}
+
+/* görsel üst alan */
+.best-sellers__daily .product-item__top{
+  flex:0 0 210px !important;
+  height:210px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+
+/* görsel */
+.best-sellers__daily .product-item__top img{
+  max-width:100% !important;
+  max-height:100% !important;
+  width:auto !important;
+  height:auto !important;
+  object-fit:contain !important;
+  display:block !important;
+}
+
+/* alt alan */
+.best-sellers__daily .product-item__bottom{
+  flex:1 1 auto !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  align-items:center !important;
+  text-align:center !important;
+  min-height:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+
+/* ürün adı */
+.best-sellers__daily .product-item__title{
+  display:block !important;
+  margin:0 0 10px 0 !important;
+  padding:0 !important;
+  text-align:center !important;
+  line-height:1.35 !important;
+  font-size:14px !important;
+  color:#222 !important;
+
+  display:-webkit-box !important;
+  -webkit-line-clamp:2 !important;
+  -webkit-box-orient:vertical !important;
+  overflow:hidden !important;
+  min-height:38px !important;
+  max-height:38px !important;
+}
+
+/* fiyat alanı */
+.best-sellers__daily .price.product-item__price{
+  margin-top:auto !important;
+  padding-top:10px !important;
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:10px !important;
+  width:100% !important;
+  text-align:center !important;
+  line-height:1 !important;
+}
+
+/* fiyat iç elemanları */
+.best-sellers__daily .price.product-item__price *{
+  line-height:1 !important;
+  margin:0 !important;
+}
+
+/* rating gizle */
+.best-sellers__daily .product-item__rating{
+  display:none !important;
 }
